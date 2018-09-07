@@ -1,0 +1,81 @@
+<div id="rootContainer">
+
+    <mat-sidenav-container>
+        <mat-sidenav mode="over" #sidenav id="sidenav" autosize>
+
+            <!-- When user will be logged in, some info will be shown here -->
+            <mat-toolbar id="sidenavToolbar" class="noSelect">
+                <mat-toolbar-row id="sidenavToolbarFirstRow">
+                    <img [src]="user.photoURL" height="56" width="56" id="userPhoto" draggable="false" />
+                </mat-toolbar-row>
+                <mat-toolbar-row id="sidenavToolbarSecondRow">
+                    <div id="sidenavToolbarSecondRowContent">
+                        <div>
+                            <span id="displayNameRow">{{user.displayName}}</span>
+                        </div>
+                        <div id="emailRowContainer">
+                            <span id="emailRow">{{user.email}}</span>
+                        </div>
+                    </div>
+                </mat-toolbar-row>
+            </mat-toolbar>
+
+            <!-- Buttons -->
+            <div id="sidenavContent">
+                <mat-nav-list>
+                    <!-- CHEAT: This prevent the first item to being selected -->
+                    <a mat-button style="height: 0; position: absolute;"></a>
+
+                    <div *ngFor="let sidenavButton of sidenavButtons">
+                        <button mat-button mat-list-item (click)="goToPath(sidenavButton.path); sidenav.toggle()" *ngIf="!sidenavButton.isDivider && !sidenavButton.isSubheader"
+                            [disabled]="sidenavButton.isDisabled" autofocus="false">
+                            <mat-icon mat-list-icon>{{ sidenavButton.icon }}</mat-icon>
+                            <span mat-line>{{sidenavButton.text}}</span>
+                        </button>
+
+                        <div *ngIf="sidenavButton.isDivider">
+                            <div class="divider"></div>
+                        </div>
+
+                        <div *ngIf="sidenavButton.isSubheader">
+                            <h3 class="subHeader noSelect">{{sidenavButton.text}}</h3>
+                        </div>
+                    </div>
+                </mat-nav-list>
+            </div>
+        </mat-sidenav>
+
+        <!-- Toolbar to show when user is on the home page -->
+        <mat-toolbar color="primary" *ngIf="deviceType == 'desktop' || toolbarToShow == toolbarTypes.sidenav">
+            <button mat-icon-button (click)="sidenav.open()">
+                <mat-icon>menu</mat-icon>
+            </button>
+
+
+            <a href="" onclick="return false;" (click)="returnToHomePath()" class="noSelect">
+                AC Time Tracker
+            </a>
+
+            <span style="flex: 1 1 auto;"></span>
+
+            <button mat-icon-button (click)="doLogout()">
+                <mat-icon>exit_to_app</mat-icon>
+            </button>
+        </mat-toolbar>
+
+        <!-- Toolbar to show when user changes page -->
+        <mat-toolbar color="primary" *ngIf="deviceType == 'mobile' && toolbarToShow == toolbarTypes.back">
+            <button mat-icon-button (click)="goBack()">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+        </mat-toolbar>
+
+        <div id="inner-sidenav-content">
+            <!-- Used by children paths -->
+            <router-outlet></router-outlet>
+        </div>
+
+    </mat-sidenav-container>
+
+
+</div>

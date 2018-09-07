@@ -1,0 +1,24 @@
+<div class="restrictedPage">
+
+    <div [formGroup]="settingsFG">
+        <mat-list>
+            <div *ngFor="let setting of settings">
+                <mat-list-item *ngIf="!setting.isDivider && !setting.isSubheader" class="noSelect" [class.disabledOption]="setting.isDisabled">
+                    <mat-icon matListIcon>{{ setting.icon }}</mat-icon>
+                    <h3 matLine> {{setting.text}} </h3>
+                    <p matLine style="word-wrap: break-word; white-space: pre-wrap; margin-right: 10px;">{{setting.secondaryText}}</p>
+
+                    <mat-checkbox *ngIf="setting.type == 'checkbox'" 
+                        formControlName="{{setting.formControlName}}"></mat-checkbox>
+                    <mat-slide-toggle *ngIf="setting.type == 'toggle'" 
+                        formControlName="{{setting.formControlName}}"></mat-slide-toggle>
+                </mat-list-item>
+
+                <mat-divider *ngIf="setting.isDivider"></mat-divider>
+
+                <h3 matSubheader *ngIf="setting.isSubheader" class="noSelect" id="subheader">{{setting.text}}</h3>
+            </div>
+        </mat-list>
+    </div>
+
+</div>

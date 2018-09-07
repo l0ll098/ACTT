@@ -1,0 +1,117 @@
+#rootContainer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+mat-toolbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	min-height: 64px;
+}
+
+	mat-toolbar a {
+		text-decoration: none;
+		color: white;
+	}
+
+		mat-toolbar a:visited {
+			color: white;
+		}
+
+mat-sidenav-container {
+	height: 100%;
+	width: 100%;
+}
+
+mat-sidenav {
+	max-width: 320px;
+	min-width: 240px;
+	width: calc(100% - 56px);
+}
+
+#inner-sidenav-content {
+	overflow: auto;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	top: 64px;
+	margin-top: 10px;
+}
+
+#sidenavToolbar {
+	height: 128px;
+}
+
+#sidenavToolbarFirstRow {
+	height: 72px;
+}
+
+#sidenavToolbarSecondRow {
+	height: 56px; 
+	max-height: 56px;
+}
+
+#userPhoto{
+	margin-top: 15px;
+	border-radius: 50%
+}
+
+#sidenavToolbarSecondRowContent{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+#displayNameRow {
+	font-size: 14px;
+	font-weight: 500;
+	margin-bottom: 0px;
+}
+
+#emailRowContainer {
+	margin-top: -15px;
+}
+
+#emailRow{
+	font-size: 14px;
+	font-weight: 400;
+}
+
+#sidenavContent {
+    margin-top: 128px;
+}
+
+    #sidenavContent mat-nav-list div button {
+        height: 64px;
+        width: 100%;
+        text-align: left;
+        vertical-align: central;
+    }
+
+        #sidenavContent mat-nav-list div button mat-icon {
+            margin-right: 32px;
+        }
+
+        #sidenavContent mat-nav-list div button span {
+            font-weight: 500;
+            font-size: 14px;
+		}
+		
+.divider {
+	height: 1px;
+	display: block;
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-top-color: rgba(0, 0, 0, 0.12);
+	margin-top: 1px;
+}
+
+.subHeader {
+	font-size: 14px;
+	color: rgba(0, 0, 0, 0.54);
+	margin-left: 16px;
+}
