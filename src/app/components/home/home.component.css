@@ -45,6 +45,8 @@ mat-sidenav {
 
 #sidenavToolbar {
 	height: 128px;
+	max-width: 320px;
+	min-width: 240px;
 }
 
 #sidenavToolbarFirstRow {
