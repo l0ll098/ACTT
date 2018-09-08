@@ -47,6 +47,7 @@ mat-sidenav {
 	height: 128px;
 	max-width: 320px;
 	min-width: 240px;
+	position: initial;
 }
 
 #sidenavToolbarFirstRow {
@@ -83,25 +84,21 @@ mat-sidenav {
 	font-weight: 400;
 }
 
-#sidenavContent {
-    margin-top: 128px;
+#sidenavContent mat-nav-list div button {
+	height: 64px;
+	width: 100%;
+	text-align: left;
+	vertical-align: central;
 }
 
-    #sidenavContent mat-nav-list div button {
-        height: 64px;
-        width: 100%;
-        text-align: left;
-        vertical-align: central;
-    }
+	#sidenavContent mat-nav-list div button mat-icon {
+		margin-right: 32px;
+	}
 
-        #sidenavContent mat-nav-list div button mat-icon {
-            margin-right: 32px;
-        }
-
-        #sidenavContent mat-nav-list div button span {
-            font-weight: 500;
-            font-size: 14px;
-		}
+	#sidenavContent mat-nav-list div button span {
+		font-weight: 500;
+		font-size: 14px;
+	}
 		
 .divider {
 	height: 1px;
