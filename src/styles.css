@@ -20,3 +20,58 @@
 	-ms-user-select: none;
 	user-select: none;
 }
+
+.centered {
+	text-align: center;
+	margin-top: 40px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.fullPage {
+    width: 100%;
+}
+
+@media screen and (min-width: 960px) {
+    .restrictedPage {
+        width: 53%;
+        margin: 74px auto auto auto;
+    }
+
+    .form {
+        width: 52%;
+        height: auto;
+        margin: 30px auto;
+        padding: 3em 2em 2em 2em;
+        background: #fafafa;
+        border: 1px solid #ebebeb;
+        box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 1px 0px, rgba(0, 0, 0, 0.09804) 0px 1px 2px 0px;
+    }
+
+}
+
+@media screen and (max-width: 959px) {
+    .restrictedPage {
+        width: 100%;
+        margin: 74px auto auto auto;
+    }
+
+    .form {
+        width: 70%;
+        height: auto;
+        margin: 30px auto;
+        padding: 3em 1em 2em 1em;
+        background: #fafafa;
+        border: 1px solid #ebebeb;
+        box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 1px 0px, rgba(0, 0, 0, 0.09804) 0px 1px 2px 0px;
+    }
+
+}
+
+md-form-field {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

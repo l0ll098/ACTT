@@ -19,7 +19,11 @@ import {
 	MatListModule,
 	MatSidenavModule,
 	MatCheckboxModule,
-	MatSlideToggleModule
+	MatSlideToggleModule,
+	MatFormFieldModule,
+	MatAutocompleteModule,
+	MatInputModule,
+	MatSelectModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -97,7 +101,11 @@ const appRoutes: Routes = [
 		MatListModule,
 		MatSidenavModule,
 		MatCheckboxModule,
-		MatSlideToggleModule
+		MatSlideToggleModule,
+		MatFormFieldModule,
+		MatAutocompleteModule,
+		MatInputModule,
+		MatSelectModule
 	],
 	providers: [
 		AuthService,

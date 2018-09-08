@@ -7,7 +7,7 @@ export interface LapTime {
 
 export interface Track {
     name: string;
-    lenght: number;
+    length: number;
 }
 
 export interface Car {

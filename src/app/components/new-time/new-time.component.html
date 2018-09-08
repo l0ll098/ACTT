@@ -1,0 +1,113 @@
+<div class="centered form">
+    <p>Insert a new lap time</p>
+
+    <div [formGroup]="newLapTimeFG">
+        <div>
+            <mat-form-field class="fullPage">
+                <input type="text" matInput formControlName="track" [matAutocomplete]="autoTrack" 
+                    placeholder="Select the track" required>
+                <mat-error *ngIf="FormControls.track.hasError('required')">
+                    This field is <strong>required</strong>!
+                </mat-error>
+            </mat-form-field>
+
+            <mat-autocomplete #autoTrack="matAutocomplete" [displayWith]="showResult">
+                <div *ngIf="filteredTracks.length > 0; else noTrackFound">
+                    <mat-option *ngFor="let track of filteredTracks" [value]="track">
+                        {{ track.name }} <i>- {{ track.length }}m</i>
+                    </mat-option>
+                </div>
+                <ng-template #noTrackFound>
+                    <mat-option>
+                        <i>No track with that name was found</i>
+                    </mat-option>
+                </ng-template>
+            </mat-autocomplete>
+        </div>
+
+
+        <div>
+            <mat-form-field class="fullPage">
+                <input type="text" matInput formControlName="car" [matAutocomplete]="autoCar" 
+                    placeholder="Select the used car" required>
+                <mat-error *ngIf="FormControls.track.hasError('required')">
+                    This field is <strong>required</strong>!
+                </mat-error>
+            </mat-form-field>
+
+            <mat-autocomplete #autoCar="matAutocomplete" [displayWith]="showResult">
+                <div *ngIf="filteredCars.length > 0; else noCarFound">
+                    <mat-option *ngFor="let car of filteredCars" [value]="car">
+                        {{ car.name }}
+                    </mat-option>
+                </div>
+                <ng-template #noCarFound>
+                    <mat-option>
+                        <i>No car with that name was found</i>
+                    </mat-option>
+                </ng-template>
+            </mat-autocomplete>
+        </div>
+
+        <div class="sameLine">
+            <mat-form-field class="fullPage">
+                <input type="number" matInput formControlName="minutes" 
+                    placeholder="Enter laptime - minutes" required [min]="0" [max]="59">
+                <mat-error *ngIf="FormControls.minutes.hasError('required')">
+                    This field is <strong>required</strong>!
+                </mat-error>
+                <mat-error *ngIf="FormControls.minutes.hasError('min')">
+                    Minimum value is 0
+                </mat-error>
+                <mat-error *ngIf="FormControls.minutes.hasError('max')">
+                    Maximum value is 59
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="fullPage">
+                <input type="number" matInput formControlName="seconds" 
+                    placeholder="Enter laptime - seconds" required [min]="0" [max]="59">
+                <mat-error *ngIf="FormControls.seconds.hasError('required')">
+                    This field is <strong>required</strong>!
+                </mat-error>
+                <mat-error *ngIf="FormControls.seconds.hasError('min')">
+                    Minimum value is 0
+                </mat-error>
+                <mat-error *ngIf="FormControls.seconds.hasError('max')">
+                    Maximum value is 59
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="fullPage">
+                <input type="number" matInput formControlName="millisec" 
+                    placeholder="Enter laptime - milliseconds" required [min]="0" [max]="999">
+                <mat-error *ngIf="FormControls.millisec.hasError('required')">
+                    This field is <strong>required</strong>!
+                </mat-error>
+                <mat-error *ngIf="FormControls.millisec.hasError('min')">
+                    Minimum value is 0
+                </mat-error>
+                <mat-error *ngIf="FormControls.millisec.hasError('max')">
+                    Maximum value is 999
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="fullPage">
+                <input type="number" matInput formControlName="lapNumber" 
+                    placeholder="Lap number" required [min]="1" [max]="999">
+                <mat-error *ngIf="FormControls.lapNumber.hasError('required')">
+                    This field is <strong>required</strong>!
+                </mat-error>
+                <mat-error *ngIf="FormControls.lapNumber.hasError('min')">
+                    Well, you should have completed at least a lap...
+                </mat-error>
+                <mat-error *ngIf="FormControls.lapNumber.hasError('max')">
+                    Whoa, so many laps!
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <button mat-flat-button color="accent" (click)="save()" 
+            [disabled]="!newLapTimeFG.valid || disableSaveButton">Save!</button>
+    </div>
+</div>
