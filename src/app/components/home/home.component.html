@@ -73,6 +73,11 @@
         <div id="inner-sidenav-content">
             <!-- Used by children paths -->
             <router-outlet></router-outlet>
+
+            <!-- FAB to register a new time -->
+            <button mat-fab color="accent" (click)="goToNew()" *ngIf="showNewFAB" id="newFAB">
+                <mat-icon>add</mat-icon>
+            </button>
         </div>
 
     </mat-sidenav-container>

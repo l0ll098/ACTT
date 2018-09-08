@@ -27,6 +27,8 @@ import { HomeComponent } from './components/home/home.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { LoginComponent } from './components/login/login.component';
 import { SettingsComponent } from './components/home/settings/settings.component';
+import { TimesComponent } from "./components/times/times.component";
+import {NewTimeComponent} from "./components/new-time/new-time.component";
 
 import { AuthService } from "./services/auth.service";
 import { FirebaseService } from "./services/firebase.service";
@@ -45,6 +47,14 @@ const appRoutes: Routes = [
 		canActivate: [AuthService],
 		children: [
 			{
+				path: "times",
+				component: TimesComponent
+			},
+			{
+				path: "new",
+				component: NewTimeComponent
+			},
+			{
 				path: "settings",
 				component: SettingsComponent
 			}
@@ -62,7 +72,9 @@ const appRoutes: Routes = [
 		HomeComponent,
 		NotFoundComponent,
 		LoginComponent,
-		SettingsComponent
+		SettingsComponent,
+		TimesComponent,
+		NewTimeComponent
 	],
 	imports: [
 		BrowserModule,

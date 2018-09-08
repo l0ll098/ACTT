@@ -28,14 +28,9 @@ export class HomeComponent implements OnInit, AfterContentInit {
 
 	public sidenavButtons: SidenavButton[] = [
 		{
-			text: "Leadboards",
+			text: "View Times",
 			icon: "show_chart",
-			path: "/leadboards"
-		},
-		{
-			text: "Upcoming and past events",
-			icon: "events",
-			path: "/events"
+			path: "/times"
 		},
 		{
 			isDivider: true
@@ -59,6 +54,7 @@ export class HomeComponent implements OnInit, AfterContentInit {
 
 	public user;
 	public deviceType: "desktop" | "mobile";
+	public showNewFAB = true;
 
 	private pathVisited: string[] = ["/"];
 
@@ -119,10 +115,19 @@ export class HomeComponent implements OnInit, AfterContentInit {
 
 		// Then navigate to that path
 		this.goToPath(prevPath);
+
+		this.showNewFAB = true;
 	}
 
 	public returnToHomePath() {
 		this.goToPath("/");
+
+		this.showNewFAB = true;
+	}
+
+	public goToNew() {
+		this.goToPath("/new");
+		this.showNewFAB = false;
 	}
 
     /**
