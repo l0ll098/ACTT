@@ -1,0 +1,18 @@
+{
+    "rules": {
+        "users": {
+            "$uid": {
+                ".read": "$uid === auth.uid",
+                ".write": "$uid === auth.uid",
+                "lapTimes": {
+                    ".indexOn": [
+                        "car/name",
+                        "track/name",
+                        "track/length",
+                        "time/millisecs"
+                    ]
+                }
+            }
+        }
+    }
+}
