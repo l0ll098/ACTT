@@ -154,7 +154,6 @@ export class FirebaseService {
         return new Promise((resolve, reject) => {
             this.getUserRef().once("value", (snapshot) => {
                 this.isABetterLapTime(lapTime).then(isBetter => {
-                    console.log(isBetter);
 
                     if (isBetter) {
                         this.pushData(lapTime, "users/" + snapshot.key + "/lapTimes").then((data) => {
