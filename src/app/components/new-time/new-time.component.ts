@@ -1,8 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { Track, Car } from "../../models/data.model";
+
+import { Track, Car, LapTime, Time } from "../../models/data.model";
 import { tracks } from "../../models/tracks";
 import { cars } from "../../models/cars";
+
+import { FirebaseService } from "../../services/firebase.service";
 
 @Component({
     selector: 'app-new-time',
@@ -38,7 +41,7 @@ export class NewTimeComponent implements OnInit {
     public filteredCars = this.cars.slice(0, this.NUMBER_OF_CARS_TO_SHOW_INITIALLY);
     public disableSaveButton = false;
 
-    constructor() { }
+    constructor(private firebaseService: FirebaseService) { }
 
     ngOnInit(): void {
         this.FormControls.track.valueChanges.subscribe(track => {
@@ -114,5 +117,36 @@ export class NewTimeComponent implements OnInit {
 
     public save() {
         this.disableSaveButton = true;
+
+        const humanTime = {
+            millisecs: this.FormControls.millisec.value,
+            minutes: this.FormControls.minutes.value,
+            seconds: this.FormControls.seconds.value
+        };
+        const lapTime: LapTime = {
+            car: this.FormControls.car.value,
+            lap: this.FormControls.lapNumber.value,
+            timestamp: Date.now(),
+            track: this.FormControls.track.value,
+            time: {
+                millisecs: 0
+            }
+        };
+
+        // Update time
+        lapTime.time.millisecs = this.convertTimeToMS(humanTime);
+
+        this.firebaseService.saveUserLapTime(lapTime).then((data) => {
+            console.log(data);
+
+            this.disableSaveButton = false;
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+
+
+    private convertTimeToMS(time: Time): number {
+        return ((time.minutes * 60) + time.seconds) * 1000 + time.millisecs;
     }
 }
