@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { SettingsItem } from "../../../models/lists.model";
-import { IndexedDBService } from "../../../services/indexedDb.service";
+import { SettingsItem } from "../models/lists.model";
+import { IndexedDBService } from "./indexedDb.service";
 
 @Injectable()
 export class SettingsService {

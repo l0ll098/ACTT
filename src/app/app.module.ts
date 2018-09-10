@@ -40,7 +40,7 @@ import {NewTimeComponent} from "./components/new-time/new-time.component";
 import { AuthService } from "./services/auth.service";
 import { FirebaseService } from "./services/firebase.service";
 import { IndexedDBService } from "./services/indexedDb.service";
-import { SettingsService } from './components/home/settings/settings.service';
+import { SettingsService } from './services/settings.service';
 
 import { LapTimePipe } from './pipes/lap-time.pipe';
 

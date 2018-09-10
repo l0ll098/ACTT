@@ -6,7 +6,7 @@ import { FirebaseService } from "../../services/firebase.service";
 import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { SidenavButton } from '../../models/lists.model';
-import { SettingsService } from './settings/settings.service';
+import { SettingsService } from '../../services/settings.service';
 
 
 enum toolbarTypes {
@@ -46,7 +46,8 @@ export class HomeComponent implements OnInit, AfterContentInit {
 		{
 			text: "Favorite",
 			icon: "favorite",
-			path: "/account/favorite"
+			path: "/account/favorite",
+			isDisabled: true
 		},
 		{
 			text: "Settings",
