@@ -24,7 +24,8 @@ import {
 	MatAutocompleteModule,
 	MatInputModule,
 	MatSelectModule,
-	MatTableModule
+	MatTableModule,
+	MatPaginatorModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -39,6 +40,8 @@ import { AuthService } from "./services/auth.service";
 import { FirebaseService } from "./services/firebase.service";
 import { IndexedDBService } from "./services/indexedDb.service";
 import { SettingsService } from './components/home/settings/settings.service';
+
+import { LapTimePipe } from './pipes/lap-time.pipe';
 
 
 const appRoutes: Routes = [
@@ -79,7 +82,9 @@ const appRoutes: Routes = [
 		LoginComponent,
 		SettingsComponent,
 		TimesComponent,
-		NewTimeComponent
+		NewTimeComponent,
+
+		LapTimePipe
 	],
 	imports: [
 		BrowserModule,
@@ -107,7 +112,8 @@ const appRoutes: Routes = [
 		MatAutocompleteModule,
 		MatInputModule,
 		MatSelectModule,
-		MatTableModule
+		MatTableModule,
+		MatPaginatorModule
 	],
 	providers: [
 		AuthService,
