@@ -1,7 +1,7 @@
 @media screen and (min-width: 960px) {
     #tableContainer {
         margin: 16px auto;
-    }
+    }    
 }
 
 @media screen and (max-width: 959px) {
@@ -10,17 +10,28 @@
         width: calc(100% - 16px);
     }
 
-    /* It will be applied to th and td inside the table (but not on the last one) */
-    #tableContainer th:not(:last-child),
-    #tableContainer td:not(:last-child) {
-        padding-right: 16px;
+    #tableContainer th:not(:first-child):not(:last-child),
+    #tableContainer td:not(:first-child):not(:last-child) {
+        padding-right: 8px;
+    }
+
+    #tableContainer th:last-child {
+        padding-right: 8px;
     }
 }
 
 #tableContainer table {
     width: 100%;
+    margin: 0 auto;
 }
 
 th.mat-sort-header-sorted {
     color: black;
+}
+
+#searchField {
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 16px;
+    width: calc(100% - 32px);
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { LapTime } from "../../models/data.model";
 import { FirebaseService } from "../../services/firebase.service";
-import { MatTableDataSource, MatSort, MatPaginator, Sort } from "@angular/material";
+import { MatTableDataSource, MatPaginator, Sort } from "@angular/material";
 
 @Component({
 	selector: 'app-times',
@@ -55,6 +55,19 @@ export class TimesComponent implements OnInit {
 					return 0;
 			}
 		});
+	}
+
+	applyFilter(filterValue: string) {
+		this.dataSource.filterPredicate = (data: LapTime, filter: string) => {
+			return data.car.name.toLowerCase().includes(filter.toLowerCase()) ||
+				data.track.name.toLowerCase().includes(filter.toLowerCase()) ||
+				(data.track.length + "").includes(filter) ||
+				(data.lap + "").includes(filter) ||
+				(data.humanTime.minutes + "").includes(filter) ||
+				(data.humanTime.seconds + "").includes(filter) ||
+				(data.humanTime.millisecs + "").includes(filter);
+		};
+		this.dataSource.filter = filterValue.trim();
 	}
 }
 
