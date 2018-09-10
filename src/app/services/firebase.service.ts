@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import * as firebase from "firebase";
 
 import { AuthService } from "./auth.service";
-import { LapTime, Time } from "../models/data.model";
+import { LapTime, Time, Track, Car } from "../models/data.model";
 
 /**
  * @constant userRefInitializer This is used to initialize the user object in the database
@@ -247,4 +247,95 @@ export class FirebaseService {
         });
     }
 
+
+    public getLapTimes(limitTo: number = 25): Promise<LapTime[]> {
+        return new Promise((resolve, reject) => {
+            this.getUserRef().child("lapTimes").limitToLast(limitTo).once("value", (data) => {
+                /*// Convert it to an array
+                const dataArray: LapTime[] = Object.keys(data.val()).map((key) => {
+                    return data.val()[key];
+                });
+                // Sort the data
+                return resolve(dataArray.sort((a: LapTime, b: LapTime) => {
+                    return a.time.millisecs - b.time.millisecs;
+                }));*/
+
+                return resolve(this._formatLapTimeQueryResults(data));
+            }, (err) => {
+                return reject(err);
+            });
+        });
+    }
+
+    public getLapTimesByTrack(track: Track, limitTo: number = 25): Promise<LapTime[]> {
+        return new Promise((resolve, reject) => {
+            this.getUserRef()
+                .child("lapTimes")
+                .orderByChild("track/name")
+                .equalTo(track.name)
+                .limitToLast(limitTo)
+                .once("value", (data) => {
+                    // Convert it to an array
+                    const dataArray: LapTime[] = Object.keys(data.val()).map((key) => {
+                        return data.val()[key];
+                    });
+                    // Sort the data
+                    return resolve(dataArray.sort((a: LapTime, b: LapTime) => {
+                        return a.time.millisecs - b.time.millisecs;
+                    }));
+                }, (err) => {
+                    return reject(err);
+                });
+        });
+    }
+
+    public getLapTimesByCar(car: Car, limitTo: number = 25): Promise<LapTime[]> {
+        return new Promise((resolve, reject) => {
+            this.getUserRef()
+                .child("lapTimes")
+                .orderByChild("car/name")
+                .equalTo(car.name)
+                .limitToLast(limitTo).once("value", (data) => {
+                    // Convert it to an array
+                    const dataArray: LapTime[] = Object.keys(data.val()).map((key) => {
+                        return data.val()[key];
+                    });
+                    // Sort the data
+                    return resolve(dataArray.sort((a: LapTime, b: LapTime) => {
+                        return a.time.millisecs - b.time.millisecs;
+                    }));
+                }, (err) => {
+                    return reject(err);
+                });
+        });
+    }
+
+    private _formatLapTimeQueryResults(rowData) {
+        // Convert it to an array
+        const dataArray: LapTime[] = Object.keys(rowData.val()).map((key) => {
+            return rowData.val()[key];
+        });
+
+        // Sort the data
+        const sorted = dataArray.sort((a: LapTime, b: LapTime) => {
+            return a.time.millisecs - b.time.millisecs;
+        });
+
+        // Calculate the human time
+        sorted.forEach((lapTime: LapTime) => {
+            let ms = lapTime.time.millisecs;
+
+            const min = Math.floor(ms / 60000);
+            ms = ms - (min * 60000);
+            const secs = Math.floor(ms / 1000);
+            ms = ms - (secs * 1000);
+            lapTime.humanTime = {
+                millisecs: ms,
+                seconds: secs,
+                minutes: min
+            };
+        });
+
+        return sorted;
+    }
 }

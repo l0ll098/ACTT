@@ -1,0 +1,18 @@
+@media screen and (min-width: 960px) {
+    #table {
+        margin: 16px auto;
+    }
+}
+
+@media screen and (max-width: 959px) {
+    #table {
+        margin: 16px 8px 0 8px;
+        width: calc(100% - 16px);
+    }
+
+    /* It will be applied to th and td inside the table (but not on the last one) */
+    #table th:not(:last-child),
+    #table td:not(:last-child) {
+        padding-right: 16px;
+    }
+}

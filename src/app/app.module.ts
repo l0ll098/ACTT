@@ -23,7 +23,8 @@ import {
 	MatFormFieldModule,
 	MatAutocompleteModule,
 	MatInputModule,
-	MatSelectModule
+	MatSelectModule,
+	MatTableModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -105,7 +106,8 @@ const appRoutes: Routes = [
 		MatFormFieldModule,
 		MatAutocompleteModule,
 		MatInputModule,
-		MatSelectModule
+		MatSelectModule,
+		MatTableModule
 	],
 	providers: [
 		AuthService,
