@@ -26,6 +26,9 @@ export class HomeComponent implements OnInit, AfterContentInit {
 	public toolbarTypes = toolbarTypes;
 	public toolbarToShow: toolbarTypes = toolbarTypes.sidenav;
 
+	public DEFAULT_TOOLBAR_TILE = "AC Time Tracker";
+	public toolbarTitle = this.DEFAULT_TOOLBAR_TILE;
+
 	public sidenavButtons: SidenavButton[] = [
 		{
 			text: "View Times",
@@ -141,8 +144,14 @@ export class HomeComponent implements OnInit, AfterContentInit {
 				// If so change the toolbar and reset the array of the path visited
 				this.toolbarToShow = toolbarTypes.sidenav;
 				this.pathVisited = [];
+
+				// If user returns to the main path, show the app name
+				this.toolbarTitle = this.DEFAULT_TOOLBAR_TILE;
 			} else {
 				this.toolbarToShow = toolbarTypes.back;
+
+				// When user changes path, show the text alongside the back arrow
+				this.toolbarTitle = this.sidenavButtons.find(btn => btn.path === path).text;
 			}
 			this.router.navigate([path]);
 		}

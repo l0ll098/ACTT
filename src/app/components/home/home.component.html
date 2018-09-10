@@ -53,7 +53,7 @@
 
 
             <a href="" onclick="return false;" (click)="returnToHomePath()" class="noSelect">
-                AC Time Tracker
+                {{ DEFAULT_TOOLBAR_TILE }}
             </a>
 
             <span style="flex: 1 1 auto;"></span>
@@ -68,6 +68,10 @@
             <button mat-icon-button (click)="goBack()">
                 <mat-icon>arrow_back</mat-icon>
             </button>
+
+            <span style="flex: 1 1 auto;">
+                {{ toolbarTitle }}
+            </span>
         </mat-toolbar>
 
         <div id="inner-sidenav-content">
