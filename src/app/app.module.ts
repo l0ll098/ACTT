@@ -66,12 +66,16 @@ const appRoutes: Routes = [
 			{
 				path: "settings",
 				component: SettingsComponent
+			},
+			{
+				path: "notFound",
+				component: NotFoundComponent
 			}
 		]
 	},
 	{
 		path: "**",
-		component: NotFoundComponent
+		redirectTo: "/notFound"
 	}
 ];
 

@@ -1,0 +1,10 @@
+#container {
+    margin: 0 auto;
+    text-align: center;
+}
+
+#returnToHome {
+    cursor:pointer;
+    color:blue;
+    text-decoration:underline;
+}
