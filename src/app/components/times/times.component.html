@@ -1,7 +1,7 @@
 <div class="mat-elevation-z8 restrictedPage" id="tableContainer">
-    <table mat-table [dataSource]="dataSource" matSort>
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
         <!-- Position Column -->
-        <ng-container matColumnDef="position">
+        <ng-container matColumnDef="index">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
             <td mat-cell *matCellDef="let element"> {{element.index}} </td>
         </ng-container>
@@ -31,7 +31,7 @@
         </ng-container>
 
         <!-- Lap Number -->
-        <ng-container matColumnDef="lapNumber">
+        <ng-container matColumnDef="lap">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Lap Number </th>
             <td mat-cell *matCellDef="let el"> {{el.lap}} </td>
         </ng-container>

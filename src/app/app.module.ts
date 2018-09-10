@@ -25,7 +25,8 @@ import {
 	MatInputModule,
 	MatSelectModule,
 	MatTableModule,
-	MatPaginatorModule
+	MatPaginatorModule,
+	MatSortModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -113,7 +114,8 @@ const appRoutes: Routes = [
 		MatInputModule,
 		MatSelectModule,
 		MatTableModule,
-		MatPaginatorModule
+		MatPaginatorModule,
+		MatSortModule
 	],
 	providers: [
 		AuthService,
