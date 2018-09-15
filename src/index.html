@@ -41,7 +41,44 @@
 </head>
 
 <body>
-  <app-root></app-root>
+  <app-root>
+    <style>
+      * {
+        font-family: "Roboto", sans-serif;
+      }
+
+      #bootstrappingScreen {
+        text-align: center;
+        position: absolute;
+        top: 50%;
+        width: calc(100% - 8px);
+        margin: 0 auto;
+      }
+
+      #bootstrappingScreen div {
+        margin-top: 10px;
+      }
+
+      noscript {
+        margin-top: 20px;
+      }
+    </style>
+
+    <div id="bootstrappingScreen">
+      <img src="assets/images/android-chrome-192x192.png" alt="RankingIT" height="96" width="96" />
+
+      <br />
+      <div>
+        Assetto Corsa Time Tracker
+        <br><br><br>
+        <noscript>
+          Sorry, JavaScript needs to be enabled in order to run this application
+        </noscript>
+      </div>
+    </div>
+  </app-root>
+
+
 </body>
 
 </html>
