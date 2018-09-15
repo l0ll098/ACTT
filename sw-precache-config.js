@@ -13,16 +13,9 @@ module.exports = {
     navigateFallback: '/index.html',
     runtimeCaching: [
         {
-            urlPattern: /localhost:3000/,
-            handler: 'networkFirst'
-        },
-        {
-            urlPattern: /assettocorsatimetracker\.firebaseapp\.com/,
-            handler: 'cacheFirst'
-        },
-        {
             urlPattern: /fonts\.googleapis\.com/,
             handler: "cacheFirst"
         }
-    ]
+    ],
+    navigateFallbackWhitelist: [/^(?!\/__)/]
 };
