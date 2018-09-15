@@ -9,6 +9,10 @@
 /tmp
 /out-tsc
 
+# Firebase
+.firebaserc
+*.log
+
 # dependencies
 /node_modules
 
