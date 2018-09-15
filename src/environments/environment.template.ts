@@ -1,4 +1,5 @@
-import * as firebase from "firebase";
+import { auth } from "firebase/app";
+import "firebase/auth";
 import * as firebaseui from "firebaseui";
 
 // The file contents for the current environment will overwrite these during build.
@@ -23,8 +24,8 @@ export const environment = {
 export const firebaseUIConfigs: firebaseui.auth.Config = {
 	signInFlow: "redirect",
 	signInOptions: [
-		firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-		firebase.auth.EmailAuthProvider.PROVIDER_ID
+		auth.GoogleAuthProvider.PROVIDER_ID,
+		auth.EmailAuthProvider.PROVIDER_ID
 	],
 	tosUrl: '<your-tos-link>',
 	privacyPolicyUrl: '<your-privacyPolicyUrl-link>',
