@@ -1,6 +1,6 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "Assetto Corsa Time Tracker",
+    "short_name": "AC Time Tracker",
     "icons": [
         {
             "src": "assets/images/android-chrome-36x36.png",
@@ -48,7 +48,8 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#ffffff",
+    "theme_color": "#303f9f",
     "background_color": "#ffffff",
-    "display": "standalone"
+    "display": "standalone",
+    "start_url": "/"
 }
