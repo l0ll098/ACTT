@@ -303,6 +303,10 @@ export class FirebaseService {
     }
 
     private _formatLapTimeQueryResults(rowData) {
+        if (!rowData) {
+            return [];
+        }
+
         // Convert it to an array
         const dataArray: LapTime[] = Object.keys(rowData.val()).map((key) => {
             return rowData.val()[key];
