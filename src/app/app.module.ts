@@ -35,7 +35,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { LoginComponent } from './components/login/login.component';
 import { SettingsComponent } from './components/home/settings/settings.component';
 import { TimesComponent } from "./components/times/times.component";
-import {NewTimeComponent} from "./components/new-time/new-time.component";
+import { NewTimeComponent } from "./components/new-time/new-time.component";
+import { BestTimesComponent } from "./components/best-times/best-times.component";
 
 import { AuthService } from "./services/auth.service";
 import { FirebaseService } from "./services/firebase.service";
@@ -68,6 +69,10 @@ const appRoutes: Routes = [
 				component: SettingsComponent
 			},
 			{
+				path: "best",
+				component: BestTimesComponent
+			},
+			{
 				path: "notFound",
 				component: NotFoundComponent
 			}
@@ -88,6 +93,7 @@ const appRoutes: Routes = [
 		SettingsComponent,
 		TimesComponent,
 		NewTimeComponent,
+		BestTimesComponent,
 
 		LapTimePipe
 	],

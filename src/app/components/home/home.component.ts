@@ -36,6 +36,11 @@ export class HomeComponent implements OnInit, AfterContentInit {
 			path: "/times"
 		},
 		{
+			text: "Best times",
+			icon: "timer",
+			path: "/best"
+		},
+		{
 			isDivider: true
 		},
 		{
