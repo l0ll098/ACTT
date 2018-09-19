@@ -303,7 +303,7 @@ export class FirebaseService {
     }
 
     private _formatLapTimeQueryResults(rowData) {
-        if (!rowData) {
+        if (!rowData.val()) {
             return [];
         }
 
