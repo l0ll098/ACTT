@@ -156,8 +156,12 @@ export class HomeComponent implements OnInit, AfterContentInit {
 			} else {
 				this.toolbarToShow = toolbarTypes.back;
 
-				// When user changes path, show the text alongside the back arrow
-				this.toolbarTitle = this.sidenavButtons.find(btn => btn.path === path).text;
+				let btn = this.sidenavButtons.find(btn => btn.path === path);
+
+				if (btn) {
+					// When user changes path, show the text alongside the back arrow
+					this.toolbarTitle = btn.text;
+				}
 			}
 			this.router.navigate([path]);
 		}
