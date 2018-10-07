@@ -1,11 +1,13 @@
 import { Component, OnInit } from "@angular/core";
-import { FormControl, FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { FormControl, FormGroup,  Validators } from "@angular/forms";
+import { Router } from "@angular/router";
 
 import { Track, Car, LapTime, Time } from "../../models/data.model";
 import { tracks } from "../../models/tracks";
 import { cars } from "../../models/cars";
 
 import { FirebaseService } from "../../services/firebase.service";
+
 
 @Component({
     selector: 'app-new-time',
@@ -41,7 +43,9 @@ export class NewTimeComponent implements OnInit {
     public filteredCars = this.cars.slice(0, this.NUMBER_OF_CARS_TO_SHOW_INITIALLY);
     public disableSaveButton = false;
 
-    constructor(private firebaseService: FirebaseService) { }
+    constructor(
+        private firebaseService: FirebaseService,
+        private router: Router) { }
 
     ngOnInit(): void {
         this.FormControls.track.valueChanges.subscribe(track => {
@@ -140,8 +144,12 @@ export class NewTimeComponent implements OnInit {
             console.log(data);
 
             this.disableSaveButton = false;
+
+            this.router.navigate(["/times"]);
         }).catch(err => {
             console.log(err);
+
+            alert("An error occured while saving data");
         });
     }
 
