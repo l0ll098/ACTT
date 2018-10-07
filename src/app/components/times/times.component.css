@@ -5,9 +5,10 @@
 }
 
 @media screen and (max-width: 959px) {
-    #tableContainer {
-        margin: 16px 8px 0 8px;
-        width: calc(100% - 16px);
+    #tableContainer th:first-child,
+    #tableContainer td:first-child {
+        width: 30px;
+        padding-left: 8px;
     }
 
     #tableContainer th:not(:first-child):not(:last-child),
@@ -18,6 +19,10 @@
     #tableContainer th:last-child {
         padding-right: 8px;
     }
+}
+
+#tableContainer {
+    margin-top: 16px;
 }
 
 #tableContainer table {
