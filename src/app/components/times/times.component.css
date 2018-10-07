@@ -40,3 +40,9 @@ th.mat-sort-header-sorted {
     margin-top: 16px;
     width: calc(100% - 32px);
 }
+
+#tableContainer #refreshBtn {
+    float: right;
+    margin-right: 8px;
+    margin-top: 16px;
+}

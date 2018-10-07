@@ -97,9 +97,9 @@ export class HomeComponent implements OnInit, AfterContentInit {
 		});
 
 		// When the page is reloaded, navigate to the main path
-		if (this.router.url.length > 1) {
+		/*if (this.router.url.length > 1) {
 			this.goToPath("/");
-		}
+		}*/
 
 		/* Check if it's a mobile device.
 		   This is used to show the toolbar with the back icon on mobile and

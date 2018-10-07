@@ -19,19 +19,8 @@ export class TimesComponent implements OnInit {
 	constructor(private firebaseService: FirebaseService) { }
 
 	ngOnInit(): void {
-		this.firebaseService.getLapTimes().then(data => {
-			this.lapTimes = data;
-
-			// Add an index property
-			this.lapTimes.forEach((el, index) => {
-				el["index"] = <number>index + 1;
-			});
-
-			this.dataSource = new MatTableDataSource(this.lapTimes);
-			this.dataSource.paginator = this.paginator;
-		}).catch(err => {
-			console.log(err);
-		});
+		// Load data
+		this.refresh();
 	}
 
 	sortData(sort: Sort) {
@@ -68,6 +57,25 @@ export class TimesComponent implements OnInit {
 				(data.humanTime.millisecs + "").includes(filter);
 		};
 		this.dataSource.filter = filterValue.trim();
+	}
+
+	/**
+	 * Reloads the data table
+	 */
+	public refresh() {
+		this.firebaseService.getLapTimes().then(data => {
+			this.lapTimes = data;
+
+			// Add an index property
+			this.lapTimes.forEach((el, index) => {
+				el["index"] = <number>index + 1;
+			});
+
+			this.dataSource = new MatTableDataSource(this.lapTimes);
+			this.dataSource.paginator = this.paginator;
+		}).catch(err => {
+			console.log(err);
+		});
 	}
 }
 
