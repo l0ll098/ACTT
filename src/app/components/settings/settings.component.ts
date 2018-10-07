@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SettingsItem } from '../../../models/lists.model';
+import { SettingsItem } from '../../models/lists.model';
 import { FormGroup, FormControl } from '@angular/forms';
-import { SettingsService } from '../../../services/settings.service'
+import { SettingsService } from '../../services/settings.service'
 
 @Component({
     selector: 'app-settings',

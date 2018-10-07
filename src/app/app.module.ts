@@ -34,7 +34,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { LoginComponent } from './components/login/login.component';
-import { SettingsComponent } from './components/home/settings/settings.component';
+import { SettingsComponent } from './components/settings/settings.component';
 import { TimesComponent } from "./components/times/times.component";
 import { NewTimeComponent } from "./components/new-time/new-time.component";
 import { BestTimesComponent } from "./components/best-times/best-times.component";
