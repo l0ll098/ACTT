@@ -21,5 +21,6 @@ module.exports = {
             handler: "cacheFirst"
         }
     ],
-    navigateFallbackWhitelist: [/^(?!\/__)/]
+    navigateFallbackWhitelist: [/^(?!\/__)/],
+    skipWaiting: true
 };
