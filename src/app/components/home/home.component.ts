@@ -7,6 +7,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 
 import { SidenavButton } from '../../models/lists.model';
 import { SettingsService } from '../../services/settings.service';
+import { MatSnackBar } from '@angular/material';
 
 
 enum toolbarTypes {
@@ -73,7 +74,8 @@ export class HomeComponent implements OnInit, AfterContentInit {
 		private authService: AuthService,
 		private firebaseService: FirebaseService,
 		private deviceService: DeviceDetectorService,
-		private settingsService: SettingsService) {
+		private settingsService: SettingsService,
+		private snackBar: MatSnackBar) {
 
 		this.authService.getUserData().subscribe(data => {
 			console.log(data);
@@ -109,6 +111,15 @@ export class HomeComponent implements OnInit, AfterContentInit {
 			this.deviceType = "desktop";
 		} else {
 			this.deviceType = "mobile";
+		}
+
+
+		if (!navigator.onLine) {
+			// TODO: Move up the new FAB when opening the snackbar and move it back down when the 
+			// snackbar is closed
+			this.snackBar.open("You are offline.", "Ok", {
+				duration: 10000		// 10s
+			});
 		}
 	}
 

@@ -26,7 +26,8 @@ import {
 	MatSelectModule,
 	MatTableModule,
 	MatPaginatorModule,
-	MatSortModule
+	MatSortModule,
+	MatSnackBarModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -125,7 +126,8 @@ const appRoutes: Routes = [
 		MatSelectModule,
 		MatTableModule,
 		MatPaginatorModule,
-		MatSortModule
+		MatSortModule,
+		MatSnackBarModule
 	],
 	providers: [
 		AuthService,
