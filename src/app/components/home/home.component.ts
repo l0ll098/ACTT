@@ -8,6 +8,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { SidenavButton } from '../../models/lists.model';
 import { SettingsService } from '../../services/settings.service';
 import { MatSnackBar } from '@angular/material';
+import { LocationStrategy } from '@angular/common';
 
 
 enum toolbarTypes {
@@ -71,6 +72,7 @@ export class HomeComponent implements OnInit, AfterContentInit {
 
 	constructor(
 		private router: Router,
+		private location: LocationStrategy,
 		private authService: AuthService,
 		private firebaseService: FirebaseService,
 		private deviceService: DeviceDetectorService,
@@ -121,6 +123,15 @@ export class HomeComponent implements OnInit, AfterContentInit {
 				duration: 10000		// 10s
 			});
 		}
+
+		// Intercept the "back arrow". Both in mobile and desktop
+		this.location.onPopState((e) => {
+			if (this.location.path() === "/") {
+				this.returnToHomePath();
+			} else {
+				this.goToPath(this.location.path());
+			}
+		});
 	}
 
 	ngAfterContentInit() {
