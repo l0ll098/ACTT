@@ -15,6 +15,10 @@ module.exports = {
         {
             urlPattern: /fonts\.googleapis\.com/,
             handler: "cacheFirst"
+        },
+        {
+            urlPattern: /assettocorsatimetracker\.firebaseapp\.com/,
+            handler: "cacheFirst"
         }
     ],
     navigateFallbackWhitelist: [/^(?!\/__)/]
