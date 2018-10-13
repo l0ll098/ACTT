@@ -1,6 +1,4 @@
-import { auth } from "firebase/app";
-import "firebase/auth";
-import * as firebaseui from "firebaseui";
+import { firebaseui, firebase } from "firebaseui-angular";
 
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
@@ -24,8 +22,8 @@ export const environment = {
 export const firebaseUIConfigs: firebaseui.auth.Config = {
 	signInFlow: "redirect",
 	signInOptions: [
-		auth.GoogleAuthProvider.PROVIDER_ID,
-		auth.EmailAuthProvider.PROVIDER_ID
+		firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+		firebase.auth.EmailAuthProvider.PROVIDER_ID
 	],
 	tosUrl: '<your-tos-link>',
 	privacyPolicyUrl: '<your-privacyPolicyUrl-link>',

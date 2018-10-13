@@ -6,9 +6,10 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { environment, firebaseUIConfigs } from '../environments/environment';
 
-import { AngularFireModule } from "angularfire2";
-import { FirebaseUIModule } from "firebaseui-angular";
-import { AngularFireAuthModule } from "angularfire2/auth";
+import { FirebaseUIModule, firebase, firebaseui } from 'firebaseui-angular';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireDatabaseModule } from "@angular/fire/database";
 
 import { DeviceDetectorModule } from "ngx-device-detector";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -106,6 +107,7 @@ const appRoutes: Routes = [
 			{ enableTracing: (environment.enableAngularRoutingLog ? true : false) }
 		),
 		AngularFireAuthModule,
+		AngularFireDatabaseModule,
 		AngularFireModule.initializeApp(environment.firebase),
 		FirebaseUIModule.forRoot(firebaseUIConfigs),
 		DeviceDetectorModule.forRoot(),
