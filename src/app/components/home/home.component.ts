@@ -129,15 +129,6 @@ export class HomeComponent implements OnInit, AfterContentInit {
             this.deviceType = "mobile";
         }
 
-
-        if (!navigator.onLine) {
-            // TODO: Move up the new FAB when opening the snackbar and move it back down when the 
-            // snackbar is closed
-            this.snackBar.open("You are offline.", "Ok", {
-                duration: 10000		// 10s
-            });
-        }
-
         // Intercept the "back arrow". Both in mobile and desktop
         this.location.onPopState((e) => {
             if (this.location.path() === "/") {
@@ -145,6 +136,18 @@ export class HomeComponent implements OnInit, AfterContentInit {
             } else {
                 this.goToPath(this.location.path());
             }
+        });
+
+        window.addEventListener("offline", () => {
+            // TODO: Move up the new FAB when opening the snackbar and move it back down when the 
+            // snackbar is closed
+            this.snackBar.open("You are offline.", "Ok", {
+                duration: 10000		// 10s
+            });
+        });
+
+        window.addEventListener("online", ()=>{
+            this.snackBar.dismiss();
         });
     }
 
