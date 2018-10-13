@@ -146,7 +146,7 @@ export class HomeComponent implements OnInit, AfterContentInit {
             });
         });
 
-        window.addEventListener("online", ()=>{
+        window.addEventListener("online", () => {
             this.snackBar.dismiss();
         });
     }
