@@ -139,11 +139,23 @@ export class HomeComponent implements OnInit, AfterContentInit {
         });
 
         window.addEventListener("offline", () => {
-            // TODO: Move up the new FAB when opening the snackbar and move it back down when the 
-            // snackbar is closed
             this.snackBar.open("You are offline.", "Ok", {
                 duration: 10000		// 10s
             });
+
+            // Check that the current device is small, such as a smartphone 
+            if (this.deviceType == "mobile") {
+                // When the snackbar is opend, move up the FAB so that it doesn't get covered
+                this.snackBar._openedSnackBarRef.afterOpened().subscribe(e => {
+                    document.getElementById("newFAB").style.bottom = "64px";
+                });
+
+                // When the snackbar is closed, move down the FAB
+                this.snackBar._openedSnackBarRef.afterDismissed().subscribe(e => {
+                    document.getElementById("newFAB").style.bottom = "16px";
+                });                
+            }
+
         });
 
         window.addEventListener("online", () => {
