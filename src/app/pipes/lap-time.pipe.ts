@@ -1,7 +1,10 @@
 import { PipeTransform, Pipe } from "@angular/core";
 import { Time } from "../models/data.model";
 
-@Pipe({ name: "lapTime" })
+@Pipe({ 
+    name: "lapTime",
+    pure: true
+ })
 export class LapTimePipe implements PipeTransform {
 
     transform(value: any, ...args: any[]) {
