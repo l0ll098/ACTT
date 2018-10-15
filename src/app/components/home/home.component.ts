@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, AfterContentInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { LocationStrategy } from '@angular/common';
 
@@ -25,7 +25,7 @@ enum toolbarTypes {
     styleUrls: ['./home.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent implements OnInit, AfterViewInit, AfterContentInit {
+export class HomeComponent implements AfterViewInit, AfterContentInit {
 
     @ViewChild(MatSidenav)
     public sidenav: MatSidenav;
@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentInit {
         });
     }
 
-    ngOnInit() {
+    ngAfterViewInit() {
         // When the page is reloaded, navigate to the main path
 		/*if (this.router.url.length > 1) {
 			this.goToPath("/");
@@ -115,9 +115,7 @@ export class HomeComponent implements OnInit, AfterViewInit, AfterContentInit {
         } else {
             this.deviceType = "mobile";
         }
-    }
 
-    ngAfterViewInit() {
         // Subscribe to path changes
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
