@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterContentInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { LocationStrategy } from '@angular/common';
 
@@ -24,7 +24,7 @@ enum toolbarTypes {
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit, AfterContentInit {
+export class HomeComponent implements OnInit, AfterViewInit, AfterContentInit {
 
     @ViewChild(MatSidenav)
     public sidenav: MatSidenav;
@@ -100,20 +100,6 @@ export class HomeComponent implements OnInit, AfterContentInit {
     }
 
     ngOnInit() {
-        // Subscribe to path changes
-        this.router.events.subscribe((event) => {
-            if (event instanceof NavigationStart) {
-                // When user changes path, add it to the array
-                //this.pathVisited.push(event.url);
-
-                if (this.pathVisited.includes(event.url.split("/")[0])) {
-                    this.pathVisited.push(event.url);
-                } else {
-                    this.pathVisited = ["/"];
-                }
-            }
-        });
-
         // When the page is reloaded, navigate to the main path
 		/*if (this.router.url.length > 1) {
 			this.goToPath("/");
@@ -128,6 +114,21 @@ export class HomeComponent implements OnInit, AfterContentInit {
         } else {
             this.deviceType = "mobile";
         }
+    }
+
+    ngAfterViewInit() {
+        // Subscribe to path changes
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationStart) {
+                // When user changes path, add it to the array
+                if (this.pathVisited.includes(event.url.split("/")[0])) {
+                    this.pathVisited.push(event.url);
+                } else {
+                    this.pathVisited = ["/"];
+                }
+            }
+        });
+
 
         // Intercept the "back arrow". Both in mobile and desktop
         this.location.onPopState((e) => {
@@ -153,7 +154,7 @@ export class HomeComponent implements OnInit, AfterContentInit {
                 // When the snackbar is closed, move down the FAB
                 this.snackBar._openedSnackBarRef.afterDismissed().subscribe(e => {
                     document.getElementById("newFAB").style.bottom = "16px";
-                });                
+                });
             }
 
         });
@@ -230,5 +231,9 @@ export class HomeComponent implements OnInit, AfterContentInit {
 
     openSidenav() {
         this.sidenav.open();
+    }
+
+    trackByFn(index, item) {
+        return index;
     }
 }

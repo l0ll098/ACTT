@@ -1,5 +1,5 @@
-import { Component, OnInit } from "@angular/core";
-import { FormControl, FormGroup,  Validators } from "@angular/forms";
+import { Component, OnInit, AfterViewInit } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { Track, Car, LapTime, Time } from "../../models/data.model";
@@ -14,7 +14,7 @@ import { FirebaseService } from "../../services/firebase.service";
     templateUrl: './new-time.component.html',
     styleUrls: ['./new-time.component.css']
 })
-export class NewTimeComponent implements OnInit {
+export class NewTimeComponent implements AfterViewInit {
 
     private NUMBER_OF_TRACKS_TO_SHOW_INITIALLY = 9;
     private NUMBER_OF_CARS_TO_SHOW_INITIALLY = 9;
@@ -47,7 +47,7 @@ export class NewTimeComponent implements OnInit {
         private firebaseService: FirebaseService,
         private router: Router) { }
 
-    ngOnInit(): void {
+    ngAfterViewInit(): void {
         this.FormControls.track.valueChanges.subscribe(track => {
             this.filterTrack(track);
         });
@@ -156,5 +156,13 @@ export class NewTimeComponent implements OnInit {
 
     private convertTimeToMS(time: Time): number {
         return ((time.minutes * 60) + time.seconds) * 1000 + time.millisecs;
+    }
+
+    trackByTracksFn(index, item) {
+        return index;
+    }
+
+    trackByCarsFn(index, item) {
+        return index;
     }
 }

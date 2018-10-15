@@ -13,7 +13,7 @@
 
             <mat-autocomplete #autoTrack="matAutocomplete" [displayWith]="showResult">
                 <div *ngIf="filteredTracks.length > 0; else noTrackFound">
-                    <mat-option *ngFor="let track of filteredTracks" [value]="track">
+                    <mat-option *ngFor="let track of filteredTracks; trackBy: trackByTracksFn" [value]="track">
                         {{ track.name }} <i>- {{ track.length }}m</i>
                     </mat-option>
                 </div>
@@ -37,7 +37,7 @@
 
             <mat-autocomplete #autoCar="matAutocomplete" [displayWith]="showResult">
                 <div *ngIf="filteredCars.length > 0; else noCarFound">
-                    <mat-option *ngFor="let car of filteredCars" [value]="car">
+                    <mat-option *ngFor="let car of filteredCars; trackBy: trackByCarsFn" [value]="car">
                         {{ car.name }}
                     </mat-option>
                 </div>

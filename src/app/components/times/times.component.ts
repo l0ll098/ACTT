@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, ViewChild, AfterViewInit } from "@angular/core";
 import { LapTime } from "../../models/data.model";
 import { FirebaseService } from "../../services/firebase.service";
 import { MatTableDataSource, MatPaginator, Sort } from "@angular/material";
@@ -8,7 +8,7 @@ import { MatTableDataSource, MatPaginator, Sort } from "@angular/material";
 	templateUrl: './times.component.html',
 	styleUrls: ['./times.component.css']
 })
-export class TimesComponent implements OnInit {
+export class TimesComponent implements AfterViewInit {
 
 	public lapTimes: LapTime[] = [];
 	public displayedColumns: string[] = ["index", "carName", "trackName", "trackLength", "lapTime", "lap"];
@@ -18,7 +18,7 @@ export class TimesComponent implements OnInit {
 
 	constructor(private firebaseService: FirebaseService) { }
 
-	ngOnInit(): void {
+	ngAfterViewInit(): void {
 		// Load data
 		this.refresh();
 	}

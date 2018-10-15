@@ -26,7 +26,7 @@
                     <!-- CHEAT: This prevent the first item to being selected -->
                     <a mat-button style="height: 0; position: absolute;"></a>
 
-                    <div *ngFor="let sidenavButton of sidenavButtons">
+                    <div *ngFor="let sidenavButton of sidenavButtons; trackBy: trackByFn">
                         <button mat-button mat-list-item (click)="goToPath(sidenavButton.path); sidenav.toggle()" *ngIf="!sidenavButton.isDivider && !sidenavButton.isSubheader"
                             [disabled]="sidenavButton.isDisabled" autofocus="false">
                             <mat-icon mat-list-icon>{{ sidenavButton.icon }}</mat-icon>
