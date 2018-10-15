@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit } from "@angular/core";
+import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy } from "@angular/core";
 import { LapTime } from "../../models/data.model";
 import { FirebaseService } from "../../services/firebase.service";
 import { MatTableDataSource, MatPaginator, Sort } from "@angular/material";
@@ -6,7 +6,8 @@ import { MatTableDataSource, MatPaginator, Sort } from "@angular/material";
 @Component({
 	selector: 'app-times',
 	templateUrl: './times.component.html',
-	styleUrls: ['./times.component.css']
+	styleUrls: ['./times.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimesComponent implements AfterViewInit {
 

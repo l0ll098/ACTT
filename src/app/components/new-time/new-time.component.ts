@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from "@angular/core";
+import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
@@ -12,7 +12,8 @@ import { FirebaseService } from "../../services/firebase.service";
 @Component({
     selector: 'app-new-time',
     templateUrl: './new-time.component.html',
-    styleUrls: ['./new-time.component.css']
+    styleUrls: ['./new-time.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewTimeComponent implements AfterViewInit {
 
