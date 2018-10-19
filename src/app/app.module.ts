@@ -11,7 +11,6 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from "@angular/fire/database";
 
-import { DeviceDetectorModule } from "ngx-device-detector";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
 	MatToolbarModule,
@@ -30,6 +29,7 @@ import {
 	MatSortModule,
 	MatSnackBarModule
 } from '@angular/material';
+import {PlatformModule} from "@angular/cdk/platform";
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -110,7 +110,6 @@ const appRoutes: Routes = [
 		AngularFireDatabaseModule,
 		AngularFireModule.initializeApp(environment.firebase),
 		FirebaseUIModule.forRoot(firebaseUIConfigs),
-		DeviceDetectorModule.forRoot(),
 		HttpClientModule,
 		FormsModule,
 		ReactiveFormsModule,
@@ -129,7 +128,9 @@ const appRoutes: Routes = [
 		MatTableModule,
 		MatPaginatorModule,
 		MatSortModule,
-		MatSnackBarModule
+		MatSnackBarModule,
+
+		PlatformModule
 	],
 	providers: [
 		AuthService,

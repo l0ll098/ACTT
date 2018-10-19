@@ -34,7 +34,6 @@
     "firebaseui-angular": "3.3.2",
     "hammerjs": "^2.0.8",
     "idb": "^2.1.1",
-    "ngx-device-detector": "^1.2.2",
     "rxjs": "^6.3.2",
     "rxjs-compat": "^6.3.2",
     "zone.js": "^0.8.14"

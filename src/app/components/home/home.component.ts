@@ -2,8 +2,8 @@ import { Component, AfterContentInit, ViewChild, ElementRef, AfterViewInit } fro
 import { Router, NavigationStart } from '@angular/router';
 import { LocationStrategy } from '@angular/common';
 
-import { DeviceDetectorService } from 'ngx-device-detector';
 import { MatSnackBar, MatSidenav } from '@angular/material';
+import { Platform } from "@angular/cdk/platform";
 import * as Hammer from "hammerjs";
 
 import { AuthService } from '../../services/auth.service';
@@ -81,7 +81,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         private elementRef: ElementRef,
         private authService: AuthService,
         private firebaseService: FirebaseService,
-        private deviceService: DeviceDetectorService,
+        private platform: Platform,
         private settingsService: SettingsService,
         private snackBar: MatSnackBar) {
 
@@ -105,14 +105,15 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
 			this.goToPath("/");
 		}*/
 
-		/* Check if it's a mobile device.
-		   This is used to show the toolbar with the back icon on mobile and
-		   the toolbar with the sidenav icon on desktop
+        /* 
+            Check if it's a mobile device.
+		    This is used to show the toolbar with the back icon on mobile and
+            the toolbar with the sidenav icon on desktop
 		*/
-        if (this.deviceService.isDesktop()) {
-            this.deviceType = "desktop";
-        } else {
+        if (this.platform.ANDROID || this.platform.IOS) {
             this.deviceType = "mobile";
+        } else {
+            this.deviceType = "desktop";
         }
 
         // Subscribe to path changes
