@@ -25,9 +25,14 @@ const userRefInitializer = {
 @Injectable()
 export class FirebaseService {
 
+    private uid;
+
     constructor(
         private authService: AuthService,
-        private db: AngularFireDatabase) { }
+        private db: AngularFireDatabase) {
+
+        this.uid = this.authService.getCurrentUser().uid;
+    }
 
     /**
      * Returns a reference to the path passed as a parameter
@@ -42,8 +47,7 @@ export class FirebaseService {
      * @returns A reference to the user's object
      */
     public getUserRef() {
-        const uid = this.authService.getCurrentUser().uid;
-        return this.db.object("/users/" + uid);
+        return this.db.object("/users/" + this.uid);
     }
 
     /**
@@ -131,8 +135,7 @@ export class FirebaseService {
      * @returns {Promise<any>} A promise to check if this method has finished its job
      */
     public updatePropertyForCurrentUser(path: string, newValue: Object): Promise<any> {
-        const uid = this.authService.getCurrentUser().uid;
-        return this.getRef("/users/" + uid + "/" + path).update(newValue);
+        return this.getRef("/users/" + this.uid + "/" + path).update(newValue);
     }
 
     /**
@@ -155,12 +158,10 @@ export class FirebaseService {
      * @param lapTime The new lapTime
      */
     public saveUserLapTime(lapTime: LapTime) {
-        const uid = this.authService.getCurrentUser().uid;
-
         return new Promise((resolve, reject) => {
             this.isABetterLapTime(lapTime).then(isBetter => {
                 if (isBetter) {
-                    this.pushData(lapTime, "users/" + uid + "/lapTimes/" + this.db.createPushId())
+                    this.pushData(lapTime, "users/" + this.uid + "/lapTimes/" + this.db.createPushId())
                         .then(data => {
                             return resolve(data);
                         })
@@ -183,10 +184,8 @@ export class FirebaseService {
      * @param lapTime The new lapTime to check
      */
     public isABetterLapTime(lapTime: LapTime): Promise<boolean> {
-        const uid = this.authService.getCurrentUser().uid;
-
         return new Promise((resolve, reject) => {
-            this.getRef("/users/" + uid + "/lapTimes")
+            this.getRef("/users/" + this.uid + "/lapTimes")
                 .query
                 .orderByChild("car/name")
                 .equalTo(lapTime.car.name)
@@ -254,10 +253,8 @@ export class FirebaseService {
 
 
     public getLapTimes(limitTo: number = 25): Promise<LapTime[]> {
-        const uid = this.authService.getCurrentUser().uid;
-
         return new Promise((resolve, reject) => {
-            this.getRef("/users/" + uid + "/lapTimes")
+            this.getRef("/users/" + this.uid + "/lapTimes")
                 .query
                 .limitToLast(limitTo)
                 .once("value", (data) => {
@@ -269,10 +266,8 @@ export class FirebaseService {
     }
 
     public getLapTimesByTrack(track: Track, limitTo: number = 25): Promise<LapTime[]> {
-        const uid = this.authService.getCurrentUser().uid;
-
         return new Promise((resolve, reject) => {
-            this.getRef("/users/" + uid + "/lapTimes")
+            this.getRef("/users/" + this.uid + "/lapTimes")
                 .query
                 .orderByChild("track/name")
                 .equalTo(track.name)
@@ -293,10 +288,8 @@ export class FirebaseService {
     }
 
     public getLapTimesByCar(car: Car, limitTo: number = 25): Promise<LapTime[]> {
-        const uid = this.authService.getCurrentUser().uid;
-
         return new Promise((resolve, reject) => {
-            this.getRef("/users/" + uid + "/lapTimes")
+            this.getRef("/users/" + this.uid + "/lapTimes")
                 .query
                 .orderByChild("car/name")
                 .equalTo(car.name)

@@ -163,7 +163,7 @@ export class NewTimeComponent implements AfterViewInit {
                             text: "Ok"
                         }
                     }
-                })
+                });
             });
     }
 
