@@ -156,8 +156,8 @@ export class FirebaseService {
      */
     public saveUserLapTime(lapTime: LapTime) {
         const uid = this.authService.getCurrentUser().uid;
-return Promise.reject({testing:true});
-        /*return new Promise((resolve, reject) => {
+
+        return new Promise((resolve, reject) => {
             this.isABetterLapTime(lapTime).then(isBetter => {
                 if (isBetter) {
                     this.pushData(lapTime, "users/" + uid + "/lapTimes/" + this.db.createPushId())
@@ -171,7 +171,7 @@ return Promise.reject({testing:true});
                     return reject({ isABetterLapTime: false });
                 }
             });
-        });*/
+        });
     }
 
     /**
