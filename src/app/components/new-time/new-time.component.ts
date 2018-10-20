@@ -1,12 +1,14 @@
 import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
+import { MatDialog } from "@angular/material";
 
 import { Track, Car, LapTime, Time } from "../../models/data.model";
 import { tracks } from "../../models/tracks";
 import { cars } from "../../models/cars";
 
 import { FirebaseService } from "../../services/firebase.service";
+import { DialogComponent } from "../dialog/dialog.component";
 
 
 @Component({
@@ -46,7 +48,8 @@ export class NewTimeComponent implements AfterViewInit {
 
     constructor(
         private firebaseService: FirebaseService,
-        private router: Router) { }
+        private router: Router,
+        private dialog: MatDialog) { }
 
     ngAfterViewInit(): void {
         this.FormControls.track.valueChanges.subscribe(track => {
@@ -141,17 +144,27 @@ export class NewTimeComponent implements AfterViewInit {
         // Update time
         lapTime.time.millisecs = this.convertTimeToMS(humanTime);
 
-        this.firebaseService.saveUserLapTime(lapTime).then((data) => {
-            console.log(data);
+        this.firebaseService.saveUserLapTime(lapTime)
+            .then((data) => {
+                console.log(data);
 
-            this.disableSaveButton = false;
+                this.disableSaveButton = false;
 
-            this.router.navigate(["/times"]);
-        }).catch(err => {
-            console.log(err);
+                this.router.navigate(["/times"]);
+            })
+            .catch(err => {
+                console.log(err);
 
-            alert("An error occured while saving data");
-        });
+                this.dialog.open(DialogComponent, {
+                    data: {
+                        title: "Error",
+                        message: "An error occured while saving data. Please retry",
+                        doActionBtn: {
+                            text: "Ok"
+                        }
+                    }
+                })
+            });
     }
 
 

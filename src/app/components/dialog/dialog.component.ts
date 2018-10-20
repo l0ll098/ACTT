@@ -17,12 +17,16 @@ export class DialogComponent {
     onDoClick() {
         this.close();
 
-        return this.data.doActionBtn.onClick();
+        if (this.data.doActionBtn.onClick) {
+            return this.data.doActionBtn.onClick();
+        } else {
+            return null;
+        }
     }
 
     onCancelClick() {
         this.close();
-        
+
         if (this.data.cancelBtn && this.data.cancelBtn.onClick) {
             return this.data.cancelBtn.onClick();
         } else {
