@@ -28,9 +28,10 @@ import {
 	MatTableModule,
 	MatPaginatorModule,
 	MatSortModule,
-	MatSnackBarModule
+	MatSnackBarModule,
+	MatDialogModule
 } from '@angular/material';
-import {PlatformModule} from "@angular/cdk/platform";
+import { PlatformModule } from "@angular/cdk/platform";
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -40,6 +41,7 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { TimesComponent } from "./components/times/times.component";
 import { NewTimeComponent } from "./components/new-time/new-time.component";
 import { BestTimesComponent } from "./components/best-times/best-times.component";
+import { DialogComponent } from "./components/dialog/dialog.component";
 
 import { AuthService } from "./services/auth.service";
 import { FirebaseService } from "./services/firebase.service";
@@ -98,6 +100,8 @@ const appRoutes: Routes = [
 		NewTimeComponent,
 		BestTimesComponent,
 
+		DialogComponent,
+
 		LapTimePipe
 	],
 	imports: [
@@ -108,6 +112,7 @@ const appRoutes: Routes = [
 			{ enableTracing: (environment.enableAngularRoutingLog ? true : false) }
 		),
 		ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+		PlatformModule,
 		AngularFireAuthModule,
 		AngularFireDatabaseModule,
 		AngularFireModule.initializeApp(environment.firebase),
@@ -131,8 +136,7 @@ const appRoutes: Routes = [
 		MatPaginatorModule,
 		MatSortModule,
 		MatSnackBarModule,
-
-		PlatformModule
+		MatDialogModule
 	],
 	providers: [
 		AuthService,
@@ -140,6 +144,11 @@ const appRoutes: Routes = [
 		IndexedDBService,
 		SettingsService
 	],
-	bootstrap: [AppComponent]
+	bootstrap: [
+		AppComponent
+	],
+	entryComponents: [
+		DialogComponent
+	]
 })
 export class AppModule { }
