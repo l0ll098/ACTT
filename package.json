@@ -9,10 +9,7 @@
     "buildProd": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "precache": "sw-precache --verbose --config=sw-precache-config.js",
-    "buildAndPrecache": "npm run build && npm run precache",
-    "buildAndPrecacheProd": "npm run buildProd && npm run precache"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -27,7 +24,9 @@
     "@angular/material": "^6.4.7",
     "@angular/platform-browser": "^6.1.7",
     "@angular/platform-browser-dynamic": "^6.1.7",
+    "@angular/pwa": "^0.10.2",
     "@angular/router": "^6.1.7",
+    "@angular/service-worker": "^6.1.7",
     "core-js": "^2.4.1",
     "firebase": "5.4.2",
     "firebaseui": "3.4.0",
@@ -57,7 +56,6 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^1.0.0",
     "protractor": "~5.4.0",
-    "sw-precache": "^5.2.1",
     "ts-node": "~7.0.1",
     "tslint": "~5.11.0",
     "typescript": "2.7.2"

@@ -3,10 +3,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from '@angular/common/http';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { environment, firebaseUIConfigs } from '../environments/environment';
 
-import { FirebaseUIModule, firebase, firebaseui } from 'firebaseui-angular';
+import { FirebaseUIModule } from 'firebaseui-angular';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from "@angular/fire/database";
@@ -106,6 +107,7 @@ const appRoutes: Routes = [
 			appRoutes,
 			{ enableTracing: (environment.enableAngularRoutingLog ? true : false) }
 		),
+		ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
 		AngularFireAuthModule,
 		AngularFireDatabaseModule,
 		AngularFireModule.initializeApp(environment.firebase),
