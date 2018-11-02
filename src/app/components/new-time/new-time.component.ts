@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material";
@@ -49,6 +49,7 @@ export class NewTimeComponent implements AfterViewInit {
     constructor(
         private firebaseService: FirebaseService,
         private router: Router,
+        private changeDetectorRef: ChangeDetectorRef,
         private dialog: MatDialog) { }
 
     ngAfterViewInit(): void {
@@ -148,9 +149,23 @@ export class NewTimeComponent implements AfterViewInit {
             .then((data) => {
                 console.log(data);
 
-                this.disableSaveButton = false;
+                if (data.isBetter) {
+                    this.router.navigate(["/times"]);
+                } else {
+                    this.dialog.open(DialogComponent, {
+                        data: {
+                            title: "Error",
+                            message: "You have already saved a better lap time using this car on this track.",
+                            doActionBtn: {
+                                text: "Ok"
+                            }
+                        }
+                    });
 
-                this.router.navigate(["/times"]);
+                    this.disableSaveButton = false;
+                    // Force view update
+                    this.changeDetectorRef.markForCheck();
+                }
             })
             .catch(err => {
                 console.log(err);

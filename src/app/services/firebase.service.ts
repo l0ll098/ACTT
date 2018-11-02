@@ -157,13 +157,13 @@ export class FirebaseService {
      * Old records are kept.
      * @param lapTime The new lapTime
      */
-    public saveUserLapTime(lapTime: LapTime) {
+    public saveUserLapTime(lapTime: LapTime): Promise<IsBetterLapTime> {
         return new Promise((resolve, reject) => {
             this.isABetterLapTime(lapTime).then(isBetter => {
                 if (isBetter) {
                     this.pushData(lapTime, "users/" + this.uid + "/lapTimes/" + this.db.createPushId())
                         .then(data => {
-                            return resolve(data);
+                            return resolve(isBetter);
                         })
                         .catch(err => {
                             return reject(err);
