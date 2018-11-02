@@ -76,7 +76,7 @@
 
         <div id="inner-sidenav-content">
             <!-- An empty div used to open and close the sidenav on swipe -->
-            <div (swipeleft)="closeSidenav()" (swiperight)="openSidenav()" style="width: 64px; position: absolute; height: 100%;"></div>
+            <div (swipeleft)="closeSidenav()" (swiperight)="openSidenav()" id="sidenavOpener"></div>
 
             <!-- Used by children paths -->
             <router-outlet></router-outlet>

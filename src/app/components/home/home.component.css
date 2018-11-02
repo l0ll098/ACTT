@@ -120,3 +120,9 @@ mat-sidenav {
 	right: 16px;
 	bottom: 16px;
 }
+
+#sidenavOpener {
+	width: 64px; 
+	position: absolute; 
+	height: 100%;
+}
