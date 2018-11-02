@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { AngularFireDatabase } from "@angular/fire/database";
 
 import { AuthService } from "./auth.service";
-import { LapTime, Track, Car } from "../models/data.model";
+import { LapTime, Track, Car, IsBetterLapTime } from "../models/data.model";
 import { DataSnapshot } from "@angular/fire/database/interfaces";
 
 /**
@@ -36,7 +36,7 @@ export class FirebaseService {
 
     /**
      * Returns a reference to the path passed as a parameter
-     * @param {string} path The path where data are stored 
+     * @param {string} path The path where data are stored
      */
     public getRef(path?: string) {
         return this.db.object(path);
@@ -183,71 +183,30 @@ export class FirebaseService {
      * If user scores a lower (or equal) lapTime in a lower lap, it's a record.
      * @param lapTime The new lapTime to check
      */
-    public isABetterLapTime(lapTime: LapTime): Promise<boolean> {
+    public isABetterLapTime(lapTime: LapTime): Promise<IsBetterLapTime> {
         return new Promise((resolve, reject) => {
-            this.getRef("/users/" + this.uid + "/lapTimes")
-                .query
-                .orderByChild("car/name")
-                .equalTo(lapTime.car.name)
-                .once("value", (data_car) => {
-                    // Check if the data filtered by car name has some children
-                    if (!data_car.hasChildren()) {
-                        // If not, the lapTime was set with a car that has never been used before,
-                        // it's a record
-                        return resolve(true);
-                    } else {
-                        data_car.ref
-                            .orderByChild("track/name")
-                            .equalTo(lapTime.track.name)
-                            .once("value", (data_track) => {
-                                // Check if the data filtered by track name has some children
-                                if (!data_track.hasChildren()) {
-                                    // If not, the lapTime was set on a track where user has never driven before
-                                    // it's a record
-                                    return resolve(true);
-                                } else {
-                                    data_car.ref
-                                        .orderByChild("track/length")
-                                        .equalTo(lapTime.track.length)
-                                        .once("value", (data_length) => {
-                                            // Check also the length.
-                                            // Required as the drag tracks have the same name but different lengths
-                                            // (hence times and records)
-                                            if (!data_length.hasChildren()) {
-                                                return resolve(true);
-                                            } else {
-                                                data_length.ref
-                                                    .orderByChild("time/millisecs")
-                                                    .endAt(lapTime.time.millisecs)
-                                                    .once("value", (data_ms) => {
-                                                        // Check based on the time scored, converted to milliseconds
-                                                        if (!data_ms.hasChildren()) {
-                                                            // If it hasn't children, it's a new record
-                                                            return resolve(true);
-                                                        } else {
-                                                            data_ms.ref
-                                                                .orderByChild("lap")
-                                                                .endAt(lapTime.lap)
-                                                                .once("value", (data_lap) => {
-                                                                    // Otherwise check the lap
-                                                                    if (!data_lap.hasChildren()) {
-                                                                        // If the new lap used as filter doesn't return
-                                                                        // any data, it's a new records
-                                                                        // (even when someone scores the same time
-                                                                        // but a some lap before, it's a new record)
-                                                                        return resolve(true);
-                                                                    } else {
-                                                                        return resolve(false);
-                                                                    }
-                                                                });
-                                                        }
-                                                    });
-                                            }
-                                        });
-                                }
-                            });
-                    }
-                });
+            this.getLapTimesByCarAndTrack(lapTime.car, lapTime.track).then(data => {
+                if (data) {
+                    data.forEach(_lapTime => {
+                        if (lapTime.time.millisecs < _lapTime.time.millisecs) {
+                            console.log("Better time");
+
+                            return resolve({ isBetter: true, reason: "Better time" });
+                        } else {
+                            if (lapTime.time.millisecs === _lapTime.time.millisecs && _lapTime.lap < lapTime.lap) {
+                                console.log("Better lap number");
+                                return resolve({ isBetter: true, reason: "Better LapNumber" });
+                            } else {
+                                console.log("Worse time");
+                                return resolve({ isBetter: false, reason: "Worse Time" });
+                            }
+                        }
+                    });
+                } else {
+                    console.log("Best time as there are not records");
+                    return resolve({ isBetter: true, reason: "First time saved" });
+                }
+            });
         });
     }
 
@@ -308,6 +267,51 @@ export class FirebaseService {
                 });
         });
     }
+
+    /**
+     * Queris the DB getting data where car and track are the same as the one passed
+     * @param car The car used
+     * @param track The track where the car has been used
+     */
+    private getLapTimesByCarAndTrack(car: Car, track: Track): Promise<LapTime[]> {
+        return new Promise((resolve, reject) => {
+            this.getRef("/users/" + this.uid + "/lapTimes")
+                .query
+                .orderByChild("car/name")
+                .equalTo(car.name)
+                .once("value", (data) => {
+
+                    if (data.hasChildren()) {
+                        data.ref
+                            .orderByChild("track/name")
+                            .equalTo(track.name)
+                            .once("value", (data_track_name) => {
+
+                                if (data.hasChildren()) {
+                                    data_track_name.ref
+                                        .orderByChild("track/length")
+                                        .equalTo(track.length)
+                                        .once("value", (data_track_length) => {
+                                            const valLapTimes: LapTime[] = data_track_length.val();
+
+                                            // Convert it to an array
+                                            const lapTimes: LapTime[] = Object.keys(valLapTimes).map((key) => {
+                                                return valLapTimes[key];
+                                            });
+
+                                            return resolve(lapTimes);
+                                        });
+                                } else {
+                                    return resolve(null);
+                                }
+                            });
+                    } else {
+                        return resolve(null);
+                    }
+                });
+        });
+    }
+
 
     private _formatLapTimeQueryResults(rowData: DataSnapshot) {
         if (!rowData.val()) {

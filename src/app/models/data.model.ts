@@ -23,3 +23,9 @@ export interface Time {
     seconds?: number;
     millisecs: number;
 }
+
+
+export interface IsBetterLapTime {
+    isBetter: boolean;
+    reason: "Better time" | "Better LapNumber" | "Worse Time" | "First time saved";
+}
