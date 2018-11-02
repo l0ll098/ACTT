@@ -235,11 +235,15 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
             } else {
                 this.toolbarToShow = toolbarTypes.back;
 
-                const btn = this.sidenavButtons.find(_btn => _btn.path === path);
+                if (path === "/new") {
+                    this.toolbarTitle = "New time";
+                } else {
+                    const btn = this.sidenavButtons.find(_btn => _btn.path === path);
 
-                if (btn) {
-                    // When user changes path, show the text alongside the back arrow
-                    this.toolbarTitle = btn.text;
+                    if (btn) {
+                        // When user changes path, show the text alongside the back arrow
+                        this.toolbarTitle = btn.text;
+                    }
                 }
             }
             this.router.navigate([path]);
