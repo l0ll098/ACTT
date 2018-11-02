@@ -20,6 +20,11 @@ enum toolbarTypes {
     back
 }
 
+const PATH_WHERE_NEW_FAB_SHOULD_BE_DISPLAYED = [
+    "/",
+];
+
+
 
 @Component({
     selector: 'app-home',
@@ -203,19 +208,14 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         this.pathVisited.splice(this.pathVisited.length - 1, 1);
         // Then navigate to that path
         this.goToPath(prevPath);
-
-        this.showNewFAB = true;
     }
 
     public returnToHomePath() {
         this.goToPath("/");
-
-        this.showNewFAB = true;
     }
 
     public goToNew() {
         this.goToPath("/new");
-        this.showNewFAB = false;
     }
 
     /**
@@ -246,6 +246,13 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
                     }
                 }
             }
+
+            if (PATH_WHERE_NEW_FAB_SHOULD_BE_DISPLAYED.includes(path)) {
+                this.showNewFAB = true;
+            } else {
+                this.showNewFAB = false;
+            }
+
             this.router.navigate([path]);
         }
     }
