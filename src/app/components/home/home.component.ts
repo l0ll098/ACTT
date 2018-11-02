@@ -195,6 +195,10 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
 
         // Initialize defualt settings
         this.settingsService.initDefaultSettingsValues();
+
+        // Hide new FAB if the path isn't in the array.
+        // This could happen if the page has been reloaded from a different path than "/"
+        this.showAndHideNewFAB(this.location.path());
     }
 
 
@@ -247,11 +251,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
                 }
             }
 
-            if (PATH_WHERE_NEW_FAB_SHOULD_BE_DISPLAYED.includes(path)) {
-                this.showNewFAB = true;
-            } else {
-                this.showNewFAB = false;
-            }
+            this.showAndHideNewFAB(path);
 
             this.router.navigate([path]);
         }
@@ -267,5 +267,13 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
 
     trackByFn(index, item) {
         return index;
+    }
+
+    private showAndHideNewFAB(path: string) {
+        if (PATH_WHERE_NEW_FAB_SHOULD_BE_DISPLAYED.includes(path)) {
+            this.showNewFAB = true;
+        } else {
+            this.showNewFAB = false;
+        }
     }
 }
