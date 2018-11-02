@@ -1,10 +1,12 @@
 import { Component, AfterContentInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { LocationStrategy } from '@angular/common';
+import { SwUpdate } from "@angular/service-worker";
 
-import { MatSnackBar, MatSidenav } from '@angular/material';
+import { MatSnackBar, MatSidenav, MatDialog } from '@angular/material';
 import { Platform } from "@angular/cdk/platform";
-import * as Hammer from "hammerjs";
+
+import { DialogComponent } from '../dialog/dialog.component';
 
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from "../../services/firebase.service";
@@ -82,20 +84,14 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         private authService: AuthService,
         private firebaseService: FirebaseService,
         private platform: Platform,
+        private swUpdate: SwUpdate,
         private settingsService: SettingsService,
-        private snackBar: MatSnackBar) {
+        private snackBar: MatSnackBar,
+        private dialog: MatDialog) {
 
         this.authService.getUserData().subscribe(data => {
             console.log(data);
             this.user = data;
-        });
-
-        const hammerTime = new Hammer(elementRef.nativeElement);
-        hammerTime.on("panright", () => {
-            this.openSidenav();
-        });
-        hammerTime.on("panleft", () => {
-            this.closeSidenav();
         });
     }
 
@@ -105,7 +101,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
 			this.goToPath("/");
 		}*/
 
-        /* 
+        /*
             Check if it's a mobile device.
 		    This is used to show the toolbar with the back icon on mobile and
             the toolbar with the sidenav icon on desktop
@@ -143,8 +139,8 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
                 duration: 10000		// 10s
             });
 
-            // Check that the current device is small, such as a smartphone 
-            if (this.deviceType == "mobile") {
+            // Check that the current device is small, such as a smartphone
+            if (this.deviceType === "mobile") {
                 // When the snackbar is opend, move up the FAB so that it doesn't get covered
                 this.snackBar._openedSnackBarRef.afterOpened().subscribe(e => {
                     document.getElementById("newFAB").style.bottom = "64px";
@@ -160,6 +156,32 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
 
         window.addEventListener("online", () => {
             this.snackBar.dismiss();
+        });
+
+        // Subscribe to the observer to notify user that a newer version is available
+        this.swUpdate.available.subscribe(event => {
+            console.log("Update available: current version is", event.current, "available version is", event.available);
+
+            // Show a dialog asking user if he want to update
+            this.dialog.open(DialogComponent, {
+                data: {
+                    title: "Update",
+                    message: "An update is available. Do you want to update now?",
+                    doActionBtn: {
+                        text: "Yes",
+                        onClick: () => {
+                            // If he presses ok, reload the window, installing the new version
+                            window.location.reload();
+                        }
+                    },
+                    cancelBtn: {
+                        text: "No",
+                        onClick: () => {
+                            console.log("Installing the update the next time window is loaded");
+                        }
+                    }
+                }
+            });
         });
     }
 
@@ -213,7 +235,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
             } else {
                 this.toolbarToShow = toolbarTypes.back;
 
-                let btn = this.sidenavButtons.find(btn => btn.path === path);
+                const btn = this.sidenavButtons.find(_btn => _btn.path === path);
 
                 if (btn) {
                     // When user changes path, show the text alongside the back arrow
