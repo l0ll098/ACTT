@@ -186,26 +186,32 @@ export class FirebaseService {
     public isABetterLapTime(lapTime: LapTime): Promise<IsBetterLapTime> {
         return new Promise((resolve, reject) => {
             this.getLapTimesByCarAndTrack(lapTime.car, lapTime.track).then(data => {
+                const toRet: IsBetterLapTime = {
+                    reason: "Worse Time",
+                    isBetter: false
+                };
+
                 if (data) {
                     data.forEach(_lapTime => {
                         if (lapTime.time.millisecs < _lapTime.time.millisecs) {
-                            console.log("Better time");
-
-                            return resolve({ isBetter: true, reason: "Better time" });
+                            toRet.isBetter = true;
+                            toRet.reason = "Better time";
                         } else {
                             if (lapTime.time.millisecs === _lapTime.time.millisecs && _lapTime.lap < lapTime.lap) {
-                                console.log("Better lap number");
-                                return resolve({ isBetter: true, reason: "Better LapNumber" });
+                                toRet.isBetter = true;
+                                toRet.reason = "Better LapNumber";
                             } else {
-                                console.log("Worse time");
-                                return resolve({ isBetter: false, reason: "Worse Time" });
+                                toRet.isBetter = false;
+                                toRet.reason = "Worse Time";
                             }
                         }
                     });
                 } else {
-                    console.log("Best time as there are not records");
-                    return resolve({ isBetter: true, reason: "First time saved" });
+                    toRet.isBetter = true;
+                    toRet.reason = "First time saved";
                 }
+
+                return resolve(toRet);
             });
         });
     }
