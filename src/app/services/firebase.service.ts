@@ -318,6 +318,50 @@ export class FirebaseService {
         });
     }
 
+    private getLapTimeKeyByTimestamp(lapTime: LapTime): Promise<string> {
+        return new Promise((resolve, reject) => {
+            this.getRef("/users/" + this.uid + "/lapTimes/")
+                .query
+                .orderByChild("timestamp")
+                .limitToFirst(1)
+                .equalTo(lapTime.timestamp)
+                .once("value", (data) => {
+                    const savedLapTime = data.val();
+                    return resolve(Object.keys(savedLapTime)[0]);
+                });
+        });
+    }
+
+    /**
+     * This method will delete a single lapTime.
+     * The "deleteLapTimes" method is based on this one.
+     * @param lapTime The LapTime that has to be deleted
+     */
+    private deleteASingleLapTime(lapTime: LapTime): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.getLapTimeKeyByTimestamp(lapTime).then(key => {
+                this.getRef("/users/" + this.uid + "/lapTimes/" + key + "/")
+                    .remove()
+                    .then(done => {
+                        return resolve(true);
+                    })
+                    .catch(err => {
+                        return reject(false);
+                    });
+            });
+        });
+    }
+
+    /**
+     * This method will delete the array of LapTime(s).
+     * @param lapTimes The array of LapTimes that has to be deleted.
+     */
+    public deleteLapTimes(lapTimes: LapTime[]) {
+        return Promise.all(
+            lapTimes.map(lapTime => this.deleteASingleLapTime(lapTime))
+        );
+    }
+
 
     private _formatLapTimeQueryResults(rowData: DataSnapshot) {
         if (!rowData.val()) {

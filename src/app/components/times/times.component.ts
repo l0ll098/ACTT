@@ -1,13 +1,18 @@
 import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy } from "@angular/core";
+import { MatTableDataSource, MatPaginator, Sort, MatDialog } from "@angular/material";
+import { SelectionModel } from "@angular/cdk/collections";
+
+import { DialogComponent } from "../dialog/dialog.component";
+
 import { LapTime } from "../../models/data.model";
+
 import { FirebaseService } from "../../services/firebase.service";
-import { MatTableDataSource, MatPaginator, Sort } from "@angular/material";
 
 @Component({
 	selector: 'app-times',
 	templateUrl: './times.component.html',
 	styleUrls: ['./times.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimesComponent implements AfterViewInit {
 
@@ -15,9 +20,23 @@ export class TimesComponent implements AfterViewInit {
 	public displayedColumns: string[] = ["index", "carName", "trackName", "trackLength", "lapTime", "lap"];
 	public dataSource: MatTableDataSource<LapTime>;
 
+	public initialSelection = [];
+	public allowMultiSelect = true;
+	public selection: SelectionModel<LapTime>;
+
 	@ViewChild(MatPaginator) paginator: MatPaginator;
 
-	constructor(private firebaseService: FirebaseService) { }
+	public deleteFAB = {
+		show: true,
+		icon: "delete"
+	};
+
+	constructor(
+		private firebaseService: FirebaseService,
+		private dialog: MatDialog
+	) {
+		this.selection = new SelectionModel<LapTime>(this.allowMultiSelect, this.initialSelection);
+	}
 
 	ngAfterViewInit(): void {
 		// Load data
@@ -61,6 +80,24 @@ export class TimesComponent implements AfterViewInit {
 	}
 
 	/**
+	 * Whether the number of selected elements matches the total number of rows.
+	 */
+	isAllSelected() {
+		const numSelected = this.selection.selected.length;
+		const numRows = this.dataSource.data.length;
+		return numSelected === numRows;
+	}
+
+	/**
+	 * Selects all rows if they are not all selected; otherwise clear selection.
+	 */
+	masterToggle() {
+		this.isAllSelected() ?
+			this.selection.clear() :
+			this.dataSource.data.forEach(row => this.selection.select(row));
+	}
+
+	/**
 	 * Reloads the data table
 	 */
 	public refresh() {
@@ -77,6 +114,63 @@ export class TimesComponent implements AfterViewInit {
 		}).catch(err => {
 			console.log(err);
 		});
+	}
+
+	public showCheckboxes() {
+		// Check if the table is already showing the col with checkboxes
+		if (this.displayedColumns.includes("select")) {
+			// If so remove that col from the table as user wants to delete a previously selected record
+			this.displayedColumns.shift();
+
+			// Show the initial icon in the FAB
+			this.deleteFAB.icon = "delete";
+
+			console.group("Delete laptimes");
+
+			// Delete the selected data
+			this.dialog.open(DialogComponent, {
+				data: {
+					title: "Caution",
+					message: "Are you sure you want to delete those records?",
+					doActionBtn: {
+						text: "Yes",
+						onClick: () => {
+							console.log("Deleting these lapTimes: ", this.selection.selected);
+
+							// If he presses ok, delete the data
+							this.firebaseService
+								.deleteLapTimes(this.selection.selected)
+								.then(done => {
+									console.log("Finished deleting!");
+									console.groupEnd();
+									this.refresh();
+								})
+								.catch(err => {
+									console.log(err);
+									console.groupEnd();
+								});
+						}
+					},
+					cancelBtn: {
+						text: "No",
+						onClick: () => {
+							console.log("Pressed no");
+							console.groupEnd();
+
+							// De-select all the checkboxes
+							this.selection.clear();		// TODO: Can be personalized through settings
+						}
+					}
+				}
+			});
+		} else {
+			// First interaction with the FAB. Show the col with checkboxes.
+			// If pressed again, delete the selected data (handled in the code above).
+			this.displayedColumns.unshift("select");
+
+			// Change the icon to support the second interaction.
+			this.deleteFAB.icon = "delete_forever";
+		}
 	}
 }
 

@@ -46,3 +46,9 @@ th.mat-sort-header-sorted {
     margin-right: 8px;
     margin-top: 16px;
 }
+
+#deleteFAB {
+    position: fixed;
+	right: 16px;
+	bottom: 16px;
+}
