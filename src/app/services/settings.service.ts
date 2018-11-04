@@ -13,6 +13,7 @@ export class SettingsService {
             type: "toggle",
             formControlName: "enableNotifications",
             defualtValue: false,
+            isDisabled: true,
             onChange: (value) => { }
         },
         {

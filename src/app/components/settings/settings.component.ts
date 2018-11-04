@@ -1,12 +1,12 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { SettingsItem } from '../../models/lists.model';
-import { FormGroup, FormControl } from '@angular/forms';
-import { SettingsService } from '../../services/settings.service'
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { SettingsItem } from "../../models/lists.model";
+import { FormGroup, FormControl } from "@angular/forms";
+import { SettingsService } from "../../services/settings.service";
 
 @Component({
-    selector: 'app-settings',
-    templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.css'],
+    selector: "app-settings",
+    templateUrl: "./settings.component.html",
+    styleUrls: ["./settings.component.css"],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent implements OnInit {
