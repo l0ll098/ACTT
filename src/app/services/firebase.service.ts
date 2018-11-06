@@ -159,17 +159,17 @@ export class FirebaseService {
      */
     public saveUserLapTime(lapTime: LapTime): Promise<IsBetterLapTime> {
         return new Promise((resolve, reject) => {
-            this.isABetterLapTime(lapTime).then(isBetter => {
-                if (isBetter) {
+            this.isABetterLapTime(lapTime).then(isBetterLap => {
+                if (isBetterLap.isBetter) {
                     this.pushData(lapTime, "users/" + this.uid + "/lapTimes/" + this.db.createPushId())
                         .then(data => {
-                            return resolve(isBetter);
+                            return resolve(isBetterLap);
                         })
                         .catch(err => {
                             return reject(err);
                         });
                 } else {
-                    return reject({ isABetterLapTime: false });
+                    return reject(isBetterLap);
                 }
             });
         });
@@ -187,28 +187,31 @@ export class FirebaseService {
         return new Promise((resolve, reject) => {
             this.getLapTimesByCarAndTrack(lapTime.car, lapTime.track).then(data => {
                 const toRet: IsBetterLapTime = {
-                    reason: "Worse Time",
-                    isBetter: false
+                    reason: "First time saved",
+                    isBetter: true
                 };
 
                 if (data) {
                     data.forEach(_lapTime => {
-                        if (lapTime.time.millisecs < _lapTime.time.millisecs) {
-                            toRet.isBetter = true;
-                            toRet.reason = "Better time";
+                        // If the saved time is better, the passed one is worse
+                        if (_lapTime.time.millisecs < lapTime.time.millisecs) {
+                            toRet.isBetter = false;
+                            toRet.reason = "Worse Time";
+
+                            return resolve(toRet);
                         } else {
-                            if (lapTime.time.millisecs === _lapTime.time.millisecs && _lapTime.lap < lapTime.lap) {
-                                toRet.isBetter = true;
-                                toRet.reason = "Better LapNumber";
-                            } else {
+                            // If the saved and passed laptime have the same time but the saved one has
+                            // a better lap, the passed one is worse
+                            if (_lapTime.time.millisecs === lapTime.time.millisecs && _lapTime.lap < lapTime.lap) {
                                 toRet.isBetter = false;
-                                toRet.reason = "Worse Time";
+                                toRet.reason = "Worse LapNumber";
+
+                                return resolve(toRet);
+                            } else {
+                                // Keep cycling saved times to ensure that the passed laptime is really a better one
                             }
                         }
                     });
-                } else {
-                    toRet.isBetter = true;
-                    toRet.reason = "First time saved";
                 }
 
                 return resolve(toRet);
@@ -299,11 +302,14 @@ export class FirebaseService {
                                         .equalTo(track.length)
                                         .once("value", (data_track_length) => {
                                             const valLapTimes: LapTime[] = data_track_length.val();
+                                            let lapTimes: LapTime[] = [];
 
-                                            // Convert it to an array
-                                            const lapTimes: LapTime[] = Object.keys(valLapTimes).map((key) => {
-                                                return valLapTimes[key];
-                                            });
+                                            if (valLapTimes) {
+                                                // Convert it to an array
+                                                lapTimes = Object.keys(valLapTimes).map((key) => {
+                                                    return valLapTimes[key];
+                                                });
+                                            }
 
                                             return resolve(lapTimes);
                                         });

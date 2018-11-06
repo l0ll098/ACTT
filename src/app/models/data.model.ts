@@ -27,5 +27,5 @@ export interface Time {
 
 export interface IsBetterLapTime {
     isBetter: boolean;
-    reason: "Better time" | "Better LapNumber" | "Worse Time" | "First time saved";
+    reason: "Better time" | "Better LapNumber" | "First time saved" | "Worse Time" | "Worse LapNumber";
 }
