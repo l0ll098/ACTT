@@ -147,42 +147,48 @@ export class TimesComponent implements AfterViewInit {
 
 			console.group("Delete laptimes");
 
-			// Delete the selected data
-			this.dialog.open(DialogComponent, {
-				data: {
-					title: "Caution",
-					message: "Are you sure you want to delete those records?",
-					doActionBtn: {
-						text: "Yes",
-						onClick: () => {
-							console.log("Deleting these lapTimes: ", this.selection.selected);
+			// Before showing the confirm dialog, ensure that at least a record was selected
+			if (this.selection.selected.length > 0) {
+				// Delete the selected data
+				this.dialog.open(DialogComponent, {
+					data: {
+						title: "Caution",
+						message: "Are you sure you want to delete those records?",
+						doActionBtn: {
+							text: "Yes",
+							onClick: () => {
+								console.log("Deleting these lapTimes: ", this.selection.selected);
 
-							// If he presses ok, delete the data
-							this.firebaseService
-								.deleteLapTimes(this.selection.selected)
-								.then(done => {
-									console.log("Finished deleting!");
-									console.groupEnd();
-									this.refresh();
-								})
-								.catch(err => {
-									console.log(err);
-									console.groupEnd();
-								});
-						}
-					},
-					cancelBtn: {
-						text: "No",
-						onClick: () => {
-							console.log("Pressed no");
-							console.groupEnd();
+								// If he presses ok, delete the data
+								this.firebaseService
+									.deleteLapTimes(this.selection.selected)
+									.then(done => {
+										console.log("Finished deleting!");
+										console.groupEnd();
+										this.refresh();
+									})
+									.catch(err => {
+										console.log(err);
+										console.groupEnd();
+									});
+							}
+						},
+						cancelBtn: {
+							text: "No",
+							onClick: () => {
+								console.log("Pressed no");
+								console.groupEnd();
 
-							// De-select all the checkboxes
-							this.selection.clear();		// TODO: Can be personalized through settings
+								// De-select all the checkboxes
+								this.selection.clear();		// TODO: Can be personalized through settings
+							}
 						}
 					}
-				}
-			});
+				});
+			} else {
+				console.log("User didn't select anything. Swithcing FAB state.");
+				console.groupEnd();
+			}
 		} else {
 			// First interaction with the FAB. Show the col with checkboxes.
 			// If pressed again, delete the selected data (handled in the code above).
