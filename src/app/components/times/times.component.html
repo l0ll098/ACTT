@@ -59,7 +59,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <mat-paginator #paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons (page)="event = pageChanged($event)"></mat-paginator>
+    <mat-paginator #paginator [pageSizeOptions]="pageSizeOptions" showFirstLastButtons (page)="pageChanged($event)"></mat-paginator>
 
     <!-- Refresh button -->
     <button mat-raised-button color="primary" class="mat-elevation-z8" id="refreshBtn" (click)="refresh()">Refresh</button>
