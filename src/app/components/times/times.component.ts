@@ -7,6 +7,7 @@ import { DialogComponent } from "../dialog/dialog.component";
 import { LapTime } from "../../models/data.model";
 
 import { FirebaseService } from "../../services/firebase.service";
+import { SettingsService, SettingsName } from "../../services/settings.service";
 
 @Component({
 	selector: 'app-times',
@@ -19,6 +20,7 @@ export class TimesComponent implements AfterViewInit {
 	public lapTimes: LapTime[] = [];
 	public displayedColumns: string[] = ["index", "carName", "trackName", "trackLength", "lapTime", "lap"];
 	public dataSource: MatTableDataSource<LapTime>;
+	public pageSizeOptions: number[] = [];
 
 	public initialSelection = [];
 	public allowMultiSelect = true;
@@ -32,10 +34,24 @@ export class TimesComponent implements AfterViewInit {
 	};
 
 	constructor(
+		private dialog: MatDialog,
 		private firebaseService: FirebaseService,
-		private dialog: MatDialog
+		private settingsService: SettingsService
 	) {
 		this.selection = new SelectionModel<LapTime>(this.allowMultiSelect, this.initialSelection);
+
+		this.settingsService
+			.getSttingsValues(SettingsName.LapTimesPageSize)
+			.then(data => {
+				this.pageSizeOptions = data.map(size => (<number>size.value));
+				this.paginator.pageSizeOptions = this.pageSizeOptions;
+			});
+
+		this.settingsService
+			.getSettingValue(SettingsName.LapTimesPageSize)
+			.then(value => {
+				this.paginator.pageSize = (<number>value);
+			});
 	}
 
 	ngAfterViewInit(): void {
@@ -171,6 +187,12 @@ export class TimesComponent implements AfterViewInit {
 			// Change the icon to support the second interaction.
 			this.deleteFAB.icon = "delete_forever";
 		}
+	}
+
+	public pageChanged(event) {
+		// When the page size has been changed from the paginator, update the saved value so that
+		// it can be used the next time
+		this.settingsService.updateSettingValue(event.pageSize, SettingsName.LapTimesPageSize);
 	}
 }
 

@@ -15,8 +15,15 @@ export interface SidenavButton extends ListItem {
 
 export interface SettingsItem extends ListItem {
 	secondaryText?: string;
-	type?: "checkbox" | "toggle";
+	type?: "checkbox" | "toggle" | "select";
 	formControlName?: string;
 	onChange?: Function;
+
 	defualtValue?: any;
+	values?: SettingsSelectItem[];
+}
+
+export interface SettingsSelectItem {
+	value: string | number;
+	viewValue: string | number;
 }
