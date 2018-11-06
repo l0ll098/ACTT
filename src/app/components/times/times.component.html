@@ -1,6 +1,6 @@
 <div class="mat-elevation-z8 restrictedPage" id="tableContainer">
     <mat-form-field id="searchField">
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+        <input matInput [(ngModel)]="filter" (keyup)="applyFilter($event.target.value)" placeholder="Filter" type="text">
     </mat-form-field>
 
     <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">

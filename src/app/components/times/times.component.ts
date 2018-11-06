@@ -26,6 +26,8 @@ export class TimesComponent implements AfterViewInit {
 	public allowMultiSelect = true;
 	public selection: SelectionModel<LapTime>;
 
+	public filter = "";
+
 	@ViewChild(MatPaginator) paginator: MatPaginator;
 
 	public deleteFAB = {
@@ -127,6 +129,8 @@ export class TimesComponent implements AfterViewInit {
 
 			this.dataSource = new MatTableDataSource(this.lapTimes);
 			this.dataSource.paginator = this.paginator;
+
+			this.applyFilter(this.filter);
 		}).catch(err => {
 			console.log(err);
 		});
