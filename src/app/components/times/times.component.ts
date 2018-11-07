@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { MatTableDataSource, MatPaginator, Sort, MatDialog } from "@angular/material";
 import { SelectionModel } from "@angular/cdk/collections";
 
@@ -38,7 +38,8 @@ export class TimesComponent implements AfterViewInit {
 	constructor(
 		private dialog: MatDialog,
 		private firebaseService: FirebaseService,
-		private settingsService: SettingsService
+		private settingsService: SettingsService,
+		private changeDetectorRef: ChangeDetectorRef
 	) {
 		this.selection = new SelectionModel<LapTime>(this.allowMultiSelect, this.initialSelection);
 
@@ -134,6 +135,9 @@ export class TimesComponent implements AfterViewInit {
 		}).catch(err => {
 			console.log(err);
 		});
+
+		// Force view refresh to correctly show the table page length (so table page sizing is correct)
+		this.changeDetectorRef.markForCheck();
 	}
 
 	public showCheckboxes() {
