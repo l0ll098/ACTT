@@ -29,7 +29,8 @@ import {
 	MatPaginatorModule,
 	MatSortModule,
 	MatSnackBarModule,
-	MatDialogModule
+	MatDialogModule,
+	ErrorStateMatcher
 } from '@angular/material';
 import { PlatformModule } from "@angular/cdk/platform";
 
@@ -42,6 +43,7 @@ import { TimesComponent } from "./components/times/times.component";
 import { NewTimeComponent } from "./components/new-time/new-time.component";
 import { BestTimesComponent } from "./components/best-times/best-times.component";
 import { DialogComponent } from "./components/dialog/dialog.component";
+import { LapTimeFormInputComponent } from "./components/lap-time/lap-time.component";
 
 import { AuthService } from "./services/auth.service";
 import { FirebaseService } from "./services/firebase.service";
@@ -101,6 +103,7 @@ const appRoutes: Routes = [
 		BestTimesComponent,
 
 		DialogComponent,
+		LapTimeFormInputComponent,
 
 		LapTimePipe
 	],

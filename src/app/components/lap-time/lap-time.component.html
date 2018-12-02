@@ -1,0 +1,7 @@
+<div [formGroup]="parts" class="laptime-input-container">
+    <input type="number" class="laptime-input-element" formControlName="minutes" [min]="0" [max]="59" (input)="onInput($event)">
+    <span class="laptime-input-spacer">&#58;</span>
+    <input type="number" class="laptime-input-element" formControlName="seconds" [min]="0" [max]="59" (input)="onInput($event)">
+    <span class="laptime-input-spacer">&#58;</span>
+    <input type="number" class="laptime-input-element" formControlName="millisecs" [min]="0" [max]="999" (input)="onInput($event)">
+</div>

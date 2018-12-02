@@ -1,7 +1,7 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { MatDialog } from "@angular/material";
+import { MatDialog, } from "@angular/material";
 
 import { Track, Car, LapTime, Time } from "../../models/data.model";
 import { tracks } from "../../models/tracks";
@@ -37,7 +37,9 @@ export class NewTimeComponent implements AfterViewInit {
         minutes: this.FormControls.minutes,
         seconds: this.FormControls.seconds,
         millisec: this.FormControls.millisec,
-        lapNumber: this.FormControls.lapNumber
+        lapNumber: this.FormControls.lapNumber,
+
+        test: new FormControl()
     });
 
     public tracks: Track[] = tracks;
@@ -59,6 +61,10 @@ export class NewTimeComponent implements AfterViewInit {
 
         this.FormControls.car.valueChanges.subscribe(car => {
             this.filterCar(car);
+        });
+
+        this.newLapTimeFG.get("test").valueChanges.subscribe(val => {
+            console.log(val);
         });
     }
 
