@@ -36,16 +36,6 @@ import { Time } from "../../models/data.model";
         {
             provide: MatFormFieldControl,
             useExisting: LapTimeFormInputComponent
-        },
-        {
-            provide: NG_VALIDATORS,
-            useValue: minutesValidator,
-            multi: true
-        },
-        {
-            provide: NG_VALIDATORS,
-            useValue: secondsValidator,
-            multi: true
         }
     ]
 })
