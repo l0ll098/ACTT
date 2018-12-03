@@ -476,7 +476,7 @@ export const cars: Car[] = [
         name: "Porsche 908 LH"
     },
     {
-        name: "Porsche 911 GT3 RSR 2017"
+        name: "Porsche 911 GT3 2017"
     },
     {
         name: "Praga R1"
