@@ -15,7 +15,6 @@ import {
     AbstractControl,
     ControlValueAccessor,
     DefaultValueAccessor,
-    NG_VALIDATORS,
     NgControl
 } from "@angular/forms";
 
@@ -99,13 +98,19 @@ export class LapTimeFormInputComponent
 
     @Input()
     get value(): Time | null {
-        return this._value;
+        const { value: { minutes, seconds, millisecs } } = this.parts;
+        return {
+            minutes: minutes,
+            seconds: seconds,
+            millisecs: millisecs
+        };
     }
     set value(time: Time | null) {
-        this._value = time;
+        this.parts.setValue(time);
+        // Tell Angular that the value has been updated
+        this.valueAccessor.onChange(time);
         this.stateChanges.next();
     }
-    private _value: Time = { minutes: 0, seconds: 0, millisecs: 0 };
 
 
     public FormControls = {
@@ -168,6 +173,13 @@ export class LapTimeFormInputComponent
             // normal state
             this.errorState = false;
             this.ngControl.control.setErrors(null);
+
+            // Update the stored value
+            this.value = {
+                minutes: this.FormControls.minutes.value,
+                seconds: this.FormControls.seconds.value,
+                millisecs: this.FormControls.millisecs.value
+            };
         }
     }
 
