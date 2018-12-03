@@ -1,5 +1,6 @@
 .laptime-input-container {
     display: flex;
+    width: 100%;
 }
 
 .laptime-input-element {
@@ -9,6 +10,8 @@
     outline: none;
     font: inherit;
     text-align: center;
+    width: 33%;
+    margin: 0 auto;
 }
 
 .laptime-input-spacer {
