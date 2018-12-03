@@ -3,7 +3,7 @@
 
     <div [formGroup]="newLapTimeFG">
 
-        <mat-form-field>
+        <!--<mat-form-field>
             <app-laptime-form-input placeholder="Enter laptime" required formControlName="test"></app-laptime-form-input>
             <mat-error *ngIf="newLapTimeFG.get('test').hasError('required')">
                 This field is <strong>required</strong>!
@@ -20,10 +20,7 @@
             <mat-error *ngIf="newLapTimeFG.get('test').hasError('maxSec')">
                 Secs too high
             </mat-error>
-        </mat-form-field>
-        <p>{{newLapTimeFG.get('test').errors | json}}</p>
-        <p>{{newLapTimeFG.get('test').hasError('minMin') | json}}</p>
-        <p>{{newLapTimeFG.get('test').hasError('maxSec') | json}}</p>
+        </mat-form-field>-->
 
         <div>
             <mat-form-field class="fullPage">
@@ -74,44 +71,27 @@
 
         <div class="sameLine">
             <mat-form-field class="fullPage">
-                <input type="number" matInput formControlName="minutes" 
-                    placeholder="Enter laptime - minutes" required [min]="0" [max]="59">
-                <mat-error *ngIf="FormControls.minutes.hasError('required')">
+                <app-laptime-form-input placeholder="Enter laptime" required formControlName="lapTime"></app-laptime-form-input>
+                <mat-error *ngIf="FormControls.lapTime.hasError('required')">
                     This field is <strong>required</strong>!
                 </mat-error>
-                <mat-error *ngIf="FormControls.minutes.hasError('min')">
-                    Minimum value is 0
+                <mat-error *ngIf="FormControls.lapTime.hasError('minMin')">
+                    Minutes <strong>must</strong> be greater than 0!
                 </mat-error>
-                <mat-error *ngIf="FormControls.minutes.hasError('max')">
-                    Maximum value is 59
+                <mat-error *ngIf="FormControls.lapTime.hasError('maxMin')">
+                    Minutes <strong>must</strong> be smaller than 60!
                 </mat-error>
-            </mat-form-field>
-
-            <mat-form-field class="fullPage">
-                <input type="number" matInput formControlName="seconds" 
-                    placeholder="Enter laptime - seconds" required [min]="0" [max]="59">
-                <mat-error *ngIf="FormControls.seconds.hasError('required')">
-                    This field is <strong>required</strong>!
+                <mat-error *ngIf="FormControls.lapTime.hasError('minSec')">
+                    Seconds <strong>must</strong> be greater than 0!
                 </mat-error>
-                <mat-error *ngIf="FormControls.seconds.hasError('min')">
-                    Minimum value is 0
+                <mat-error *ngIf="FormControls.lapTime.hasError('maxSec')">
+                    Seconds <strong>must</strong> be smaller than 60!
                 </mat-error>
-                <mat-error *ngIf="FormControls.seconds.hasError('max')">
-                    Maximum value is 59
+                <mat-error *ngIf="FormControls.lapTime.hasError('minMillisecs')">
+                    Milliseconds <strong>must</strong> be greater than 0!
                 </mat-error>
-            </mat-form-field>
-
-            <mat-form-field class="fullPage">
-                <input type="number" matInput formControlName="millisec" 
-                    placeholder="Enter laptime - milliseconds" required [min]="0" [max]="999">
-                <mat-error *ngIf="FormControls.millisec.hasError('required')">
-                    This field is <strong>required</strong>!
-                </mat-error>
-                <mat-error *ngIf="FormControls.millisec.hasError('min')">
-                    Minimum value is 0
-                </mat-error>
-                <mat-error *ngIf="FormControls.millisec.hasError('max')">
-                    Maximum value is 999
+                <mat-error *ngIf="FormControls.lapTime.hasError('maxMillisecs')">
+                    Milliseconds <strong>must</strong> be smaller than 1000!
                 </mat-error>
             </mat-form-field>
 

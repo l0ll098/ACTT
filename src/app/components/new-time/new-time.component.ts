@@ -25,21 +25,15 @@ export class NewTimeComponent implements AfterViewInit {
     public FormControls = {
         track: new FormControl(),
         car: new FormControl(),
-        minutes: new FormControl(null, [Validators.min(0), Validators.max(59)]),
-        seconds: new FormControl(null, [Validators.min(0), Validators.max(59)]),
-        millisec: new FormControl(null, [Validators.min(0), Validators.max(999)]),
+        lapTime: new FormControl(null, [Validators.required]),
         lapNumber: new FormControl(null, [Validators.min(1), Validators.max(999)])
     };
 
     public newLapTimeFG = new FormGroup({
         track: this.FormControls.track,
         car: this.FormControls.car,
-        minutes: this.FormControls.minutes,
-        seconds: this.FormControls.seconds,
-        millisec: this.FormControls.millisec,
-        lapNumber: this.FormControls.lapNumber,
-
-        test: new FormControl()
+        lapTime: this.FormControls.lapTime,
+        lapNumber: this.FormControls.lapNumber
     });
 
     public tracks: Track[] = tracks;
@@ -61,10 +55,6 @@ export class NewTimeComponent implements AfterViewInit {
 
         this.FormControls.car.valueChanges.subscribe(car => {
             this.filterCar(car);
-        });
-
-        this.newLapTimeFG.get("test").valueChanges.subscribe(val => {
-            console.log(val);
         });
     }
 
@@ -133,11 +123,8 @@ export class NewTimeComponent implements AfterViewInit {
     public save() {
         this.disableSaveButton = true;
 
-        const humanTime = {
-            millisecs: this.FormControls.millisec.value,
-            minutes: this.FormControls.minutes.value,
-            seconds: this.FormControls.seconds.value
-        };
+        const humanTime: Time = this.FormControls.lapTime.value;
+
         const lapTime: LapTime = {
             car: this.FormControls.car.value,
             lap: this.FormControls.lapNumber.value,
