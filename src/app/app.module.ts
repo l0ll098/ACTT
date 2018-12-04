@@ -30,7 +30,6 @@ import {
 	MatSortModule,
 	MatSnackBarModule,
 	MatDialogModule,
-	ErrorStateMatcher
 } from '@angular/material';
 import { PlatformModule } from "@angular/cdk/platform";
 
@@ -49,6 +48,7 @@ import { AuthService } from "./services/auth.service";
 import { FirebaseService } from "./services/firebase.service";
 import { IndexedDBService } from "./services/indexedDb.service";
 import { SettingsService } from './services/settings.service';
+import { LoggerService } from './services/log.service';
 
 import { LapTimePipe } from './pipes/lap-time.pipe';
 
@@ -145,7 +145,8 @@ const appRoutes: Routes = [
 		AuthService,
 		FirebaseService,
 		IndexedDBService,
-		SettingsService
+		SettingsService,
+		LoggerService
 	],
 	bootstrap: [
 		AppComponent

@@ -13,6 +13,7 @@ import { FirebaseService } from "../../services/firebase.service";
 import { SettingsService } from '../../services/settings.service';
 
 import { SidenavButton } from '../../models/lists.model';
+import { LoggerService } from '../../services/log.service';
 
 
 enum toolbarTypes {
@@ -88,6 +89,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         private elementRef: ElementRef,
         private authService: AuthService,
         private firebaseService: FirebaseService,
+        private loggerService: LoggerService,
         private platform: Platform,
         private swUpdate: SwUpdate,
         private settingsService: SettingsService,
@@ -95,7 +97,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         private dialog: MatDialog) {
 
         this.authService.getUserData().subscribe(data => {
-            console.log(data);
+            this.loggerService.log(data);
             this.user = data;
         });
     }
@@ -165,7 +167,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
 
         // Subscribe to the observer to notify user that a newer version is available
         this.swUpdate.available.subscribe(event => {
-            console.log("Update available: current version is", event.current, "available version is", event.available);
+            this.loggerService.log("Update available: current version is", event.current, "available version is", event.available);
 
             // Show a dialog asking user if he want to update
             this.dialog.open(DialogComponent, {
@@ -182,7 +184,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
                     cancelBtn: {
                         text: "No",
                         onClick: () => {
-                            console.log("Installing the update the next time window is loaded");
+                            this.loggerService.log("Installing the update the next time window is loaded");
                         }
                     }
                 }
