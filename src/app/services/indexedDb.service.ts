@@ -185,6 +185,9 @@ export class IndexedDBService {
         }
 
         const objStore = await this.getLogsObjectStore("readwrite");
+        // Before saving new lines of log, delete (if necessary) the oldest ones.
+        await this.deleteOldestData(objStore);
+
         return objStore.add(log, (new Date()).getTime());
     }
 }
