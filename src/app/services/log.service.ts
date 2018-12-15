@@ -5,11 +5,8 @@ import { environment } from "../../environments/environment";
 import { IndexedDBService } from "./indexedDb.service";
 
 
+const isProd = true;//environment.production || false;
 
-const isProd = environment.production || false;
-const noop = (): any => undefined;
-
-// TODO: Save in idb a log of all the stuff logged by this service. Those data will be show on a certain path
 
 @Injectable()
 export class LoggerService {
@@ -19,33 +16,73 @@ export class LoggerService {
     ) { }
 
     get info() {
-        // tslint:disable-next-line:no-console
-        return console.info.bind(console);
+        if (!isProd) {
+            // tslint:disable-next-line:no-console
+            return console.info.bind(console);
+        } else {
+            return proxyConsole("info", this.indexedDBService);
+        }
     }
 
     get log() {
-        // tslint:disable-next-line:no-console
-        return console.log.bind(console);
+        if (!isProd) {
+            return console.log.bind(console);
+        } else {
+            return proxyConsole("log", this.indexedDBService);
+        }
     }
 
     get warn() {
-        // tslint:disable-next-line:no-console
-        return console.warn.bind(console);
+        if (!isProd) {
+            return console.warn.bind(console);
+        } else {
+            return proxyConsole("warn", this.indexedDBService);
+        }
     }
 
     get error() {
-        // tslint:disable-next-line:no-console
-        return console.error.bind(console);
+        if (!isProd) {
+            return console.error.bind(console);
+        } else {
+            return proxyConsole("error", this.indexedDBService);
+        }
     }
 
     get group() {
-        // tslint:disable-next-line:no-console
-        return console.group.bind(console);
+        if (!isProd) {
+            return console.group.bind(console);
+        } else {
+            return proxyConsole("group", this.indexedDBService);
+        }
     }
 
     get groupEnd() {
-        // tslint:disable-next-line:no-console
-        return console.groupEnd.bind(console);
+        if (!isProd) {
+            return console.groupEnd.bind(console);
+        } else {
+            return proxyConsole("groupEnd", this.indexedDBService);
+        }
     }
 
+}
+
+
+function proxyConsole(method: string, indexedDBService: IndexedDBService) {
+    // Keep a pointer to the original console
+    const original = console[method];
+    // Overwrite it
+    console[method] = (...args) => {
+        indexedDBService.writeLogs(JSON.stringify(args));
+
+        original.apply(this, args);
+    };
+
+    // Call the console method using the proxied console
+    const log = console[method].bind(console) || Function.prototype.bind.call(console[method], console);
+
+    // Restore the original console
+    console[method] = original;
+
+    // Return the proxied console to the calling method
+    return log;
 }

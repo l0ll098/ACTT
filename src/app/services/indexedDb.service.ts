@@ -185,6 +185,6 @@ export class IndexedDBService {
         }
 
         const objStore = await this.getLogsObjectStore("readwrite");
-        return objStore.add(log);
+        return objStore.add(log, (new Date()).getTime());
     }
 }
