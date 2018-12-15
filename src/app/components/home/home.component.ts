@@ -10,7 +10,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from "../../services/firebase.service";
-import { SettingsService } from '../../services/settings.service';
+import { SettingsService, SettingsName } from '../../services/settings.service';
 
 import { SidenavButton } from '../../models/lists.model';
 import { LoggerService } from '../../services/log.service';
@@ -201,6 +201,15 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         // Hide new FAB if the path isn't in the array.
         // This could happen if the page has been reloaded from a different path than "/"
         this.showAndHideNewFAB(this.location.path());
+
+        // Check if the "Show log" button has to be shown
+        this.settingsService
+            .getSettingValue(SettingsName.EnableLogButton)
+            .then(showBtn => {
+                if (showBtn) {
+                    this.addLogBtn();
+                }
+            });
     }
 
 
@@ -277,5 +286,26 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         } else {
             this.showNewFAB = false;
         }
+    }
+
+    private addLogBtn() {
+        const extraBtns: SidenavButton[] = [
+            {
+                isDivider: true
+            },
+            {
+                text: "Advanced features",
+                isSubheader: true
+            },
+            {
+                icon: "developer_mode",
+                text: "Show logs",
+                path: "log"
+            }
+        ];
+
+        extraBtns.forEach(btn => {
+            this.sidenavButtons.push(btn);
+        });
     }
 }
