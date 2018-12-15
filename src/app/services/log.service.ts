@@ -4,8 +4,8 @@ import { environment } from "../../environments/environment";
 
 import { IndexedDBService } from "./indexedDb.service";
 
-
-const isProd = true;//environment.production || false;
+// Logs will be written to IDB if the specific variable is set to true of if the app is in production.
+const enableIDBLog = environment.enableIDBLog || environment.production;
 
 
 @Injectable()
@@ -16,7 +16,7 @@ export class LoggerService {
     ) { }
 
     get info() {
-        if (!isProd) {
+        if (!enableIDBLog) {
             // tslint:disable-next-line:no-console
             return console.info.bind(console);
         } else {
@@ -25,7 +25,7 @@ export class LoggerService {
     }
 
     get log() {
-        if (!isProd) {
+        if (!enableIDBLog) {
             return console.log.bind(console);
         } else {
             return proxyConsole("log", this.indexedDBService);
@@ -33,7 +33,7 @@ export class LoggerService {
     }
 
     get warn() {
-        if (!isProd) {
+        if (!enableIDBLog) {
             return console.warn.bind(console);
         } else {
             return proxyConsole("warn", this.indexedDBService);
@@ -41,7 +41,7 @@ export class LoggerService {
     }
 
     get error() {
-        if (!isProd) {
+        if (!enableIDBLog) {
             return console.error.bind(console);
         } else {
             return proxyConsole("error", this.indexedDBService);
@@ -49,7 +49,7 @@ export class LoggerService {
     }
 
     get group() {
-        if (!isProd) {
+        if (!enableIDBLog) {
             return console.group.bind(console);
         } else {
             return proxyConsole("group", this.indexedDBService);
@@ -57,7 +57,7 @@ export class LoggerService {
     }
 
     get groupEnd() {
-        if (!isProd) {
+        if (!enableIDBLog) {
             return console.groupEnd.bind(console);
         } else {
             return proxyConsole("groupEnd", this.indexedDBService);
