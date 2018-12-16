@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import idb, { UpgradeDB, DB, ObjectStore } from "idb";
+import { Log } from "../models/data.model";
 
 enum ObjectStores {
     "laptimes" = "laptimes",
@@ -83,7 +84,7 @@ export class IndexedDBService {
                         const laptimesStore = upgradeDB.createObjectStore(ObjectStores.laptimes);
                         const settingsStore = upgradeDB.createObjectStore(ObjectStores.settings);
                     case 1:
-                        const logsStore = upgradeDB.createObjectStore(ObjectStores.logs);
+                        const logsStore = upgradeDB.createObjectStore(ObjectStores.logs, { keyPath: "id", autoIncrement: true });
                     case 2:
                         break;
                 }
@@ -172,14 +173,14 @@ export class IndexedDBService {
 
     public async getLogs(): Promise<any> {
         if (this.isSupported) {
-            const objStore = await this.getSettingsObjectStore("readonly");
+            const objStore = await this.getLogsObjectStore("readonly");
             return objStore.getAll();
         } else {
             return new Promise(null);
         }
     }
 
-    public async writeLogs(log: any): Promise<IDBValidKey> {
+    public async writeLogs(msg: string): Promise<IDBValidKey> {
         if (!this.isSupported) {
             return null;
         }
@@ -188,6 +189,11 @@ export class IndexedDBService {
         // Before saving new lines of log, delete (if necessary) the oldest ones.
         await this.deleteOldestData(objStore);
 
-        return objStore.add(log, (new Date()).getTime());
+        const log: Log = {
+            log: msg,
+            timestamp: (new Date).getTime()
+        };
+
+        return objStore.add(log);
     }
 }

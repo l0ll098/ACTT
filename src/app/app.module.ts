@@ -51,6 +51,7 @@ import { SettingsService } from './services/settings.service';
 import { LoggerService } from './services/log.service';
 
 import { LapTimePipe } from './pipes/lap-time.pipe';
+import { LogsComponent } from './components/logs/logs.component';
 
 
 const appRoutes: Routes = [
@@ -82,7 +83,11 @@ const appRoutes: Routes = [
 			{
 				path: "notFound",
 				component: NotFoundComponent
-			}
+			},
+			{
+				path: "log",
+				component: LogsComponent
+			},
 		]
 	},
 	{
@@ -101,6 +106,7 @@ const appRoutes: Routes = [
 		TimesComponent,
 		NewTimeComponent,
 		BestTimesComponent,
+		LogsComponent,
 
 		DialogComponent,
 		LapTimeFormInputComponent,

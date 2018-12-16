@@ -1,0 +1,7 @@
+th, th:not(:last-child) {
+    padding-right: 64px;
+}
+
+th:first-child {
+    padding-right: 32px;
+}
