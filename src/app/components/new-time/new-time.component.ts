@@ -8,6 +8,8 @@ import { tracks } from "../../models/tracks";
 import { cars } from "../../models/cars";
 
 import { FirebaseService } from "../../services/firebase.service";
+import { LoggerService } from "../../services/log.service";
+
 import { DialogComponent } from "../dialog/dialog.component";
 
 
@@ -44,6 +46,7 @@ export class NewTimeComponent implements AfterViewInit {
 
     constructor(
         private firebaseService: FirebaseService,
+        private loggerService: LoggerService,
         private router: Router,
         private changeDetectorRef: ChangeDetectorRef,
         private dialog: MatDialog) { }
@@ -140,7 +143,7 @@ export class NewTimeComponent implements AfterViewInit {
 
         this.firebaseService.saveUserLapTime(lapTime)
             .then((data) => {
-                console.log(data);
+                this.loggerService.log(data);
 
                 if (data.isBetter) {
                     this.router.navigate(["/times"]);
@@ -161,7 +164,7 @@ export class NewTimeComponent implements AfterViewInit {
                 }
             })
             .catch(err => {
-                console.log(err);
+                this.loggerService.log(err);
 
                 this.dialog.open(DialogComponent, {
                     data: {

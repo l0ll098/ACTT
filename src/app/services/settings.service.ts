@@ -4,7 +4,8 @@ import { IndexedDBService } from "./indexedDb.service";
 
 export enum SettingsName {
     EnableNotifications = "enableNotifications",
-    LapTimesPageSize = "lapTimesPageSize"
+    LapTimesPageSize = "lapTimesPageSize",
+    EnableLogButton = "enableLogButton"
 }
 
 @Injectable()
@@ -40,6 +41,22 @@ export class SettingsService {
             defualtValue: 10,
             onChange: (value) => { }
         },
+        {
+            isDivider: true
+        },
+        {
+            isSubheader: true,
+            text: "Advanced features"
+        },
+        {
+            icon: "developer_mode",
+            text: "Show log button",
+            secondaryText: "Adds a button in the menu to see the log",
+            type: "toggle",
+            formControlName: SettingsName.EnableLogButton,
+            defualtValue: false,
+            onChange: (val) => { }
+        }
     ];
 
 

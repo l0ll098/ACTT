@@ -8,6 +8,8 @@ import { LapTime } from "../../models/data.model";
 
 import { FirebaseService } from "../../services/firebase.service";
 import { SettingsService, SettingsName } from "../../services/settings.service";
+import { LoggerService } from "../../services/log.service";
+
 
 @Component({
 	selector: 'app-times',
@@ -39,6 +41,7 @@ export class TimesComponent implements AfterViewInit {
 		private dialog: MatDialog,
 		private firebaseService: FirebaseService,
 		private settingsService: SettingsService,
+		private loggerService: LoggerService,
 		private changeDetectorRef: ChangeDetectorRef
 	) {
 		this.selection = new SelectionModel<LapTime>(this.allowMultiSelect, this.initialSelection);
@@ -133,7 +136,7 @@ export class TimesComponent implements AfterViewInit {
 
 			this.applyFilter(this.filter);
 		}).catch(err => {
-			console.log(err);
+			this.loggerService.log(err);
 		});
 
 		// Force view refresh to correctly show the table page length (so table page sizing is correct)
@@ -149,7 +152,7 @@ export class TimesComponent implements AfterViewInit {
 			// Show the initial icon in the FAB
 			this.deleteFAB.icon = "delete";
 
-			console.group("Delete laptimes");
+			this.loggerService.group("Delete laptimes");
 
 			// Before showing the confirm dialog, ensure that at least a record was selected
 			if (this.selection.selected.length > 0) {
@@ -161,27 +164,27 @@ export class TimesComponent implements AfterViewInit {
 						doActionBtn: {
 							text: "Yes",
 							onClick: () => {
-								console.log("Deleting these lapTimes: ", this.selection.selected);
+								this.loggerService.log("Deleting these lapTimes: ", this.selection.selected);
 
 								// If he presses ok, delete the data
 								this.firebaseService
 									.deleteLapTimes(this.selection.selected)
 									.then(done => {
-										console.log("Finished deleting!");
-										console.groupEnd();
+										this.loggerService.log("Finished deleting!");
+										this.loggerService.groupEnd();
 										this.refresh();
 									})
 									.catch(err => {
-										console.log(err);
-										console.groupEnd();
+										this.loggerService.log(err);
+										this.loggerService.groupEnd();
 									});
 							}
 						},
 						cancelBtn: {
 							text: "No",
 							onClick: () => {
-								console.log("Pressed no");
-								console.groupEnd();
+								this.loggerService.log("Pressed no");
+								this.loggerService.groupEnd();
 
 								// De-select all the checkboxes
 								this.selection.clear();		// TODO: Can be personalized through settings
@@ -190,8 +193,8 @@ export class TimesComponent implements AfterViewInit {
 					}
 				});
 			} else {
-				console.log("User didn't select anything. Swithcing FAB state.");
-				console.groupEnd();
+				this.loggerService.log("User didn't select anything. Swithcing FAB state.");
+				this.loggerService.groupEnd();
 			}
 		} else {
 			// First interaction with the FAB. Show the col with checkboxes.

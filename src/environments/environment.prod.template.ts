@@ -3,6 +3,7 @@ import { firebaseui, firebase } from "firebaseui-angular";
 export const environment = {
 	production: true,
 	enableAngularRoutingLog: false,
+	enableIDBLog: true,
 
 	firebase: {
 		apiKey: "<your-key>",

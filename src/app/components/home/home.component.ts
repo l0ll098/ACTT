@@ -10,9 +10,10 @@ import { DialogComponent } from '../dialog/dialog.component';
 
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from "../../services/firebase.service";
-import { SettingsService } from '../../services/settings.service';
+import { SettingsService, SettingsName } from '../../services/settings.service';
 
 import { SidenavButton } from '../../models/lists.model';
+import { LoggerService } from '../../services/log.service';
 
 
 enum toolbarTypes {
@@ -88,6 +89,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         private elementRef: ElementRef,
         private authService: AuthService,
         private firebaseService: FirebaseService,
+        private loggerService: LoggerService,
         private platform: Platform,
         private swUpdate: SwUpdate,
         private settingsService: SettingsService,
@@ -95,7 +97,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         private dialog: MatDialog) {
 
         this.authService.getUserData().subscribe(data => {
-            console.log(data);
+            this.loggerService.log(data);
             this.user = data;
         });
     }
@@ -165,7 +167,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
 
         // Subscribe to the observer to notify user that a newer version is available
         this.swUpdate.available.subscribe(event => {
-            console.log("Update available: current version is", event.current, "available version is", event.available);
+            this.loggerService.log("Update available: current version is", event.current, "available version is", event.available);
 
             // Show a dialog asking user if he want to update
             this.dialog.open(DialogComponent, {
@@ -182,7 +184,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
                     cancelBtn: {
                         text: "No",
                         onClick: () => {
-                            console.log("Installing the update the next time window is loaded");
+                            this.loggerService.log("Installing the update the next time window is loaded");
                         }
                     }
                 }
@@ -199,6 +201,15 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         // Hide new FAB if the path isn't in the array.
         // This could happen if the page has been reloaded from a different path than "/"
         this.showAndHideNewFAB(this.location.path());
+
+        // Check if the "Show log" button has to be shown
+        this.settingsService
+            .getSettingValue(SettingsName.EnableLogButton)
+            .then(showBtn => {
+                if (showBtn) {
+                    this.addLogBtn();
+                }
+            });
     }
 
 
@@ -275,5 +286,26 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         } else {
             this.showNewFAB = false;
         }
+    }
+
+    private addLogBtn() {
+        const extraBtns: SidenavButton[] = [
+            {
+                isDivider: true
+            },
+            {
+                text: "Advanced features",
+                isSubheader: true
+            },
+            {
+                icon: "developer_mode",
+                text: "Show logs",
+                path: "logs"
+            }
+        ];
+
+        extraBtns.forEach(btn => {
+            this.sidenavButtons.push(btn);
+        });
     }
 }
