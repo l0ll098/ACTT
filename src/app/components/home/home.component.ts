@@ -300,7 +300,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
             {
                 icon: "developer_mode",
                 text: "Show logs",
-                path: "log"
+                path: "logs"
             }
         ];
 

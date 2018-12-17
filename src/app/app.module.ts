@@ -84,11 +84,11 @@ const appRoutes: Routes = [
 				path: "notFound",
 				component: NotFoundComponent
 			},
-			{
-				path: "log",
-				component: LogsComponent
-			},
 		]
+	},
+	{
+		path: "logs",
+		component: LogsComponent
 	},
 	{
 		path: "**",
