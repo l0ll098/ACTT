@@ -84,18 +84,20 @@ mat-sidenav {
 	font-weight: 400;
 }
 
-#sidenavContent mat-nav-list div button {
+.sidenavButton {
 	height: 64px;
 	width: 100%;
 	text-align: left;
-	vertical-align: central;
+	vertical-align: middle;
 }
 
-	#sidenavContent mat-nav-list div button mat-icon {
+	.sidenavButtonIcon {
+		vertical-align: middle;
 		margin-right: 32px;
 	}
 
-	#sidenavContent mat-nav-list div button span {
+	.sidenavButtonText {
+		vertical-align: middle;
 		font-weight: 500;
 		font-size: 14px;
 	}

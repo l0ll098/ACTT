@@ -27,10 +27,12 @@
                     <a mat-button style="height: 0; position: absolute;"></a>
 
                     <div *ngFor="let sidenavButton of sidenavButtons; trackBy: trackByFn">
-                        <button mat-button mat-list-item (click)="goToPath(sidenavButton.path); sidenav.toggle()" *ngIf="!sidenavButton.isDivider && !sidenavButton.isSubheader"
-                            [disabled]="sidenavButton.isDisabled" autofocus="false">
-                            <mat-icon mat-list-icon>{{ sidenavButton.icon }}</mat-icon>
-                            <span mat-line>{{sidenavButton.text}}</span>
+                        <button mat-button  (click)="goToPath(sidenavButton.path); sidenav.toggle()" *ngIf="!sidenavButton.isDivider && !sidenavButton.isSubheader"
+                            [disabled]="sidenavButton.isDisabled" autofocus="false" class="sidenavButton">
+                            <div mat-list-item>
+                                <mat-icon mat-list-icon class="sidenavButtonIcon">{{ sidenavButton.icon }}</mat-icon>
+                                <span mat-line class="sidenavButtonText">{{sidenavButton.text}}</span>
+                            </div>
                         </button>
 
                         <div *ngIf="sidenavButton.isDivider">
