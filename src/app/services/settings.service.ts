@@ -82,7 +82,7 @@ export class SettingsService {
         return this.idbService.getSettingValue(settingName);
     }
 
-    public getSttingsValues(settingName: string): Promise<SettingsSelectItem[]> {
+    public getPossibleSettingsValues(settingName: string): Promise<SettingsSelectItem[]> {
         return new Promise((resolve, reject) => {
             const matching = this.settings.filter(setting => setting.formControlName === settingName);
             if (matching.length > 0) {
