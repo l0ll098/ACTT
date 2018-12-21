@@ -51,12 +51,6 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
             path: "/times"
         },
         {
-            text: "Best times",
-            icon: "timer",
-            path: "/best",
-            isDisabled: true
-        },
-        {
             isDivider: true
         },
         {
