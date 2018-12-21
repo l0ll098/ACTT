@@ -9,7 +9,8 @@
     "buildProd": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "gulp": "gulp"
   },
   "private": true,
   "dependencies": {
@@ -48,6 +49,8 @@
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~10.9.4",
     "codelyzer": "~4.4.4",
+    "gulp": "^4.0.0",
+    "gulp-exec": "^3.0.2",
     "jasmine-core": "~3.2.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.0.0",
