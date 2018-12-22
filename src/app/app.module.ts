@@ -40,7 +40,6 @@ import { LoginComponent } from './components/login/login.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { TimesComponent } from "./components/times/times.component";
 import { NewTimeComponent } from "./components/new-time/new-time.component";
-import { BestTimesComponent } from "./components/best-times/best-times.component";
 import { DialogComponent } from "./components/dialog/dialog.component";
 import { LapTimeFormInputComponent } from "./components/lap-time/lap-time.component";
 
@@ -77,10 +76,6 @@ const appRoutes: Routes = [
 				component: SettingsComponent
 			},
 			{
-				path: "best",
-				component: BestTimesComponent
-			},
-			{
 				path: "notFound",
 				component: NotFoundComponent
 			},
@@ -105,7 +100,6 @@ const appRoutes: Routes = [
 		SettingsComponent,
 		TimesComponent,
 		NewTimeComponent,
-		BestTimesComponent,
 		LogsComponent,
 
 		DialogComponent,
