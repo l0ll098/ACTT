@@ -29,8 +29,6 @@ export class LogsComponent implements OnInit {
             .then(logs => {
                 this.dataSource = logs;
 
-                console.log(this.dataSource);
-
                 this.changeDetectorRef.markForCheck();
             })
             .catch(err => {
