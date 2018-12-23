@@ -13,17 +13,20 @@
 @media screen and (max-width: 959px) {
     #tableContainer th:first-child,
     #tableContainer td:first-child {
-        width: 30px;
         padding-left: 8px;
     }
 
-    #tableContainer th:not(:first-child):not(:last-child),
-    #tableContainer td:not(:first-child):not(:last-child) {
+    #tableContainer th:last-child,
+    #tableContainer td:last-child {
         padding-right: 8px;
     }
 
-    #tableContainer th:last-child {
-        padding-right: 8px;
+    #tableContainer td:not(:first-child):not(:last-child) {
+        line-break: loose;
+    }
+
+    td, th{
+        text-align: center;
     }
 
     /* This will prevent the FAB to hover on the refresh button */
