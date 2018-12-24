@@ -2,26 +2,7 @@
     <p>Insert a new lap time</p>
 
     <div [formGroup]="newLapTimeFG">
-
-        <!--<mat-form-field>
-            <app-laptime-form-input placeholder="Enter laptime" required formControlName="test"></app-laptime-form-input>
-            <mat-error *ngIf="newLapTimeFG.get('test').hasError('required')">
-                This field is <strong>required</strong>!
-            </mat-error>
-            <mat-error *ngIf="newLapTimeFG.get('test').hasError('max')">
-                This field is <strong>too big</strong>!
-            </mat-error>
-            <mat-error *ngIf="newLapTimeFG.get('test').hasError('minMin')">
-                too low
-            </mat-error>
-            <mat-error *ngIf="newLapTimeFG.get('test').hasError('maxMin')">
-                too high
-            </mat-error>
-            <mat-error *ngIf="newLapTimeFG.get('test').hasError('maxSec')">
-                Secs too high
-            </mat-error>
-        </mat-form-field>-->
-
+        
         <div>
             <mat-form-field class="fullPage">
                 <input type="text" matInput formControlName="track" [matAutocomplete]="autoTrack" 
@@ -110,6 +91,8 @@
             </mat-form-field>
         </div>
 
+        <app-lap-assists description="Select the used assists (if any)"></app-lap-assists>
+        
         <button mat-flat-button color="accent" (click)="save()" id="saveBtn"
             [disabled]="!newLapTimeFG.valid || disableSaveButton">Save!</button>
     </div>

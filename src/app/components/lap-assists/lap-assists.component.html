@@ -1,0 +1,42 @@
+<mat-accordion>
+    <mat-expansion-panel>
+        <!-- Header -->
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Assists
+            </mat-panel-title>
+            <mat-panel-description>
+                {{ description }}
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <!-- Content -->
+
+        <div [formGroup]="lapAssistsFG" style="text-align: left;">
+            <p>
+                <mat-slide-toggle formControlName="abs">ABS</mat-slide-toggle>
+                {{ FormControls.abs.value }}
+            </p>
+            <p>
+                <mat-slide-toggle>Traction Control</mat-slide-toggle>
+            </p>
+            <p>
+                <span>
+                    Traction control
+                    <mat-slider formControlName="tractionControl"></mat-slider>
+                    {{ FormControls.tractionControl.value }}
+                </span>
+            </p>
+
+            <p>
+                <span>
+                    stability control
+                    <mat-slider formControlName="stabilityControl" step="10" min="0" max="100"></mat-slider>
+                    {{ FormControls.stabilityControl.value }}
+                </span>
+            </p>
+        </div>
+
+
+    </mat-expansion-panel>
+</mat-accordion>
