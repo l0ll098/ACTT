@@ -14,26 +14,60 @@
 
         <div [formGroup]="lapAssistsFG" style="text-align: left;">
             <p>
-                <mat-slide-toggle formControlName="abs">ABS</mat-slide-toggle>
-                {{ FormControls.abs.value }}
+                <span>
+                    <span>Automatic shifter</span>
+                    <mat-slide-toggle formControlName="autoShifter"></mat-slide-toggle>
+                </span>
             </p>
             <p>
-                <mat-slide-toggle>Traction Control</mat-slide-toggle>
+                <mat-slide-toggle formControlName="autoFriction">Automatic friction</mat-slide-toggle>
+            </p>
+            <p>
+                <mat-slide-toggle formControlName="autoBlip">Automatic blip</mat-slide-toggle>
+            </p>
+            <p>
+                <mat-slide-toggle formControlName="idealTrajectory">Ideal trajectory</mat-slide-toggle>
             </p>
             <p>
                 <span>
                     Traction control
-                    <mat-slider formControlName="tractionControl"></mat-slider>
+                    <mat-slider formControlName="tractionControl" min="0" max="100" step="50"></mat-slider>
                     {{ FormControls.tractionControl.value }}
                 </span>
             </p>
 
             <p>
                 <span>
-                    stability control
+                    Abs
+                    <mat-slider formControlName="abs" min="0" max="100" step="50"></mat-slider>
+                    {{ FormControls.abs.value }}
+                </span>
+            </p>
+
+            <p>
+                <span>
+                    Stability control
                     <mat-slider formControlName="stabilityControl" step="10" min="0" max="100"></mat-slider>
                     {{ FormControls.stabilityControl.value }}
                 </span>
+            </p>
+
+            <p>
+                <span>
+                    Mechanical damages
+                    <mat-slider formControlName="mechanicalDamages" step="10" min="0" max="100"></mat-slider>
+                    {{ FormControls.mechanicalDamages.value }}
+                </span>
+            </p>
+
+            <p>
+                <mat-slide-toggle formControlName="tyresWear">Tyres waer</mat-slide-toggle>
+            </p>
+            <p>
+                <mat-slide-toggle formControlName="tyresBlankets">Tyres blankets</mat-slide-toggle>
+            </p>
+            <p>
+                <mat-slide-toggle formControlName="fuelConsumption">Fuel consumption</mat-slide-toggle>
             </p>
         </div>
 

@@ -16,10 +16,10 @@ export class LapAssistsComponent {
         autoFriction: new FormControl(),
         autoBlip: new FormControl(),
         idealTrajectory: new FormControl(),
-        tractionControl: new FormControl(),
-        abs: new FormControl(),
-        stabilityControl: new FormControl(),
-        mechanicalDamages: new FormControl(),
+        tractionControl: new FormControl([0]),
+        abs: new FormControl([0]),
+        stabilityControl: new FormControl([0]),
+        mechanicalDamages: new FormControl([0]),
         tyresWear: new FormControl(),
         tyresBlankets: new FormControl(),
         fuelConsumption: new FormControl(),
@@ -41,12 +41,4 @@ export class LapAssistsComponent {
 
     constructor() { }
 
-
-    formatLabel(value: number | null) {
-        if (!value) {
-            return 0;
-        }
-
-        return value;
-    }
 }
