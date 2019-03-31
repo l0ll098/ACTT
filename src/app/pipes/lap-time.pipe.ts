@@ -1,7 +1,7 @@
 import { PipeTransform, Pipe } from "@angular/core";
 import { Time } from "../models/data.model";
 
-@Pipe({ 
+@Pipe({
     name: "lapTime",
     pure: true
  })
