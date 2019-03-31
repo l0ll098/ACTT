@@ -31,7 +31,8 @@ import {
 	MatSnackBarModule,
 	MatDialogModule,
 	MatExpansionModule,
-	MatSliderModule
+	MatSliderModule,
+	MatMenuModule
 } from '@angular/material';
 import { PlatformModule } from "@angular/cdk/platform";
 
@@ -145,7 +146,8 @@ const appRoutes: Routes = [
 		MatSnackBarModule,
 		MatDialogModule,
 		MatExpansionModule,
-		MatSliderModule
+		MatSliderModule,
+		MatMenuModule
 	],
 	providers: [
 		AuthService,

@@ -11,6 +11,18 @@ export class LapAssistsComponent {
 
     @Input() description = "";
 
+    public ABS_VALUE: string[] = ["0", "50", "100"];
+
+    public TRACTION_CONTROL_VALUES: string[] = [
+        "0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"
+    ];
+    public STABILITY_CONTROL_VALUES: string[] = [
+        "0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"
+    ];
+    public MECHANICAL_DAMAGES_VALUES: string[] = [
+        "0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"
+    ];
+
     public FormControls = {
         autoShifter: new FormControl(),
         autoFriction: new FormControl(),

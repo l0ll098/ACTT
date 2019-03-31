@@ -1,4 +1,4 @@
-<mat-accordion>
+<mat-accordion style="width:100%;">
     <mat-expansion-panel>
         <!-- Header -->
         <mat-expansion-panel-header>
@@ -13,62 +13,96 @@
         <!-- Content -->
 
         <div [formGroup]="lapAssistsFG" style="text-align: left;">
-            <p>
-                <span>
-                    <span>Automatic shifter</span>
+            <mat-list>
+                <mat-list-item>
+                    <p matLine>Automatic shifter</p>
                     <mat-slide-toggle formControlName="autoShifter"></mat-slide-toggle>
-                </span>
-            </p>
-            <p>
-                <mat-slide-toggle formControlName="autoFriction">Automatic friction</mat-slide-toggle>
-            </p>
-            <p>
-                <mat-slide-toggle formControlName="autoBlip">Automatic blip</mat-slide-toggle>
-            </p>
-            <p>
-                <mat-slide-toggle formControlName="idealTrajectory">Ideal trajectory</mat-slide-toggle>
-            </p>
-            <p>
-                <span>
-                    Traction control
-                    <mat-slider formControlName="tractionControl" min="0" max="100" step="50"></mat-slider>
-                    {{ FormControls.tractionControl.value }}
-                </span>
-            </p>
+                </mat-list-item>
 
-            <p>
-                <span>
-                    Abs
-                    <mat-slider formControlName="abs" min="0" max="100" step="50"></mat-slider>
-                    {{ FormControls.abs.value }}
-                </span>
-            </p>
+                <mat-list-item>
+                    <p matLine>Automatic friction</p>
+                    <mat-slide-toggle formControlName="autoFriction"></mat-slide-toggle>
+                </mat-list-item>
 
-            <p>
-                <span>
-                    Stability control
-                    <mat-slider formControlName="stabilityControl" step="10" min="0" max="100"></mat-slider>
-                    {{ FormControls.stabilityControl.value }}
-                </span>
-            </p>
+                <mat-list-item>
+                    <p matLine>Automatic blip</p>
+                    <mat-slide-toggle formControlName="autoBlip"></mat-slide-toggle>
+                </mat-list-item>
 
-            <p>
-                <span>
-                    Mechanical damages
-                    <mat-slider formControlName="mechanicalDamages" step="10" min="0" max="100"></mat-slider>
-                    {{ FormControls.mechanicalDamages.value }}
-                </span>
-            </p>
+                <mat-list-item>
+                    <p matLine>Ideal trajectory</p>
+                    <mat-slide-toggle formControlName="idealTrajectory"></mat-slide-toggle>
+                </mat-list-item>
 
-            <p>
-                <mat-slide-toggle formControlName="tyresWear">Tyres waer</mat-slide-toggle>
-            </p>
-            <p>
-                <mat-slide-toggle formControlName="tyresBlankets">Tyres blankets</mat-slide-toggle>
-            </p>
-            <p>
-                <mat-slide-toggle formControlName="fuelConsumption">Fuel consumption</mat-slide-toggle>
-            </p>
+                <mat-list-item>
+                    <p matLine>Traction control</p>
+
+                    <mat-form-field class="select">
+                        <mat-label>Select</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let val of TRACTION_CONTROL_VALUES" [value]="val">
+                                {{val}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </mat-list-item>
+
+                <mat-list-item>
+                    <p matLine>Abs</p>
+
+                    <mat-form-field class="select">
+                        <mat-label>Select</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let val of ABS_VALUE" [value]="val">
+                                {{val}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-list-item>
+
+                <mat-list-item>
+                    <p matLine>Stability control</p>
+
+                    <mat-form-field class="select">
+                        <mat-label>Select</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let val of STABILITY_CONTROL_VALUES" [value]="val">
+                                {{val}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-list-item>
+
+                <mat-list-item>
+                    <p matLine>Mechanical damages</p>
+
+                    <mat-form-field class="select">
+                        <mat-label>Select</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let val of MECHANICAL_DAMAGES_VALUES" [value]="val">
+                                {{val}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </mat-list-item>
+
+                <mat-list-item>
+                    <p matLine>Tyres waer</p>
+                    <mat-slide-toggle formControlName="tyresWear"></mat-slide-toggle>
+                </mat-list-item>
+
+                <mat-list-item>
+                    <p matLine>Tyres blankets</p>
+                    <mat-slide-toggle formControlName="tyresBlankets"></mat-slide-toggle>
+                </mat-list-item>
+
+                <mat-list-item>
+                    <p matLine>Fuel consumption</p>
+                    <mat-slide-toggle formControlName="fuelConsumption"></mat-slide-toggle>
+                </mat-list-item>
+            </mat-list>
+
         </div>
 
 
