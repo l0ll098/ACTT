@@ -35,3 +35,17 @@ export interface Log {
     timestamp?: number;
     log: string | number;
 }
+
+export interface LapAssists {
+    autoShifter: boolean;
+    autoFriction: boolean;
+    autoBlip: boolean;
+    idealTrajectory: boolean;
+    tractionControl: "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100";
+    abs: "0" | "50" | "100";
+    stabilityControl: "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100";
+    mechanicalDamages: "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100";
+    tyresWear: boolean;
+    tyresBlanket: boolean;
+    fuelConsumption: boolean;
+}

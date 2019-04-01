@@ -28,14 +28,16 @@ export class NewTimeComponent implements AfterViewInit {
         track: new FormControl(),
         car: new FormControl(),
         lapTime: new FormControl(null, [Validators.required]),
-        lapNumber: new FormControl(null, [Validators.min(1), Validators.max(999)])
+        lapNumber: new FormControl(null, [Validators.min(1), Validators.max(999)]),
+        assists: new FormControl(null)
     };
 
     public newLapTimeFG = new FormGroup({
         track: this.FormControls.track,
         car: this.FormControls.car,
         lapTime: this.FormControls.lapTime,
-        lapNumber: this.FormControls.lapNumber
+        lapNumber: this.FormControls.lapNumber,
+        assists: this.FormControls.assists
     });
 
     public tracks: Track[] = tracks;
