@@ -1,11 +1,14 @@
 import { Injectable } from "@angular/core";
+import { Router } from '@angular/router';
+
 import { SettingsItem, SettingsSelectItem } from "../models/lists.model";
 import { IndexedDBService } from "./indexedDb.service";
 
 export enum SettingsName {
     EnableNotifications = "enableNotifications",
     LapTimesPageSize = "lapTimesPageSize",
-    EnableLogButton = "enableLogButton"
+    EnableLogButton = "enableLogButton",
+    ChangeUsedAssists = "changeUsedAssists"
 }
 
 @Injectable()
@@ -42,6 +45,13 @@ export class SettingsService {
             onChange: (value) => { }
         },
         {
+            icon: "gamepad",
+            text: "Change used assists",
+            secondaryText: "Change what assists you use",
+            formControlName: SettingsName.ChangeUsedAssists,
+            onClick: () => this.changeUsedAssists()
+        },
+        {
             isDivider: true
         },
         {
@@ -60,7 +70,7 @@ export class SettingsService {
     ];
 
 
-    constructor(private idbService: IndexedDBService) { }
+    constructor(private idbService: IndexedDBService, private router: Router) { }
 
     public getAllSettings(): SettingsItem[] {
         return this.settings;
@@ -91,5 +101,10 @@ export class SettingsService {
                 return reject(null);
             }
         });
+    }
+
+    private changeUsedAssists() {
+        // Change path
+        this.router.navigate(["settings/assists"]);
     }
 }

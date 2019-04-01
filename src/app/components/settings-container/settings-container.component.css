@@ -1,0 +1,13 @@
+@media screen and (min-width: 960px) {
+    .restrictedPage {
+        width: 53%;
+        margin: auto auto auto auto;
+    }
+}
+
+@media screen and (max-width: 959px) {
+    .restrictedPage {
+        width: 100%;
+        margin: auto auto auto auto;
+    }
+}
