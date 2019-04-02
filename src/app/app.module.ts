@@ -47,6 +47,8 @@ import { DialogComponent } from "./components/dialog/dialog.component";
 import { LapTimeFormInputComponent } from "./components/lap-time/lap-time.component";
 import { LogsComponent } from './components/logs/logs.component';
 import { LapAssistsComponent } from "./components/lap-assists/lap-assists.component";
+import { SettingsContainerComponent } from './components/settings-container/settings-container.component';
+import { SettingsAssistsComponent } from "./components/settings-assists/settings-assists.component";
 
 import { AuthService } from "./services/auth.service";
 import { FirebaseService } from "./services/firebase.service";
@@ -55,7 +57,6 @@ import { SettingsService } from './services/settings.service';
 import { LoggerService } from './services/log.service';
 
 import { LapTimePipe } from './pipes/lap-time.pipe';
-import { SettingsContainerComponent } from './components/settings-container/settings-container.component';
 
 
 const appRoutes: Routes = [
@@ -86,7 +87,7 @@ const appRoutes: Routes = [
 					},
 					{
 						path: "assists",
-						component: LapAssistsComponent
+						component: SettingsAssistsComponent
 					}
 				]
 			},
@@ -117,6 +118,7 @@ const appRoutes: Routes = [
 		TimesComponent,
 		NewTimeComponent,
 		LogsComponent,
+		SettingsAssistsComponent,
 
 		DialogComponent,
 		LapTimeFormInputComponent,
