@@ -1,4 +1,7 @@
-import { Component, ChangeDetectionStrategy, Input, ViewChild, Optional, Self, ElementRef, OnDestroy } from '@angular/core';
+import {
+    Component, ChangeDetectionStrategy, Input, ViewChild, Optional,
+    Self, ElementRef, OnDestroy, ChangeDetectorRef
+} from '@angular/core';
 import { FormControl, FormGroup, ControlValueAccessor, DefaultValueAccessor, NgControl } from '@angular/forms';
 import { LapAssists } from '../../models/data.model';
 import { Subject } from 'rxjs';
@@ -34,6 +37,11 @@ export class LapAssistsComponent implements ControlValueAccessor, OnDestroy {
     set value(lapAssists: LapAssists | null) {
         this._value = lapAssists;
         this.propagateChange(this._value);
+
+        if (lapAssists) {
+            this.lapAssistsFG.setValue(lapAssists);
+            this.changeDetectorRef.markForCheck();
+        }
     }
     private _value: LapAssists = null;
 
@@ -53,7 +61,9 @@ export class LapAssistsComponent implements ControlValueAccessor, OnDestroy {
 
     public lapAssistsFG: FormGroup;
 
-    constructor(private elRef: ElementRef<HTMLElement>,
+    constructor(
+        private elRef: ElementRef<HTMLElement>,
+        private changeDetectorRef: ChangeDetectorRef,
         @Optional() @Self() public ngControl: NgControl) {
 
         if (this.ngControl != null) {
@@ -91,7 +101,7 @@ export class LapAssistsComponent implements ControlValueAccessor, OnDestroy {
             stabilityControl: this.FormControls.stabilityControl.value,
             mechanicalDamages: this.FormControls.mechanicalDamages.value,
             tyresWear: this.FormControls.tyresWear.value || false,
-            tyresBlanket: this.FormControls.tyresBlankets.value || false,
+            tyresBlankets: this.FormControls.tyresBlankets.value || false,
             fuelConsumption: this.FormControls.fuelConsumption.value || false,
         };
     }
@@ -99,7 +109,9 @@ export class LapAssistsComponent implements ControlValueAccessor, OnDestroy {
     propagateChange = (_: any) => { };
 
     writeValue(val: LapAssists) {
-        this._value = val;
+        // Do not set directly the private value (_value).
+        // use instead the setter method so that view can reflect the new value
+        this.value = val;
     }
     registerOnChange(fn: any): void {
         this.propagateChange = fn;

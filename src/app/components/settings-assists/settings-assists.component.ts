@@ -1,7 +1,8 @@
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { FormGroup, FormControl } from '@angular/forms';
 
 import { FirebaseService } from '../../services/firebase.service';
+import { LapAssists } from '../../models/data.model';
 
 
 @Component({
@@ -14,14 +15,34 @@ export class SettingsAssistsComponent {
 
     assistsFG: FormGroup;
 
-    constructor(private firebaseService: FirebaseService) {
+    constructor(
+        private firebaseService: FirebaseService,
+        private changeDetectorRef: ChangeDetectorRef) {
+
         this.assistsFG = new FormGroup({
             assists: new FormControl()
         });
+
+        this.firebaseService.getLapAssists()
+            .then((lapAssists: LapAssists) => {
+                console.log(lapAssists);
+                this.assistsFG.controls["assists"].setValue(lapAssists);
+                this.changeDetectorRef.markForCheck();
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     public save() {
-        console.log(this.assistsFG.get("assists").value);
+        this.firebaseService
+            .saveLapAssists(this.assistsFG.get("assists").value)
+            .then((ok) => {
+                console.log("Done");
+            })
+            .catch((err) => {
+                console.log("err: ", err);
+            });
     }
 
     public discard() {

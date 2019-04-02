@@ -46,6 +46,6 @@ export interface LapAssists {
     stabilityControl: "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100";
     mechanicalDamages: "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100";
     tyresWear: boolean;
-    tyresBlanket: boolean;
+    tyresBlankets: boolean;
     fuelConsumption: boolean;
 }
