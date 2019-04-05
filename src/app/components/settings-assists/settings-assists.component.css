@@ -1,5 +1,11 @@
 #buttonRow {
+    float: right;
     margin-top: 16px;
+    margin-right: 8px;
+}
+
+#buttonRow button:first-child {
+    margin-right: 8px;
 }
 
 #topMessage {
