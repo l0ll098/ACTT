@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { MatDialog, } from "@angular/material";
 
-import { Track, Car, LapTime, Time } from "../../models/data.model";
+import { Track, Car, LapTime, Time, LapAssists } from "../../models/data.model";
 import { tracks } from "../../models/tracks";
 import { cars } from "../../models/cars";
 
@@ -61,6 +61,16 @@ export class NewTimeComponent implements AfterViewInit {
         this.FormControls.car.valueChanges.subscribe(car => {
             this.filterCar(car);
         });
+
+        this.firebaseService.getLapAssists()
+            .then((assists: LapAssists) => {
+                if (assists) {
+                    this.FormControls.assists.setValue(assists);
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
     private filterTrack(track: Track) {
