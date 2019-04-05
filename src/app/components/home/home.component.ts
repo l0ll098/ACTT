@@ -117,7 +117,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
                 // When user changes path, add it to the array
-                if (this.pathVisited.includes(event.url.split("/")[0])) {
+                if (this.pathVisited.length > 0) {
                     this.pathVisited.push(event.url);
                 } else {
                     this.pathVisited = ["/"];
@@ -212,9 +212,10 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
     }
 
     public goBack() {
-        // Get the previously visited path and remove it from the array
-        const prevPath = this.pathVisited[this.pathVisited.length - 1];
-        this.pathVisited.splice(this.pathVisited.length - 1, 1);
+        // Get the previously visited path
+        const prevPath = this.pathVisited[this.pathVisited.length - 2];
+        // Remove the latest two visited paths (current one and previous).
+        this.pathVisited.splice(this.pathVisited.length - 2, 2);
         // Then navigate to that path
         this.goToPath(prevPath);
     }
