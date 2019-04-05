@@ -3,6 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 
 import { FirebaseService } from '../../services/firebase.service';
 import { LapAssists } from '../../models/data.model';
+import { LoggerService } from '../../services/log.service';
 
 
 @Component({
@@ -17,35 +18,49 @@ export class SettingsAssistsComponent {
 
     constructor(
         private firebaseService: FirebaseService,
+        private loggerService: LoggerService,
         private changeDetectorRef: ChangeDetectorRef) {
 
         this.assistsFG = new FormGroup({
             assists: new FormControl()
         });
 
+        this.loggerService.group("assists settings");
+
         this.firebaseService.getLapAssists()
             .then((lapAssists: LapAssists) => {
-                console.log(lapAssists);
+                this.loggerService.log("fetched previously saved assists");
+                this.loggerService.groupEnd();
+
                 this.assistsFG.controls["assists"].setValue(lapAssists);
                 this.changeDetectorRef.markForCheck();
             })
             .catch(err => {
-                console.log(err);
+                this.loggerService.error("failed fetching previously saved assists. Error: ", err);
+                this.loggerService.groupEnd();
             });
     }
 
     public save() {
+        this.loggerService.group("assists settings");
+        this.loggerService.log("Saving new assists...");
+
         this.firebaseService
             .saveLapAssists(this.assistsFG.get("assists").value)
             .then((ok) => {
-                console.log("Done");
+                this.loggerService.log("Done");
+                this.loggerService.groupEnd();
             })
             .catch((err) => {
-                console.log("err: ", err);
+                this.loggerService.error("failed with error: ", err);
+                this.loggerService.groupEnd();
             });
+
     }
 
     public discard() {
-        console.log("discard");
+        this.loggerService.group("assists settings");
+        this.loggerService.log("discarding unsaved changes...");
+        this.loggerService.groupEnd();
     }
 }
