@@ -51,5 +51,9 @@ export class SettingsComponent implements OnInit {
         });
     }
 
-
+    public onClick(setting: SettingsItem) {
+        if (setting.onClick) {
+            setting.onClick();
+        }
+    }
 }

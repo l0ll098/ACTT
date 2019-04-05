@@ -18,6 +18,7 @@ export interface SettingsItem extends ListItem {
 	type?: "checkbox" | "toggle" | "select";
 	formControlName?: string;
 	onChange?: Function;
+	onClick?: Function;
 
 	defualtValue?: any;
 	values?: SettingsSelectItem[];

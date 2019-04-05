@@ -30,6 +30,9 @@ import {
 	MatSortModule,
 	MatSnackBarModule,
 	MatDialogModule,
+	MatExpansionModule,
+	MatSliderModule,
+	MatMenuModule
 } from '@angular/material';
 import { PlatformModule } from "@angular/cdk/platform";
 
@@ -42,6 +45,10 @@ import { TimesComponent } from "./components/times/times.component";
 import { NewTimeComponent } from "./components/new-time/new-time.component";
 import { DialogComponent } from "./components/dialog/dialog.component";
 import { LapTimeFormInputComponent } from "./components/lap-time/lap-time.component";
+import { LogsComponent } from './components/logs/logs.component';
+import { LapAssistsComponent } from "./components/lap-assists/lap-assists.component";
+import { SettingsContainerComponent } from './components/settings-container/settings-container.component';
+import { SettingsAssistsComponent } from "./components/settings-assists/settings-assists.component";
 
 import { AuthService } from "./services/auth.service";
 import { FirebaseService } from "./services/firebase.service";
@@ -50,7 +57,6 @@ import { SettingsService } from './services/settings.service';
 import { LoggerService } from './services/log.service';
 
 import { LapTimePipe } from './pipes/lap-time.pipe';
-import { LogsComponent } from './components/logs/logs.component';
 
 
 const appRoutes: Routes = [
@@ -73,7 +79,17 @@ const appRoutes: Routes = [
 			},
 			{
 				path: "settings",
-				component: SettingsComponent
+				component: SettingsContainerComponent,
+				children: [
+					{
+						path: "",
+						component: SettingsComponent
+					},
+					{
+						path: "assists",
+						component: SettingsAssistsComponent
+					}
+				]
 			},
 			{
 				path: "notFound",
@@ -97,13 +113,16 @@ const appRoutes: Routes = [
 		HomeComponent,
 		NotFoundComponent,
 		LoginComponent,
+		SettingsContainerComponent,
 		SettingsComponent,
 		TimesComponent,
 		NewTimeComponent,
 		LogsComponent,
+		SettingsAssistsComponent,
 
 		DialogComponent,
 		LapTimeFormInputComponent,
+		LapAssistsComponent,
 
 		LapTimePipe
 	],
@@ -139,7 +158,10 @@ const appRoutes: Routes = [
 		MatPaginatorModule,
 		MatSortModule,
 		MatSnackBarModule,
-		MatDialogModule
+		MatDialogModule,
+		MatExpansionModule,
+		MatSliderModule,
+		MatMenuModule
 	],
 	providers: [
 		AuthService,

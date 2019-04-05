@@ -7,6 +7,7 @@ export interface LapTime {
     track: Track;
     car: Car;
     lap: number;
+    assists?: LapAssists;
 }
 
 export interface Track {
@@ -34,4 +35,18 @@ export interface Log {
     id?: number;
     timestamp?: number;
     log: string | number;
+}
+
+export interface LapAssists {
+    autoShifter: boolean;
+    autoFriction: boolean;
+    autoBlip: boolean;
+    idealTrajectory: boolean;
+    tractionControl: "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100";
+    abs: "On" | "Factory" | "Off";
+    stabilityControl: "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100";
+    mechanicalDamages: "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100";
+    tyresWear: boolean;
+    tyresBlankets: boolean;
+    fuelConsumption: boolean;
 }

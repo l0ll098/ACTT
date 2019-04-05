@@ -1,16 +1,20 @@
 import { Injectable } from "@angular/core";
 import { AngularFireDatabase } from "@angular/fire/database";
+import { DataSnapshot } from "@angular/fire/database/interfaces";
 
 import { AuthService } from "./auth.service";
-import { LapTime, Track, Car, IsBetterLapTime } from "../models/data.model";
-import { DataSnapshot } from "@angular/fire/database/interfaces";
+import { LapTime, Track, Car, IsBetterLapTime, LapAssists } from "../models/data.model";
 
 /**
  * @constant userRefInitializer This is used to initialize the user object in the database
+ * (even though it's pretty useless if properties aren't specified).
  */
 const userRefInitializer = {
     settings: {
-        receiveNotifications: false
+        receiveNotifications: false,
+        assists: {
+
+        }
     },
     notifications: {
         tokens: {
@@ -366,6 +370,42 @@ export class FirebaseService {
         return Promise.all(
             lapTimes.map(lapTime => this.deleteASingleLapTime(lapTime))
         );
+    }
+
+
+    /**
+     * This method will return a Promise of LapAssists.
+     * It represents assists used by the current user.
+     */
+    public getLapAssists(): Promise<LapAssists> {
+        return new Promise((resolve, reject) => {
+            this.getRef("/users/" + this.uid + "/settings/assists")
+                .query
+                .once("value")
+                .then((data: DataSnapshot) => {
+                    return resolve(data.val());
+                })
+                .catch((err) => {
+                    return reject(err);
+                });
+        });
+    }
+
+    /**
+     * Saves a LapTime object in Firebase DB
+     * @param lapAssists Assists used by current user
+     */
+    public saveLapAssists(lapAssists: LapAssists) {
+        return new Promise((resolve, reject) => {
+            this.getRef("/users/" + this.uid + "/settings/assists")
+                .set(lapAssists)
+                .then((ok) => {
+                    return resolve(true);
+                })
+                .catch((err) => {
+                    return reject(err);
+                });
+        });
     }
 
 

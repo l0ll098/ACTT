@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { MatDialog, } from "@angular/material";
 
-import { Track, Car, LapTime, Time } from "../../models/data.model";
+import { Track, Car, LapTime, Time, LapAssists } from "../../models/data.model";
 import { tracks } from "../../models/tracks";
 import { cars } from "../../models/cars";
 
@@ -28,14 +28,16 @@ export class NewTimeComponent implements AfterViewInit {
         track: new FormControl(),
         car: new FormControl(),
         lapTime: new FormControl(null, [Validators.required]),
-        lapNumber: new FormControl(null, [Validators.min(1), Validators.max(999)])
+        lapNumber: new FormControl(null, [Validators.min(1), Validators.max(999)]),
+        assists: new FormControl(null)
     };
 
     public newLapTimeFG = new FormGroup({
         track: this.FormControls.track,
         car: this.FormControls.car,
         lapTime: this.FormControls.lapTime,
-        lapNumber: this.FormControls.lapNumber
+        lapNumber: this.FormControls.lapNumber,
+        assists: this.FormControls.assists
     });
 
     public tracks: Track[] = tracks;
@@ -59,6 +61,16 @@ export class NewTimeComponent implements AfterViewInit {
         this.FormControls.car.valueChanges.subscribe(car => {
             this.filterCar(car);
         });
+
+        this.firebaseService.getLapAssists()
+            .then((assists: LapAssists) => {
+                if (assists) {
+                    this.FormControls.assists.setValue(assists);
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            });
     }
 
     private filterTrack(track: Track) {
@@ -127,6 +139,7 @@ export class NewTimeComponent implements AfterViewInit {
         this.disableSaveButton = true;
 
         const humanTime: Time = this.FormControls.lapTime.value;
+        const assists = this.FormControls.assists.value;
 
         const lapTime: LapTime = {
             car: this.FormControls.car.value,
@@ -135,7 +148,8 @@ export class NewTimeComponent implements AfterViewInit {
             track: this.FormControls.track.value,
             time: {
                 millisecs: 0
-            }
+            },
+            assists: assists
         };
 
         // Update time

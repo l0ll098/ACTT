@@ -1,0 +1,12 @@
+@media screen and (min-width: 960px) {
+    .select {
+        width: 128px;
+    }
+}
+
+@media screen and (max-width: 959px) {
+    .select {
+        width: 64px;
+    }
+}
+

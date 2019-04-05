@@ -1,31 +1,28 @@
-<div class="restrictedPage">
+<div [formGroup]="settingsFG">
+    <mat-list>
+        <div *ngFor="let setting of settings">
+            <mat-list-item *ngIf="!setting.isDivider && !setting.isSubheader" class="noSelect" [class.disabledOption]="setting.isDisabled" (click)="onClick(setting)">
+                <mat-icon matListIcon>{{ setting.icon }}</mat-icon>
+                <h3 matLine> {{setting.text}} </h3>
+                <p matLine class="secondaryText">{{setting.secondaryText}}</p>
 
-    <div [formGroup]="settingsFG">
-        <mat-list>
-            <div *ngFor="let setting of settings">
-                <mat-list-item *ngIf="!setting.isDivider && !setting.isSubheader" class="noSelect" [class.disabledOption]="setting.isDisabled">
-                    <mat-icon matListIcon>{{ setting.icon }}</mat-icon>
-                    <h3 matLine> {{setting.text}} </h3>
-                    <p matLine class="secondaryText">{{setting.secondaryText}}</p>
+                <mat-checkbox *ngIf="setting.type === 'checkbox'" 
+                    formControlName="{{setting.formControlName}}"></mat-checkbox>
+                <mat-slide-toggle *ngIf="setting.type === 'toggle'" 
+                    formControlName="{{setting.formControlName}}"></mat-slide-toggle>
 
-                    <mat-checkbox *ngIf="setting.type === 'checkbox'" 
-                        formControlName="{{setting.formControlName}}"></mat-checkbox>
-                    <mat-slide-toggle *ngIf="setting.type === 'toggle'" 
-                        formControlName="{{setting.formControlName}}"></mat-slide-toggle>
+                <mat-select *ngIf="setting.type === 'select'" [(value)]="setting.defualtValue" 
+                    formControlName="{{setting.formControlName}}" class="settingsSelect">
+                    <mat-option *ngFor="let val of setting.values" [value]="val.value">
+                        {{val.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-list-item>
 
-                    <mat-select *ngIf="setting.type === 'select'" [(value)]="setting.defualtValue" 
-                        formControlName="{{setting.formControlName}}" class="settingsSelect">
-                        <mat-option *ngFor="let val of setting.values" [value]="val.value">
-                            {{val.viewValue}}
-                        </mat-option>
-                    </mat-select>
-                </mat-list-item>
+            <mat-divider *ngIf="setting.isDivider"></mat-divider>
 
-                <mat-divider *ngIf="setting.isDivider"></mat-divider>
-
-                <h3 matSubheader *ngIf="setting.isSubheader" class="noSelect" id="subheader">{{setting.text}}</h3>
-            </div>
-        </mat-list>
-    </div>
-
+            <h3 matSubheader *ngIf="setting.isSubheader" class="noSelect" id="subheader">{{setting.text}}</h3>
+        </div>
+    </mat-list>
 </div>
+

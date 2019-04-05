@@ -1,0 +1,13 @@
+<div>
+    <p id="topMessage">Here you can change what assists you normally use</p>
+
+    <div [formGroup]="assistsFG">
+        <app-lap-assists formControlName="assists"></app-lap-assists>
+    </div>
+
+    <div class="sameLine centered" id="buttonRow">
+        <button mat-button color="primary" (click)="discard()">Discard changes</button>
+        <button mat-flat-button color="accent" (click)="save()" [disabled]="disableSaveBtn">Save</button>
+    </div>
+    
+</div>

@@ -1,0 +1,92 @@
+<div [formGroup]="lapAssistsFG" style="text-align: left;">
+    <mat-list>
+        <mat-list-item>
+            <p matLine>Automatic shifter</p>
+            <mat-slide-toggle formControlName="autoShifter" (change)="onInput()"></mat-slide-toggle>
+        </mat-list-item>
+
+        <mat-list-item>
+            <p matLine>Automatic friction</p>
+            <mat-slide-toggle formControlName="autoFriction" (change)="onInput()"></mat-slide-toggle>
+        </mat-list-item>
+
+        <mat-list-item>
+            <p matLine>Automatic blip</p>
+            <mat-slide-toggle formControlName="autoBlip" (change)="onInput()"></mat-slide-toggle>
+        </mat-list-item>
+
+        <mat-list-item>
+            <p matLine>Ideal trajectory</p>
+            <mat-slide-toggle formControlName="idealTrajectory" (change)="onInput()"></mat-slide-toggle>
+        </mat-list-item>
+
+        <mat-list-item>
+            <p matLine>Traction control</p>
+
+            <mat-form-field class="select">
+                <mat-label>Choose one</mat-label>
+                <mat-select formControlName="tractionControl" (change)="onInput()">
+                    <mat-option *ngFor="let val of TRACTION_CONTROL_VALUES" [value]="val">
+                        {{val}}%
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </mat-list-item>
+
+        <mat-list-item>
+            <p matLine>Abs</p>
+
+            <mat-form-field class="select">
+                <mat-label>Pick one</mat-label>
+                <mat-select formControlName="abs" (change)="onInput()">
+                    <mat-option *ngFor="let val of ABS_VALUE" [value]="val">
+                        {{val}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+            <p matLine>Stability control</p>
+
+            <mat-form-field class="select">
+                <mat-label>Choose one</mat-label>
+                <mat-select formControlName="stabilityControl" (change)="onInput()">
+                    <mat-option *ngFor="let val of STABILITY_CONTROL_VALUES" [value]="val">
+                        {{val}}%
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+            <p matLine>Mechanical damages</p>
+
+            <mat-form-field class="select">
+                <mat-label>Select one</mat-label>
+                <mat-select formControlName="mechanicalDamages" (change)="onInput()">
+                    <mat-option *ngFor="let val of MECHANICAL_DAMAGES_VALUES" [value]="val">
+                        {{val}}%
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </mat-list-item>
+
+        <mat-list-item>
+            <p matLine>Tyres wear</p>
+            <mat-slide-toggle formControlName="tyresWear" (change)="onInput()"></mat-slide-toggle>
+        </mat-list-item>
+
+        <mat-list-item>
+            <p matLine>Tyres blankets</p>
+            <mat-slide-toggle formControlName="tyresBlankets" (change)="onInput()"></mat-slide-toggle>
+        </mat-list-item>
+
+        <mat-list-item>
+            <p matLine>Fuel consumption</p>
+            <mat-slide-toggle formControlName="fuelConsumption" (change)="onInput()"></mat-slide-toggle>
+        </mat-list-item>
+    </mat-list>
+
+</div>
