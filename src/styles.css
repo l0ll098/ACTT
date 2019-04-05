@@ -9,8 +9,10 @@
   	}
 }
 
-* {
-	font-family: "Roboto", sans-serif;
+@font-face {
+    font-family: "Roboto", sans-serif;
+    font-display: auto;
+    src: local("Roboto", sans-serif), url(https://fonts.gstatic.com/s/roboto/v19/KFOmCnqEu92Fr1Mu4mxK.woff2) format('woff2');
 }
 
 .noSelect {
