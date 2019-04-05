@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from "@angular/core";
 import { FormGroup, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { DialogComponent } from '../dialog/dialog.component';
@@ -16,26 +17,32 @@ import { LapAssists } from '../../models/data.model';
     styleUrls: ["settings-assists.component.css"],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SettingsAssistsComponent {
+export class SettingsAssistsComponent implements AfterViewInit {
 
     assistsFG: FormGroup;
+    public disableSaveBtn = true;
 
     constructor(
         private firebaseService: FirebaseService,
         private loggerService: LoggerService,
         private changeDetectorRef: ChangeDetectorRef,
+        private router: Router,
         private dialog: MatDialog) {
 
         this.assistsFG = new FormGroup({
             assists: new FormControl()
         });
+    }
 
+    ngAfterViewInit() {
         this.loggerService.group("assists settings");
 
         this.firebaseService.getLapAssists()
             .then((lapAssists: LapAssists) => {
                 this.loggerService.log("fetched previously saved assists");
                 this.loggerService.groupEnd();
+
+                this.disableSaveBtn = false;
 
                 this.assistsFG.controls["assists"].setValue(lapAssists);
                 this.changeDetectorRef.markForCheck();
@@ -47,6 +54,8 @@ export class SettingsAssistsComponent {
     }
 
     public save() {
+        this.disableSaveBtn = true;
+
         this.loggerService.group("assists settings");
         this.loggerService.log("Saving new assists...");
 
@@ -55,6 +64,10 @@ export class SettingsAssistsComponent {
             .then((ok) => {
                 this.loggerService.log("Done");
                 this.loggerService.groupEnd();
+
+                this.disableSaveBtn = false;
+
+                this.router.navigate(["settings"]);
             })
             .catch((err) => {
                 this.loggerService.error("failed with error: ", err);
@@ -69,6 +82,8 @@ export class SettingsAssistsComponent {
                         }
                     }
                 });
+
+                this.disableSaveBtn = false;
             });
 
     }
