@@ -139,6 +139,7 @@ export class NewTimeComponent implements AfterViewInit {
         this.disableSaveButton = true;
 
         const humanTime: Time = this.FormControls.lapTime.value;
+        const assists = this.FormControls.assists.value;
 
         const lapTime: LapTime = {
             car: this.FormControls.car.value,
@@ -147,7 +148,8 @@ export class NewTimeComponent implements AfterViewInit {
             track: this.FormControls.track.value,
             time: {
                 millisecs: 0
-            }
+            },
+            assists: assists
         };
 
         // Update time
