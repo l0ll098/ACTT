@@ -1,9 +1,13 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { FormGroup, FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material';
+
+import { DialogComponent } from '../dialog/dialog.component';
 
 import { FirebaseService } from '../../services/firebase.service';
-import { LapAssists } from '../../models/data.model';
 import { LoggerService } from '../../services/log.service';
+
+import { LapAssists } from '../../models/data.model';
 
 
 @Component({
@@ -19,7 +23,8 @@ export class SettingsAssistsComponent {
     constructor(
         private firebaseService: FirebaseService,
         private loggerService: LoggerService,
-        private changeDetectorRef: ChangeDetectorRef) {
+        private changeDetectorRef: ChangeDetectorRef,
+        private dialog: MatDialog) {
 
         this.assistsFG = new FormGroup({
             assists: new FormControl()
@@ -54,6 +59,16 @@ export class SettingsAssistsComponent {
             .catch((err) => {
                 this.loggerService.error("failed with error: ", err);
                 this.loggerService.groupEnd();
+
+                this.dialog.open(DialogComponent, {
+                    data: {
+                        title: "Error",
+                        message: "Something went wrong saving your new assists. Please retry later.",
+                        doActionBtn: {
+                            text: "Ok"
+                        }
+                    }
+                });
             });
 
     }
