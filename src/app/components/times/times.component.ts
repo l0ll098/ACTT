@@ -45,7 +45,9 @@ export class TimesComponent implements AfterViewInit {
 		private changeDetectorRef: ChangeDetectorRef
 	) {
 		this.selection = new SelectionModel<LapTime>(this.allowMultiSelect, this.initialSelection);
+	}
 
+	ngAfterViewInit() {
 		// Populates the possible page lengths
 		this.settingsService
 			.getPossibleSettingsValues(SettingsName.LapTimesPageSize)
@@ -53,22 +55,17 @@ export class TimesComponent implements AfterViewInit {
 				this.pageSizeOptions = data.map(size => (<number>size.value));
 				this.paginator.pageSizeOptions = this.pageSizeOptions;
 
-				// Force Angular to check this component
-				this.changeDetectorRef.markForCheck();
+				// Gets the saved page length
+				this.settingsService
+					.getSettingValue(SettingsName.LapTimesPageSize)
+					.then(value => {
+						this.paginator.pageSize = (<number>value);
+
+						// Force Angular to check this component
+						this.changeDetectorRef.markForCheck();
+					});
 			});
 
-		// Gets the saved page length
-		this.settingsService
-			.getSettingValue(SettingsName.LapTimesPageSize)
-			.then(value => {
-				this.paginator.pageSize = (<number>value);
-
-				// Force Angular to check this component
-				this.changeDetectorRef.markForCheck();
-			});
-	}
-
-	ngAfterViewInit(): void {
 		// Load data
 		this.refresh();
 	}
