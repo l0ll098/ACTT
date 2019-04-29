@@ -410,13 +410,16 @@ export class FirebaseService {
 
 
     private _formatLapTimeQueryResults(rowData: DataSnapshot) {
-        if (!rowData.val()) {
+        const data = rowData.val();
+        if (!data) {
             return [];
         }
 
         // Convert it to an array
-        const dataArray: LapTime[] = Object.keys(rowData.val()).map((key) => {
-            return rowData.val()[key];
+        const dataArray: LapTime[] = Object.keys(data).map((key) => {
+            const lapTime: LapTime = data[key];
+            lapTime.id = key;
+            return lapTime;
         });
         // Sort the data
         const sorted = dataArray.sort((a: LapTime, b: LapTime) => {

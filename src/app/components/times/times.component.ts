@@ -20,7 +20,9 @@ import { LoggerService } from "../../services/log.service";
 export class TimesComponent implements AfterViewInit {
 
 	public lapTimes: LapTime[] = [];
-	public displayedColumns: string[] = ["index", "carName", "trackName", "trackLength", "lapTime", "lap"];
+	public displayedColumns: string[] = [
+		"index", "carName", "trackName", "trackLength", "lapTime", "more"
+	];
 	public dataSource: MatTableDataSource<LapTime>;
 	public pageSizeOptions: number[] = [];
 
@@ -85,8 +87,6 @@ export class TimesComponent implements AfterViewInit {
 					return compare(a.track.length, b.track.length, isAsc);
 				case "lapTime":
 					return compare(a.time.millisecs, b.time.millisecs, isAsc);
-				case "lap":
-					return compare(a.lap, b.lap, isAsc);
 				default:
 					return 0;
 			}
@@ -98,7 +98,6 @@ export class TimesComponent implements AfterViewInit {
 			return data.car.name.toLowerCase().includes(filter.toLowerCase()) ||
 				data.track.name.toLowerCase().includes(filter.toLowerCase()) ||
 				(data.track.length + "").includes(filter) ||
-				(data.lap + "").includes(filter) ||
 				(data.humanTime.minutes + "").includes(filter) ||
 				(data.humanTime.seconds + "").includes(filter) ||
 				(data.humanTime.millisecs + "").includes(filter);
@@ -215,6 +214,10 @@ export class TimesComponent implements AfterViewInit {
 		// When the page size has been changed from the paginator, update the saved value so that
 		// it can be used the next time
 		this.settingsService.updateSettingValue(event.pageSize, SettingsName.LapTimesPageSize);
+	}
+
+	public showDetails(lapTime: LapTime) {
+		console.log(lapTime);
 	}
 }
 

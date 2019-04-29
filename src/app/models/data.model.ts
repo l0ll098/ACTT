@@ -8,6 +8,7 @@ export interface LapTime {
     car: Car;
     lap: number;
     assists?: LapAssists;
+    id?: string;
 }
 
 export interface Track {
