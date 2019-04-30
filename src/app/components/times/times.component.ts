@@ -9,6 +9,7 @@ import { LapTime } from "../../models/data.model";
 import { FirebaseService } from "../../services/firebase.service";
 import { SettingsService, SettingsName } from "../../services/settings.service";
 import { LoggerService } from "../../services/log.service";
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -40,11 +41,12 @@ export class TimesComponent implements AfterViewInit {
 	};
 
 	constructor(
+		private changeDetectorRef: ChangeDetectorRef,
+		private router: Router,
 		private dialog: MatDialog,
 		private firebaseService: FirebaseService,
 		private settingsService: SettingsService,
-		private loggerService: LoggerService,
-		private changeDetectorRef: ChangeDetectorRef
+		private loggerService: LoggerService
 	) {
 		this.selection = new SelectionModel<LapTime>(this.allowMultiSelect, this.initialSelection);
 	}
@@ -217,7 +219,7 @@ export class TimesComponent implements AfterViewInit {
 	}
 
 	public showDetails(lapTime: LapTime) {
-		console.log(lapTime);
+		this.router.navigate([`/times/${lapTime.id}`]);
 	}
 }
 

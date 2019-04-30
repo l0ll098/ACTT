@@ -3,7 +3,7 @@ import { AngularFireDatabase } from "@angular/fire/database";
 import { DataSnapshot } from "@angular/fire/database/interfaces";
 
 import { AuthService } from "./auth.service";
-import { LapTime, Track, Car, IsBetterLapTime, LapAssists } from "../models/data.model";
+import { LapTime, Track, Car, IsBetterLapTime, LapAssists, Time } from "../models/data.model";
 
 /**
  * @constant userRefInitializer This is used to initialize the user object in the database
@@ -343,6 +343,28 @@ export class FirebaseService {
     }
 
     /**
+     * Returns details of a LapTime given its ID.
+     * In case it doesn't exist, the promise will be rejected.
+     * @param id Id of the LapTime to return
+     */
+    public getLapTimeById(id: string): Promise<LapTime> {
+        return new Promise((resolve, reject) => {
+            this.getRef("/users/" + this.uid + "/lapTimes/" + id)
+                .query
+                .once("value", (data) => {
+                    const lapTime: LapTime = data.val();
+
+                    if (lapTime) {
+                        lapTime.humanTime = this._msToHumanTime(lapTime.time.millisecs);
+                        return resolve(lapTime);
+                    } else {
+                        return reject({ notFound: true });
+                    }
+                });
+        });
+    }
+
+    /**
      * This method will delete a single lapTime.
      * The "deleteLapTimes" method is based on this one.
      * @param lapTime The LapTime that has to be deleted
@@ -409,8 +431,12 @@ export class FirebaseService {
     }
 
 
-    private _formatLapTimeQueryResults(rowData: DataSnapshot) {
-        const data = rowData.val();
+    /**
+     * Formats multiple LapTime data.
+     * @param rawData DataSnapshot returned from Firebase DB
+     */
+    private _formatLapTimeQueryResults(rawData: DataSnapshot) {
+        const data = rawData.val();
         if (!data) {
             return [];
         }
@@ -428,19 +454,25 @@ export class FirebaseService {
 
         // Calculate the human time
         sorted.forEach((lapTime: LapTime) => {
-            let ms = lapTime.time.millisecs;
-
-            const min = Math.floor(ms / 60000);
-            ms = ms - (min * 60000);
-            const secs = Math.floor(ms / 1000);
-            ms = ms - (secs * 1000);
-            lapTime.humanTime = {
-                millisecs: ms,
-                seconds: secs,
-                minutes: min
-            };
+            lapTime.humanTime = this._msToHumanTime(lapTime.time.millisecs);
         });
 
         return sorted;
+    }
+
+    /**
+     * Converts milliseconds in "human time" (minutes:seconds:milliseconds)
+     * @param ms LapTime time in milliseconds (lapTime.time.millisecs)
+     */
+    private _msToHumanTime(ms: number): Time {
+        const min = Math.floor(ms / 60000);
+        ms = ms - (min * 60000);
+        const secs = Math.floor(ms / 1000);
+        ms = ms - (secs * 1000);
+        return {
+            millisecs: ms,
+            seconds: secs,
+            minutes: min
+        };
     }
 }

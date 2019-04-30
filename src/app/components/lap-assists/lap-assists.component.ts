@@ -45,6 +45,23 @@ export class LapAssistsComponent implements ControlValueAccessor, OnDestroy {
     }
     private _value: LapAssists = null;
 
+    @Input()
+    get readonly(): boolean {
+        return this._readonly;
+    }
+    set readonly(readonly: boolean) {
+        this._readonly = readonly;
+
+        if (this._readonly) {
+            this.lapAssistsFG.disable();
+        } else {
+            this.lapAssistsFG.enable();
+        }
+
+        this.changeDetectorRef.markForCheck();
+    }
+    private _readonly: boolean;
+
     public FormControls = {
         autoShifter: new FormControl(),
         autoFriction: new FormControl(),

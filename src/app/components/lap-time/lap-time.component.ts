@@ -72,6 +72,29 @@ export class LapTimeFormInputComponent
     }
 
     @Input()
+    get readonly(): boolean { return this._readonly; }
+    set readonly(readonly: boolean) {
+        this._readonly = readonly;
+
+        // ! This will only work if the readonly specified on the input element is the one
+        // !    provided by Angular: [readonly]="true".
+        // ! The HTML one won't work as it would pass an empty string.
+        // ! So..., use [readonly]="true" instead of readonly
+        if (this._readonly) {
+            this.FormControls.minutes.disable();
+            this.FormControls.seconds.disable();
+            this.FormControls.millisecs.disable();
+        } else {
+            this.FormControls.minutes.enable();
+            this.FormControls.seconds.enable();
+            this.FormControls.millisecs.enable();
+        }
+
+        this.stateChanges.next();
+    }
+    private _readonly: boolean;
+
+    @Input()
     get placeholder(): string { return this._placeholder; }
     set placeholder(value: string) {
         this._placeholder = value;
@@ -184,7 +207,11 @@ export class LapTimeFormInputComponent
     }
 
     writeValue(time: Time): void {
-        this.valueAccessor.writeValue(time);
+        if (time) {
+            this.FormControls.minutes.setValue(time.minutes);
+            this.FormControls.seconds.setValue(time.seconds);
+            this.FormControls.millisecs.setValue(time.millisecs);
+        }
     }
     registerOnChange(fn: any): void {
         this.valueAccessor.registerOnChange(fn);

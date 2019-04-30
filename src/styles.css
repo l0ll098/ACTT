@@ -53,6 +53,15 @@
         box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 1px 0px, rgba(0, 0, 0, 0.09804) 0px 1px 2px 0px;
     }
 
+    .sameLine {
+        display: flex;
+        vertical-align: middle;
+        margin-top: 8px;
+    }
+
+    .sameLine mat-form-field:not(:last-child) {
+        margin-right: 8px;
+    }
 }
 
 @media screen and (max-width: 959px) {
@@ -71,6 +80,9 @@
         box-shadow: rgba(0, 0, 0, 0.14902) 0px 1px 1px 0px, rgba(0, 0, 0, 0.09804) 0px 1px 2px 0px;
     }
 
+    .sameLine {
+        display: block;
+    }
 }
 
 md-form-field {

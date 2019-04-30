@@ -1,0 +1,49 @@
+<div class="mat-elevation-z8 form centered" id="lapTimeDetails">
+    <p>Lap time details</p>
+
+    <div [formGroup]="lapTimeDetailsFG">
+
+        <div class="sameLine">
+            <mat-form-field class="fullPage">
+                <input type="text" matInput formControlName="trackName" placeholder="Track name" readonly />
+            </mat-form-field>
+
+            <mat-form-field class="fullPage">
+                <input type="number" matInput formControlName="trackLength" placeholder="Track length (m)" readonly />
+            </mat-form-field>
+        </div>
+
+
+        <div>
+            <mat-form-field class="fullPage">
+                <input type="text" matInput formControlName="car" placeholder="Car used" readonly />
+            </mat-form-field>
+        </div>
+
+        <div class="sameLine">
+            <mat-form-field class="fullPage">
+                <app-laptime-form-input placeholder="Lap time" formControlName="lapTime" [readonly]="true">
+                </app-laptime-form-input>
+            </mat-form-field>
+
+            <mat-form-field class="fullPage">
+                <input type="number" matInput formControlName="lapNumber" placeholder="Lap number" readonly />
+            </mat-form-field>
+        </div>
+
+        <mat-accordion class="fullPage">
+            <mat-expansion-panel>
+                <!-- Header -->
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Used assists
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <!-- Content -->
+                <app-lap-assists formControlName="assists" [readonly]="true"></app-lap-assists>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </div>
+
+</div>

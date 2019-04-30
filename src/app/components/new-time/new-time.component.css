@@ -1,21 +1,3 @@
-@media screen and (min-width: 960px) {
-    .sameLine {
-        display: flex;
-        vertical-align: middle;
-        margin-top: 8px;
-    }
-
-    .sameLine mat-form-field:not(:last-child) {
-        margin-right: 8px;
-    }
-}
-
-@media screen and (max-width: 959px) {
-    .sameLine {
-        display: block;
-    }
-}
-
 mat-error {
     display: none;
 }

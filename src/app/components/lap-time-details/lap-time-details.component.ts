@@ -1,0 +1,75 @@
+import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { FirebaseService } from '../../services/firebase.service';
+import { LapTime } from '../../models/data.model';
+import { LoggerService } from '../../services/log.service';
+import { FormGroup, FormControl } from '@angular/forms';
+
+
+@Component({
+    selector: "app-lap-time-details",
+    styleUrls: ["lap-time-details.component.css"],
+    templateUrl: "lap-time-details.component.html",
+    changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class LapTimeDetailsComponent implements OnInit {
+
+    private lapTimeId: string;
+    public lapTime: LapTime;
+
+    public FormControls = {
+        trackName: new FormControl(),
+        trackLength: new FormControl(),
+        car: new FormControl(),
+        lapTime: new FormControl({ value: null, readonly: true }),
+        lapNumber: new FormControl(),
+        assists: new FormControl()
+    };
+
+    public lapTimeDetailsFG = new FormGroup({
+        trackName: this.FormControls.trackName,
+        trackLength: this.FormControls.trackLength,
+        car: this.FormControls.car,
+        lapTime: this.FormControls.lapTime,
+        lapNumber: this.FormControls.lapNumber,
+        assists: this.FormControls.assists
+    });
+
+    constructor(
+        private route: ActivatedRoute,
+        private router: Router,
+        private firebaseService: FirebaseService,
+        private loggerService: LoggerService) { }
+
+    ngOnInit() {
+        this.lapTimeId = this.route.snapshot.paramMap.get("id");
+
+        // TODO: Show a loading spinner until we get data or an error
+        this.firebaseService.getLapTimeById(this.lapTimeId)
+            .then((lapTime) => {
+                this.lapTime = lapTime;
+
+                this.setFormGroupValue();
+            })
+            .catch((err) => {
+                if (err.notFound) {
+                    this.router.navigate(["/notFound"]);
+                } else {
+                    this.loggerService.group("Fetching LapTime details");
+                    this.loggerService.log("LapTime id: ", this.lapTimeId);
+                    this.loggerService.error(err);
+                    this.loggerService.groupEnd();
+                }
+            });
+    }
+
+    private setFormGroupValue() {
+        this.FormControls.trackName.setValue(this.lapTime.track.name);
+        this.FormControls.trackLength.setValue(this.lapTime.track.length);
+        this.FormControls.car.setValue(this.lapTime.car.name);
+        this.FormControls.lapTime.setValue(this.lapTime.humanTime);
+        this.FormControls.lapNumber.setValue(this.lapTime.lap);
+        this.FormControls.assists.setValue(this.lapTime.assists);
+    }
+}
