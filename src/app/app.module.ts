@@ -43,11 +43,11 @@ import { LoginComponent } from './components/login/login.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { TimesComponent } from "./components/times/times.component";
 import { NewTimeComponent } from "./components/new-time/new-time.component";
-import { DialogComponent } from "./components/dialog/dialog.component";
-import { LapTimeFormInputComponent } from "./components/lap-time/lap-time.component";
+import { DialogComponent } from "./components/shared/dialog/dialog.component";
+import { LapTimeFormInputComponent } from "./components/shared/lap-time/lap-time.component";
 import { LogsComponent } from './components/logs/logs.component';
 import { LapTimeDetailsComponent } from './components/lap-time-details/lap-time-details.component';
-import { LapAssistsComponent } from "./components/lap-assists/lap-assists.component";
+import { LapAssistsComponent } from "./components/shared/lap-assists/lap-assists.component";
 import { SettingsContainerComponent } from './components/settings-container/settings-container.component';
 import { SettingsAssistsComponent } from "./components/settings-assists/settings-assists.component";
 

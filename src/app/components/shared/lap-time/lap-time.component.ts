@@ -24,7 +24,7 @@ import { MatFormFieldControl } from "@angular/material";
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from "@angular/cdk/a11y";
 
-import { Time } from "../../models/data.model";
+import { Time } from "../../../models/data.model";
 
 
 @Component({

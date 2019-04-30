@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material';
 import { FirebaseService } from '../../services/firebase.service';
 import { LoggerService } from '../../services/log.service';
 import { LapTime } from '../../models/data.model';
-import { DialogComponent } from '../dialog/dialog.component';
+import { DialogComponent } from '../shared/dialog/dialog.component';
 
 
 @Component({

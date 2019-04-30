@@ -3,7 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
-import { DialogComponent } from '../dialog/dialog.component';
+import { DialogComponent } from '../shared/dialog/dialog.component';
 
 import { FirebaseService } from '../../services/firebase.service';
 import { LoggerService } from '../../services/log.service';

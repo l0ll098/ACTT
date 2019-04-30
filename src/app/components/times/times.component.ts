@@ -2,7 +2,7 @@ import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy, ChangeDet
 import { MatTableDataSource, MatPaginator, Sort, MatDialog } from "@angular/material";
 import { SelectionModel } from "@angular/cdk/collections";
 
-import { DialogComponent } from "../dialog/dialog.component";
+import { DialogComponent } from "../shared/dialog/dialog.component";
 
 import { LapTime } from "../../models/data.model";
 
