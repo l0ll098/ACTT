@@ -1,10 +1,13 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormControl } from '@angular/forms';
+
+import { MatDialog } from '@angular/material';
 
 import { FirebaseService } from '../../services/firebase.service';
-import { LapTime } from '../../models/data.model';
 import { LoggerService } from '../../services/log.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { LapTime } from '../../models/data.model';
+import { DialogComponent } from '../dialog/dialog.component';
 
 
 @Component({
@@ -40,7 +43,8 @@ export class LapTimeDetailsComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private firebaseService: FirebaseService,
-        private loggerService: LoggerService) { }
+        private loggerService: LoggerService,
+        private dialog: MatDialog) { }
 
     ngOnInit() {
         this.lapTimeId = this.route.snapshot.paramMap.get("id");
@@ -60,6 +64,16 @@ export class LapTimeDetailsComponent implements OnInit {
                     this.loggerService.log("LapTime id: ", this.lapTimeId);
                     this.loggerService.error(err);
                     this.loggerService.groupEnd();
+
+                    this.dialog.open(DialogComponent, {
+                        data: {
+                            title: "Error",
+                            message: "An error occurred. Please try again.",
+                            doActionBtn: {
+                                text: "Ok"
+                            }
+                        }
+                    });
                 }
             });
     }
