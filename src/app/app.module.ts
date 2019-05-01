@@ -32,7 +32,8 @@ import {
 	MatDialogModule,
 	MatExpansionModule,
 	MatSliderModule,
-	MatMenuModule
+	MatMenuModule,
+	MatProgressSpinnerModule
 } from '@angular/material';
 import { PlatformModule } from "@angular/cdk/platform";
 
@@ -44,6 +45,7 @@ import { TimesComponent } from "./components/times/times.component";
 import { NewTimeComponent } from "./components/new-time/new-time.component";
 import { DialogComponent } from "./components/shared/dialog/dialog.component";
 import { LapTimeFormInputComponent } from "./components/shared/lap-time/lap-time.component";
+import { LoadingSpinnerComponent } from "./components/shared/loading-spinner/loading-spinner.component";
 import { LogsComponent } from './components/logs/logs.component';
 import { LapTimeDetailsComponent } from './components/lap-time-details/lap-time-details.component';
 import { LapAssistsComponent } from "./components/shared/lap-assists/lap-assists.component";
@@ -129,6 +131,7 @@ const appRoutes: Routes = [
 		DialogComponent,
 		LapTimeFormInputComponent,
 		LapAssistsComponent,
+		LoadingSpinnerComponent,
 
 		LapTimePipe
 	],
@@ -167,7 +170,8 @@ const appRoutes: Routes = [
 		MatDialogModule,
 		MatExpansionModule,
 		MatSliderModule,
-		MatMenuModule
+		MatMenuModule,
+		MatProgressSpinnerModule
 	],
 	providers: [
 		AuthService,

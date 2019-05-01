@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
 
@@ -17,6 +17,8 @@ import { DialogComponent } from '../shared/dialog/dialog.component';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LapTimeDetailsComponent implements OnInit {
+
+    public showLoadingSpinner = true;
 
     private lapTimeId: string;
     public lapTime: LapTime;
@@ -42,6 +44,7 @@ export class LapTimeDetailsComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
+        private changeDetector: ChangeDetectorRef,
         private firebaseService: FirebaseService,
         private loggerService: LoggerService,
         private dialog: MatDialog) { }
@@ -49,14 +52,17 @@ export class LapTimeDetailsComponent implements OnInit {
     ngOnInit() {
         this.lapTimeId = this.route.snapshot.paramMap.get("id");
 
-        // TODO: Show a loading spinner until we get data or an error
         this.firebaseService.getLapTimeById(this.lapTimeId)
             .then((lapTime) => {
                 this.lapTime = lapTime;
 
                 this.setFormGroupValue();
+
+                this.hideLoadingSpinner();
             })
             .catch((err) => {
+                this.hideLoadingSpinner();
+
                 if (err.notFound) {
                     this.router.navigate(["/notFound"]);
                 } else {
@@ -85,5 +91,10 @@ export class LapTimeDetailsComponent implements OnInit {
         this.FormControls.lapTime.setValue(this.lapTime.humanTime);
         this.FormControls.lapNumber.setValue(this.lapTime.lap);
         this.FormControls.assists.setValue(this.lapTime.assists);
+    }
+
+    private hideLoadingSpinner() {
+        this.showLoadingSpinner = false;
+        this.changeDetector.markForCheck();
     }
 }
