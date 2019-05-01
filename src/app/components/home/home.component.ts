@@ -6,7 +6,7 @@ import { SwUpdate } from "@angular/service-worker";
 import { MatSnackBar, MatSidenav, MatDialog } from '@angular/material';
 import { Platform } from "@angular/cdk/platform";
 
-import { DialogComponent } from '../dialog/dialog.component';
+import { DialogComponent } from '../shared/dialog/dialog.component';
 
 import { AuthService } from '../../services/auth.service';
 import { FirebaseService } from "../../services/firebase.service";

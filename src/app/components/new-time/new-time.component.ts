@@ -10,7 +10,7 @@ import { cars } from "../../models/cars";
 import { FirebaseService } from "../../services/firebase.service";
 import { LoggerService } from "../../services/log.service";
 
-import { DialogComponent } from "../dialog/dialog.component";
+import { DialogComponent } from "../shared/dialog/dialog.component";
 
 
 @Component({

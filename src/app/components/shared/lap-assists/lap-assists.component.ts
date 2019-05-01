@@ -3,7 +3,7 @@ import {
     Self, ElementRef, OnDestroy, ChangeDetectorRef
 } from '@angular/core';
 import { FormControl, FormGroup, ControlValueAccessor, DefaultValueAccessor, NgControl } from '@angular/forms';
-import { LapAssists } from '../../models/data.model';
+import { LapAssists } from '../../../models/data.model';
 import { Subject } from 'rxjs';
 
 

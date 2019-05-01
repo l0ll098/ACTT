@@ -15,6 +15,7 @@ A PWA to keep track of your personal best lap times in Assetto Corsa
 | not-found      | This will show user a custom error screen if the requested page is not found.                                   |          |
 | settings       | This one is a component used to show settings. It can handle a variety of them.                                 |          |
 | times          | It shows user a table where he can check his previously saved times.                                            |          |
+| lap-time-deatils| It's used to show details of a certain lap time |          |
 
 ### Models
 | Model name      | Details                                                                                | See also |
