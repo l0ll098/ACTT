@@ -31,11 +31,31 @@ export interface LapAssists {
     autoFriction: boolean;
     autoBlip: boolean;
     idealTrajectory: boolean;
-    tractionControl: "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100";
-    abs: "On" | "Factory" | "Off";
-    stabilityControl: "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100";
-    mechanicalDamages: "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100";
+    tractionControl: ValidStringPercentages;
+    abs: ValidAbsValues;
+    stabilityControl: ValidStringPercentages;
+    mechanicalDamages: ValidStringPercentages;
     tyresWear: boolean;
     tyresBlankets: boolean;
     fuelConsumption: boolean;
+}
+
+export type ValidStringPercentages = "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100";
+export enum ValidAbsValues {
+    On = "On",
+    Factory = "Factory",
+    Off = "Off"
+}
+
+export function isValidStringPercentage(perc: string): boolean {
+    const nPerc = parseInt(perc, 10);
+    if (!isNaN(nPerc) && nPerc >= 0 && nPerc <= 100 && nPerc % 10 === 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export function isValidAbsValue(value: string): boolean {
+    return (value === ValidAbsValues.On || value === ValidAbsValues.Factory || value === ValidAbsValues.Off);
 }

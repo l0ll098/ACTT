@@ -4,7 +4,7 @@ import * as express from "express";
 import * as cors from "cors";
 import { check, validationResult } from "express-validator/check";
 
-import { LapTime } from './models';
+import { LapTime, isValidStringPercentage, LapAssists, isValidAbsValue } from './models';
 
 admin.initializeApp();
 const app = express();
@@ -52,7 +52,7 @@ const validators = [
     check("time.millisecs").isInt(),
     check("track.name").isString(),
     check("track.length").isInt(),
-    check("assists").custom((assists) => {
+    check("assists").custom((assists: LapAssists) => {
 
         // If the assists object is undefined, skip the rest and consider the passed data as correct 
         if (assists === undefined || assists === null) {
@@ -77,7 +77,11 @@ const validators = [
             typeof assists.stabilityControl === "string" &&
             typeof assists.tractionControl === "string" &&
             typeof assists.tyresBlankets === "boolean" &&
-            typeof assists.tyresWear === "boolean"
+            typeof assists.tyresWear === "boolean" && 
+            isValidStringPercentage(assists.tractionControl) && 
+            isValidStringPercentage(assists.stabilityControl) &&
+            isValidStringPercentage(assists.mechanicalDamages) && 
+            isValidAbsValue(assists.abs)
         );
 
         // If all the properties of the assists object are correct, return
@@ -92,7 +96,6 @@ const validators = [
 
 // path: http://localhost:5001/assettocorsatimetracker/us-central1/api/lapTimes/new
 app.post('/lapTimes/new', validateFirebaseIdToken, ...validators, async (req: express.Request, res: express.Response) => {
-    console.log("here");
     const lapTime: LapTime = {
         lap: req.body.lap,
         car: {
