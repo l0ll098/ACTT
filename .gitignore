@@ -14,8 +14,11 @@
 .firebase
 *.log
 
+# Compiled Firebase functions
+/functions/lib/*
+
 # dependencies
-/node_modules
+/**/node_modules
 
 # IDEs and editors
 /.idea
