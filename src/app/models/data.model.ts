@@ -9,6 +9,7 @@ export interface LapTime {
     lap: number;
     assists?: LapAssists;
     id?: string;
+    version?: number;
 }
 
 export interface Track {

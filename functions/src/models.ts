@@ -1,3 +1,5 @@
+export const LAST_SUPPORTED_LAP_TIME_VERSION = 1;
+
 export interface LapTime {
     // minutes:seconds:millisecs
     humanTime?: Time;
@@ -9,6 +11,7 @@ export interface LapTime {
     lap: number;
     assists?: LapAssists;
     id?: string;
+    version?: number;
 }
 
 export interface Track {

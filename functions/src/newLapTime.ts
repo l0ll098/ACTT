@@ -1,11 +1,13 @@
 import * as admin from "firebase-admin";
 import { Request, Response } from "express";
-
-import { LapTime, isValidStringPercentage, isValidAbsValue, LapAssists } from "./models";
 import { validationResult, check } from "express-validator/check";
 
+import {
+    LapTime, isValidStringPercentage,
+    isValidAbsValue, LapAssists, LAST_SUPPORTED_LAP_TIME_VERSION
+} from "./models";
 
-export const validators = [
+export const newLapTimeValidators = [
     check("lap").isInt(),
     check("car.name").isString(),
     check("time.millisecs").isInt(),
@@ -68,7 +70,8 @@ export async function newLapTime(req: Request, res: Response) {
             name: req.body.track.name,
             length: req.body.track.length
         },
-        assists: req.body.assists
+        assists: req.body.assists,
+        version: LAST_SUPPORTED_LAP_TIME_VERSION
     }
 
     // Validate parameters. If an error is found, end execution and return a 422 "Unprocessable Entity"

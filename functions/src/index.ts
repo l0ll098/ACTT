@@ -3,7 +3,8 @@ import * as admin from "firebase-admin";
 import * as express from "express";
 import * as cors from "cors";
 
-import { validators, newLapTime } from './newLapTime';
+import { newLapTimeValidators, newLapTime } from './newLapTime';
+import { upgradeLapTimeValidators, upgradeLapTime } from './upgradeLapTime';
 
 admin.initializeApp();
 const app = express();
@@ -47,8 +48,9 @@ async function validateFirebaseIdToken(req: express.Request, res: express.Respon
 
 
 
-// path: http://localhost:5001/assettocorsatimetracker/us-central1/api/lapTimes/new
-app.post('/lapTimes/new', validateFirebaseIdToken, ...validators, newLapTime);
+// local base path: http://localhost:5001/assettocorsatimetracker/us-central1/api/<path>
+app.post('/lapTimes/new', validateFirebaseIdToken, ...newLapTimeValidators, newLapTime);
+app.post("/lapTimes/upgrade", validateFirebaseIdToken, ...upgradeLapTimeValidators, upgradeLapTime);
 
 // Expose Express API as a single Cloud Function:
 exports.api = functions.https.onRequest(app);
