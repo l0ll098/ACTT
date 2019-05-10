@@ -59,9 +59,58 @@ export async function upgradeLapTime(req: Request, res: Response) {
     }
 
     // Update saved value with the new one
-    const snap = await admin.database()
+    await admin.database()
         .ref("users/" + uid + "/lapTimes/" + lapTimeId + "/")
         .update(lapTime);
 
     return res.json({ done: true, lapTime: lapTime });
+}
+
+
+export async function upgradeAllLapTimes(req: Request, res: Response) {
+    // Validate parameters. If an error is found, end execution and return a 422 "Unprocessable Entity"
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        res.status(422).json({ errors: errors.array() });
+        return;
+    }
+
+    // At this point the uid is defined as it's checked by the "validateFirebaseIdToken" 
+    //  Express middleware
+    const uid = ((req as any).user as admin.auth.DecodedIdToken).uid;
+
+    // ! NOTE: This has to be separated in two parts as adding the .val() would break it
+    // The .endAt(0) is used to filter data in order to get only records where the "version"
+    // property is not defined.
+    const snap = await admin.database()
+        .ref("users/" + uid + "/lapTimes/")
+        .orderByChild("version")
+        .endAt(0)
+        .once("value");
+    const rawData = snap.val();
+
+    if (rawData.length === 0) {
+        return res.status(304).json({ done: false, msg: "Data were already updated" });
+    }
+
+    // Convert fetched LapTimes from an object to an array and set the "id" property
+    const lapTimes: LapTime[] = Object.keys(rawData).map((key) => {
+        const lapTime: LapTime = rawData[key];
+        lapTime.id = key;
+        return lapTime;
+    });
+
+    try {
+        const done = await Promise.all(lapTimes.map((lapTime) => {
+            const moddedReq = req;
+            moddedReq.body.lapTimeId = lapTime.id
+            return upgradeLapTime(req, res);
+        }));
+
+        console.log("done: ", done);
+    } catch (err) {
+        console.log("err: ", err);
+    }
+
+    return;
 }

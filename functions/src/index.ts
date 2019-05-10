@@ -4,7 +4,7 @@ import * as express from "express";
 import * as cors from "cors";
 
 import { newLapTimeValidators, newLapTime } from './newLapTime';
-import { upgradeLapTimeValidators, upgradeLapTime } from './upgradeLapTime';
+import { upgradeLapTimeValidators, upgradeLapTime, upgradeAllLapTimes } from './upgradeLapTime';
 
 admin.initializeApp();
 const app = express();
@@ -47,10 +47,10 @@ async function validateFirebaseIdToken(req: express.Request, res: express.Respon
 };
 
 
-
 // local base path: http://localhost:5001/assettocorsatimetracker/us-central1/api/<path>
-app.post('/lapTimes/new', validateFirebaseIdToken, ...newLapTimeValidators, newLapTime);
+app.post("/lapTimes/new", validateFirebaseIdToken, ...newLapTimeValidators, newLapTime);
 app.post("/lapTimes/upgrade", validateFirebaseIdToken, ...upgradeLapTimeValidators, upgradeLapTime);
+app.post("/lapTimes/upgradeAll", validateFirebaseIdToken, upgradeAllLapTimes);
 
 // Expose Express API as a single Cloud Function:
 exports.api = functions.https.onRequest(app);

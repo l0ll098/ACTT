@@ -9,7 +9,8 @@
                         "car/name",
                         "track/name",
                         "track/length",
-                        "time/millisecs"
+                        "time/millisecs",
+                        "version"
                     ]
                 }
             }
