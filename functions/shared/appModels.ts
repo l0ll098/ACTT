@@ -49,16 +49,3 @@ export enum ValidAbsValues {
     Factory = "Factory",
     Off = "Off"
 }
-
-export function isValidStringPercentage(perc: string): boolean {
-    const nPerc = parseInt(perc, 10);
-    if (!isNaN(nPerc) && nPerc >= 0 && nPerc <= 100 && nPerc % 10 === 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-export function isValidAbsValue(value: string): boolean {
-    return (value === ValidAbsValues.On || value === ValidAbsValues.Factory || value === ValidAbsValues.Off);
-}

@@ -1,11 +1,10 @@
 import * as admin from "firebase-admin";
 import { Request, Response } from "express";
-import { validationResult, check } from "express-validator/check";
+import { check } from "express-validator/check";
 
-import {
-    LapTime, isValidStringPercentage,
-    isValidAbsValue, LapAssists, LAST_SUPPORTED_LAP_TIME_VERSION
-} from "./models";
+import { LapTime, LapAssists, LAST_SUPPORTED_LAP_TIME_VERSION } from "../shared/appModels";
+import { isValidStringPercentage, isValidAbsValue, validate, sendOK, sendErr } from "../shared/helpers";
+import { HttpStatus } from "../shared/httpStatus";
 
 export const newLapTimeValidators = [
     check("lap").isInt(),
@@ -74,11 +73,8 @@ export async function newLapTime(req: Request, res: Response) {
         version: LAST_SUPPORTED_LAP_TIME_VERSION
     }
 
-    // Validate parameters. If an error is found, end execution and return a 422 "Unprocessable Entity"
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        res.status(422).json({ errors: errors.array() });
-        return;
+    if (!validate(req, res)) {
+        return false;
     }
 
     // At this point the uid is defined as it's checked by the "validateFirebaseIdToken" 
@@ -93,17 +89,15 @@ export async function newLapTime(req: Request, res: Response) {
         lapTime.assists = assists.val();
     }
 
-    // Push data
-    admin.database()
-        .ref("users/" + uid + "/lapTimes")
-        .push(lapTime)
-        .then((snapshot) => {
-            lapTime.id = snapshot.key || undefined;
-            res.json(lapTime);
-            return;
-        }, (err) => {
-            res.status(500);
-            res.json({ error: true, msg: "An error occourred.", err: err });
-            return;
-        });
+    try {
+        const snapshot = await admin.database()
+            .ref("users/" + uid + "/lapTimes")
+            .push(lapTime);
+
+        lapTime.id = snapshot.key || undefined;
+        return sendOK(res, { laptime: lapTime });
+
+    } catch (err) {
+        return sendErr(res, HttpStatus.InternalServerError, err, "An error occourred saving data");
+    }
 }

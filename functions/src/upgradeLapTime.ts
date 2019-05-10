@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import * as admin from "firebase-admin";
-import { validationResult, check } from "express-validator/check";
+import { check } from "express-validator/check";
 
-import { LapTime, LAST_SUPPORTED_LAP_TIME_VERSION } from "./models";
+import { LapTime, LAST_SUPPORTED_LAP_TIME_VERSION } from "../shared/appModels";
+import { validate, sendErr, sendOK } from "../shared/helpers";
+import { HttpStatus } from "../shared/httpStatus";
 
 
 export const upgradeLapTimeValidators = [
@@ -10,14 +12,12 @@ export const upgradeLapTimeValidators = [
 ];
 
 export async function upgradeLapTime(req: Request, res: Response) {
-    const lapTimeId: string = req.body.lapTimeId;
 
-    // Validate parameters. If an error is found, end execution and return a 422 "Unprocessable Entity"
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        res.status(422).json({ errors: errors.array() });
-        return;
+    if (!validate(req, res)) {
+        return false;
     }
+
+    const lapTimeId: string = req.body.lapTimeId;
 
     // At this point the uid is defined as it's checked by the "validateFirebaseIdToken" 
     //  Express middleware
@@ -30,7 +30,7 @@ export async function upgradeLapTime(req: Request, res: Response) {
         .val();
 
     if (!lapTime) {
-        return res.status(404).json({ done: false, error: "Lap time not found" });
+        return sendErr(res, HttpStatus.NotFound, { done: false, error: "Lap time not found" });
     }
 
     // Get version. If lapTime doesn't have it, assume 1
@@ -43,7 +43,7 @@ export async function upgradeLapTime(req: Request, res: Response) {
 
     if (version > LAST_SUPPORTED_LAP_TIME_VERSION) {
         // Data are already up to date
-        return res.status(304).json({ done: false, error: "Data is already updated" });
+        return sendErr(res, HttpStatus.NotModified, { done: false, error: "Data is already updated" });
     }
 
     // Do something based on the version
@@ -63,16 +63,13 @@ export async function upgradeLapTime(req: Request, res: Response) {
         .ref("users/" + uid + "/lapTimes/" + lapTimeId + "/")
         .update(lapTime);
 
-    return res.json({ done: true, lapTime: lapTime });
+    return sendOK(res, { done: true, lapTime: lapTime });
 }
 
 
 export async function upgradeAllLapTimes(req: Request, res: Response) {
-    // Validate parameters. If an error is found, end execution and return a 422 "Unprocessable Entity"
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        res.status(422).json({ errors: errors.array() });
-        return;
+    if (!validate(req, res)) {
+        return false;
     }
 
     // At this point the uid is defined as it's checked by the "validateFirebaseIdToken" 
@@ -90,7 +87,7 @@ export async function upgradeAllLapTimes(req: Request, res: Response) {
     const rawData = snap.val();
 
     if (rawData.length === 0) {
-        return res.status(304).json({ done: false, msg: "Data were already updated" });
+        return sendErr(res, HttpStatus.NotModified, { done: false, error: "Records were already updated" });
     }
 
     // Convert fetched LapTimes from an object to an array and set the "id" property

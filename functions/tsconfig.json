@@ -10,6 +10,7 @@
   },
   "compileOnSave": false,
   "include": [
-    "src"
+    "src", 
+    "shared"
   ]
 }
