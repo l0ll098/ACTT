@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import * as admin from "firebase-admin";
 import { check } from "express-validator/check";
 
-import { LapTime, LAST_SUPPORTED_LAP_TIME_VERSION } from "../shared/appModels";
-import { validate, sendErr, sendOK } from "../shared/helpers";
+import { LapTime } from "../shared/appModels";
+import { validate, sendErr, sendOK, upgradeData } from "../shared/helpers";
 import { HttpStatus } from "../shared/httpStatus";
 
 
@@ -29,41 +29,15 @@ export async function upgradeLapTime(req: Request, res: Response) {
         .once("value"))
         .val();
 
-    if (!lapTime) {
-        return sendErr(res, HttpStatus.NotFound, { done: false, error: "Lap time not found" });
+    try {
+        const upgrade = await upgradeData(uid, lapTime, lapTimeId);
+        if (upgrade.done) {
+            return sendOK(res, { done: true, lapTime: lapTime });
+        }
+    } catch (err) {
+        return sendErr(res, err.status, err);
     }
 
-    // Get version. If lapTime doesn't have it, assume 1
-    const version = lapTime.version ? lapTime.version : 1;
-
-    // Get defualt assists
-    const assists = (await admin.database()
-        .ref("users/" + uid + "/settings/assists")
-        .once("value")).val();
-
-    if (version > LAST_SUPPORTED_LAP_TIME_VERSION) {
-        // Data are already up to date
-        return sendErr(res, HttpStatus.NotModified, { done: false, error: "Data is already updated" });
-    }
-
-    // Do something based on the version
-    switch (version) {
-        case 1:
-            // Modify the lapTime object to add assists and set data version
-            lapTime.assists = assists;
-            lapTime.version = 1;
-        // Intentional fall-through
-        // break;
-        case 2:
-        // 
-    }
-
-    // Update saved value with the new one
-    await admin.database()
-        .ref("users/" + uid + "/lapTimes/" + lapTimeId + "/")
-        .update(lapTime);
-
-    return sendOK(res, { done: true, lapTime: lapTime });
 }
 
 
@@ -98,16 +72,13 @@ export async function upgradeAllLapTimes(req: Request, res: Response) {
     });
 
     try {
-        const done = await Promise.all(lapTimes.map((lapTime) => {
-            const moddedReq = req;
-            moddedReq.body.lapTimeId = lapTime.id
-            return upgradeLapTime(req, res);
+        const upgradedData = await Promise.all(lapTimes.map((lapTime) => {
+            return upgradeData(uid, lapTime, lapTime.id as string);
         }));
 
-        console.log("done: ", done);
+        return sendOK(res, { done: true, lapTimes: upgradedData });
     } catch (err) {
-        console.log("err: ", err);
+        return sendErr(res, HttpStatus.InternalServerError, err);
     }
 
-    return;
 }

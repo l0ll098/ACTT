@@ -1,8 +1,9 @@
 import { Response, Request } from "express";
 import { validationResult } from "express-validator/check";
+import * as admin from "firebase-admin";
 
 import { Status, HttpStatus } from "./httpStatus";
-import { ValidAbsValues } from "./appModels";
+import { ValidAbsValues, LapTime, LAST_SUPPORTED_LAP_TIME_VERSION, LapAssists } from "./appModels";
 
 /**
  * Sends a response to the client
@@ -44,16 +45,57 @@ export function validate(req: Request, res: Response): boolean {
 }
 
 export function isValidStringPercentage(perc: string): boolean {
-    const nPerc = parseInt(perc, 10);
-    if (!isNaN(nPerc) && nPerc >= 0 && nPerc <= 100 && nPerc % 10 === 0) {
-        return true;
-    } else {
-        return false;
-    }
+	const nPerc = parseInt(perc, 10);
+	if (!isNaN(nPerc) && nPerc >= 0 && nPerc <= 100 && nPerc % 10 === 0) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 export function isValidAbsValue(value: string): boolean {
-    return (value === ValidAbsValues.On || value === ValidAbsValues.Factory || value === ValidAbsValues.Off);
+	return (value === ValidAbsValues.On || value === ValidAbsValues.Factory || value === ValidAbsValues.Off);
 }
 
-// export * from "./f1";
+
+export async function upgradeData(uid: string, lapTime: LapTime, lapTimeId: string, assists?: LapAssists) {
+	if (!lapTime) {
+		return Promise.reject({ done: false, error: "LapTime not found", status: HttpStatus.NotFound });
+	}
+
+	// Get version. If lapTime doesn't have it, assume 1
+	const version = lapTime.version ? lapTime.version : 1;
+
+	// Get defualt assists
+	if (!assists) {
+		// tslint:disable-next-line:no-parameter-reassignment
+		assists = (await admin.database()
+			.ref("users/" + uid + "/settings/assists")
+			.once("value")).val();
+	}
+
+	if (version > LAST_SUPPORTED_LAP_TIME_VERSION) {
+		// Data are already up to date
+		return Promise.reject({ done: false, error: "Data is already updated", status: HttpStatus.NotModified });
+	}
+
+	// Do something based on the version
+	switch (version) {
+		case 1:
+			// Modify the lapTime object to add assists and set data version
+			lapTime.assists = assists;
+			lapTime.version = 1;
+		// Intentional fall-through
+		// break;
+		case 2:
+		// 
+	}
+
+	// Update saved value with the new one
+	await admin.database()
+		.ref("users/" + uid + "/lapTimes/" + lapTimeId + "/")
+		.update(lapTime);
+
+	// Return the new lapTime
+	return Promise.resolve({ done: true, lapTime: lapTime });
+}
