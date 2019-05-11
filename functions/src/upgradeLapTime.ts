@@ -69,7 +69,8 @@ export async function upgradeAllLapTimes(req: Request, res: Response) {
         .once("value");
     const rawData = snap.val();
 
-    if (rawData.length === 0) {
+    // If query didn't returned anything, send user a 304 message
+    if (!rawData) {
         return sendErr(res, HttpStatus.NotModified, { done: false, error: "Records were already updated" });
     }
 

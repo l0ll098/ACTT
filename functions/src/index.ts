@@ -8,6 +8,7 @@ import { upgradeLapTimeValidators, upgradeLapTime, upgradeAllLapTimes } from './
 import { HttpStatus } from '../shared/httpStatus';
 import { sendErr } from '../shared/helpers';
 
+
 admin.initializeApp();
 const app = express();
 
@@ -46,10 +47,14 @@ async function validateFirebaseIdToken(req: express.Request, res: express.Respon
 };
 
 
-// local base path: http://localhost:5001/assettocorsatimetracker/us-central1/api/<path>
-app.post("/lapTimes/new", validateFirebaseIdToken, ...newLapTimeValidators, newLapTime);
-app.post("/lapTimes/upgrade", validateFirebaseIdToken, ...upgradeLapTimeValidators, upgradeLapTime);
-app.post("/lapTimes/upgradeAll", validateFirebaseIdToken, upgradeAllLapTimes);
+try {
+    // local base path: http://localhost:5001/assettocorsatimetracker/us-central1/api/<path>
+    app.post("/lapTimes/new", validateFirebaseIdToken, ...newLapTimeValidators, newLapTime);
+    app.post("/lapTimes/upgrade", validateFirebaseIdToken, ...upgradeLapTimeValidators, upgradeLapTime);
+    app.post("/lapTimes/upgradeAll", validateFirebaseIdToken, upgradeAllLapTimes);
+} catch (err) {
+    console.log(err);
+}
 
 // Expose Express API as a single Cloud Function:
 exports.api = functions.https.onRequest(app);
