@@ -5,6 +5,8 @@ import * as cors from "cors";
 
 import { newLapTimeValidators, newLapTime } from './newLapTime';
 import { upgradeLapTimeValidators, upgradeLapTime, upgradeAllLapTimes } from './upgradeLapTime';
+import { HttpStatus } from '../shared/httpStatus';
+import { sendErr } from '../shared/helpers';
 
 admin.initializeApp();
 const app = express();
@@ -17,8 +19,7 @@ async function validateFirebaseIdToken(req: express.Request, res: express.Respon
 
     if ((!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) &&
         !(req.cookies && req.cookies.__session)) {
-        res.status(403).send('Unauthorized');
-        return;
+        return sendErr(res, HttpStatus.Unauthorized, { error: "You have to be authenticated" });
     }
 
     let idToken;
@@ -30,8 +31,7 @@ async function validateFirebaseIdToken(req: express.Request, res: express.Respon
         idToken = req.cookies.__session;
     } else {
         // No cookie
-        res.status(403).send('Unauthorized');
-        return;
+        return sendErr(res, HttpStatus.Unauthorized, { error: "You have to be authenticated" });
     }
 
     try {
@@ -41,8 +41,7 @@ async function validateFirebaseIdToken(req: express.Request, res: express.Respon
         next();
         return;
     } catch (error) {
-        res.status(403).send('Unauthorized');
-        return;
+        return sendErr(res, HttpStatus.Unauthorized, { error: "You have to be authenticated" });
     }
 };
 
