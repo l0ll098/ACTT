@@ -11,6 +11,11 @@ export const upgradeLapTimeValidators = [
     check("lapTimeId").isString().not().isEmpty()
 ];
 
+/**
+ * This function will upgrade a single LapTime for the current user
+ * @param req The request object
+ * @param res Http response
+ */
 export async function upgradeLapTime(req: Request, res: Response) {
 
     if (!validate(req, res)) {
@@ -40,7 +45,11 @@ export async function upgradeLapTime(req: Request, res: Response) {
 
 }
 
-
+/**
+ * This function will upgrade all LapTimes for the current user
+ * @param req The request object
+ * @param res Http response
+ */
 export async function upgradeAllLapTimes(req: Request, res: Response) {
     if (!validate(req, res)) {
         return false;

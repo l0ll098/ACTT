@@ -55,7 +55,18 @@ export const newLapTimeValidators = [
 ];
 
 
+/**
+ * This will create a new LapTime for the current user.
+ * Default LapTime version = LAST_SUPPORTED_LAP_TIME_VERSION
+ * @param req The request object
+ * @param res Http response
+ */
 export async function newLapTime(req: Request, res: Response) {
+    
+    if (!validate(req, res)) {
+        return false;
+    }
+    
     const lapTime: LapTime = {
         lap: req.body.lap,
         car: {
@@ -71,10 +82,6 @@ export async function newLapTime(req: Request, res: Response) {
         },
         assists: req.body.assists,
         version: LAST_SUPPORTED_LAP_TIME_VERSION
-    }
-
-    if (!validate(req, res)) {
-        return false;
     }
 
     // At this point the uid is defined as it's checked by the "validateFirebaseIdToken" 

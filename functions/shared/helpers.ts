@@ -35,6 +35,11 @@ export function sendErr(res: Response, error: Status, data: object, errMsg: stri
 	});
 }
 
+/**
+ * Checks if the validation went well. In that case it returns true, false otherwise
+ * @param req The request
+ * @param res Http response
+ */
 export function validate(req: Request, res: Response): boolean {
 	const errors = validationResult(req);
 	if (!errors.isEmpty()) {
@@ -44,6 +49,10 @@ export function validate(req: Request, res: Response): boolean {
 	return true;
 }
 
+/**
+ * Returns if the parameter is valid
+ * @param perc The percentage to check
+ */
 export function isValidStringPercentage(perc: string): boolean {
 	const nPerc = parseInt(perc, 10);
 	if (!isNaN(nPerc) && nPerc >= 0 && nPerc <= 100 && nPerc % 10 === 0) {
@@ -53,11 +62,28 @@ export function isValidStringPercentage(perc: string): boolean {
 	}
 }
 
+/**
+ * Returns if it's a valid value
+ * @param value Value to check
+ */
 export function isValidAbsValue(value: string): boolean {
 	return (value === ValidAbsValues.On || value === ValidAbsValues.Factory || value === ValidAbsValues.Off);
 }
 
-
+/**
+ * Upgrades a LapTime from a certain version (data schema) to the latest one.
+ * 
+ * In case the @param lapTime object is not defined, this function will reject the promise.
+ * If data is already updated, the promise will be rejected.
+ * 
+ * Current data version is determined checking the "version" property in the @param lapTime object.
+ * If it's not defined, it will be considered as 1.
+ * In case the  @param assists is not defined, it will be assumed that user used his defualt assists.
+ * @param uid user id
+ * @param lapTime LapTime object to upgrade
+ * @param lapTimeId LapTimeId
+ * @param assists (Optional). Assists used by user
+ */
 export async function upgradeData(uid: string, lapTime: LapTime, lapTimeId: string, assists?: LapAssists) {
 	if (!lapTime) {
 		return Promise.reject({ done: false, error: "LapTime not found", status: HttpStatus.NotFound });
