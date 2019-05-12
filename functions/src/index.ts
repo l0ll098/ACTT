@@ -3,10 +3,12 @@ import * as admin from "firebase-admin";
 import * as express from "express";
 import * as cors from "cors";
 
-import { newLapTimeValidators, newLapTime } from './newLapTime';
-import { upgradeLapTimeValidators, upgradeLapTime, upgradeAllLapTimes } from './upgradeLapTime';
 import { HttpStatus } from '../shared/httpStatus';
 import { sendErr } from '../shared/helpers';
+
+import { newLapTimeValidators, newLapTime } from './newLapTime';
+import { upgradeLapTimeValidators, upgradeLapTime, upgradeAllLapTimes } from './upgradeLapTime';
+import { getLapTimesValidators, getLapTime } from './getLapTimes';
 
 
 admin.initializeApp();
@@ -44,7 +46,7 @@ async function validateFirebaseIdToken(req: express.Request, res: express.Respon
     } catch (error) {
         return sendErr(res, HttpStatus.Unauthorized, { error: "You have to be authenticated" });
     }
-};
+}
 
 
 try {
@@ -52,9 +54,10 @@ try {
     app.post("/lapTimes/new", validateFirebaseIdToken, ...newLapTimeValidators, newLapTime);
     app.post("/lapTimes/upgrade", validateFirebaseIdToken, ...upgradeLapTimeValidators, upgradeLapTime);
     app.post("/lapTimes/upgradeAll", validateFirebaseIdToken, upgradeAllLapTimes);
+    app.get("/lapTimes", validateFirebaseIdToken, ...getLapTimesValidators, getLapTime);
 } catch (err) {
     console.log(err);
 }
 
 // Expose Express API as a single Cloud Function:
-exports.api = functions.https.onRequest(app);
+export const api = functions.https.onRequest(app);
