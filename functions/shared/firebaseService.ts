@@ -194,6 +194,22 @@ export abstract class FirebaseService {
     }
 
     /**
+     * Sets default assists for the current user
+     * @param uid User ID
+     * @param assists An LapAssists object
+     */
+    public static async saveDefaultLapAssists(uid: string, assists: LapAssists) {
+        try {
+            await admin.database()
+                .ref(`/users/${uid}/settings/assists`)
+                .set(assists);
+            return Promise.resolve(true);
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    /**
      * Formats multiple LapTime data.
      * @param rawData DataSnapshot returned from Firebase DB
      */

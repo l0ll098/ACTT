@@ -11,6 +11,7 @@ import { upgradeLapTimeValidators, upgradeLapTime, upgradeAllLapTimes } from './
 import { getLapTimesValidators, getLapTime } from './getLapTimes';
 import { deleteLapTimeValidators, deleteLapTime } from './deleteLapTime';
 import { getDefaultAssists } from './getDefaultAssists';
+import { newDefaultAssistsValidators, newDefaultAssists } from './newDefaultAssists';
 
 
 admin.initializeApp();
@@ -59,7 +60,8 @@ try {
     app.post("/lapTimes/upgradeAll", validateFirebaseIdToken, upgradeAllLapTimes);
     app.get("/lapTimes", validateFirebaseIdToken, ...getLapTimesValidators, getLapTime);
     app.delete("/lapTimes/:id?", validateFirebaseIdToken, ...deleteLapTimeValidators, deleteLapTime);
-    app.get("/assists", validateFirebaseIdToken, getDefaultAssists);
+    app.get("/settings/assists", validateFirebaseIdToken, getDefaultAssists);
+    app.post("/settings/assists", validateFirebaseIdToken, ...newDefaultAssistsValidators, newDefaultAssists);
 } catch (err) {
     console.log(err);
 }
