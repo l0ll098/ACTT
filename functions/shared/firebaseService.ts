@@ -122,6 +122,61 @@ export abstract class FirebaseService {
         }
     }
 
+    /**
+     * Returns a LapTime given its id
+     * @param uid User ID
+     * @param lapTimeId LapTime id
+     */
+    public static async getLapTimeById(uid: string, lapTimeId: string) {
+        try {
+            const snap = await admin.database()
+                .ref(`/users/${uid}/lapTimes/${lapTimeId}`)
+                .once("value");
+
+            return Promise.resolve(snap.val() as LapTime);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    /**
+     * Returns a list of LapTimes given their IDs
+     * @param uid User Id
+     * @param lapTimeIds The array of LapTime IDs
+     */
+    public static async getLapTimesByIds(uid: string, lapTimeIds: string[]) {
+        return Promise.all(lapTimeIds.map((lapTimeId: string) => this.getLapTimeById(uid, lapTimeId)));
+    }
+
+    /**
+    * This method will delete a single lapTime.
+    * The "deleteLapTimes" method is based on this one.
+    * @param uid User ID
+    * @param lapTimeId The id of the LapTime to delete
+    */
+    public static async deleteASingleLapTime(uid: string, lapTimeId: string): Promise<boolean> {
+        try {
+            await admin.database()
+                .ref(`/users/${uid}/lapTimes/${lapTimeId}/`)
+                .remove();
+
+            return Promise.resolve(true);
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    /**
+     * This method will delete the array of LapTime(s).
+     * @param uid User ID
+     * @param lapTimeIds The array of LapTimes IDs that has to be deleted.
+     */
+    public static deleteLapTimes(uid: string, lapTimeIds: string[]) {
+        return Promise.all(
+            lapTimeIds.map(lapTimeId => FirebaseService.deleteASingleLapTime(uid, lapTimeId))
+        );
+    }
+
 
     /**
      * Formats multiple LapTime data.

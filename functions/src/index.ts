@@ -9,6 +9,7 @@ import { sendErr } from '../shared/helpers';
 import { newLapTimeValidators, newLapTime } from './newLapTime';
 import { upgradeLapTimeValidators, upgradeLapTime, upgradeAllLapTimes } from './upgradeLapTime';
 import { getLapTimesValidators, getLapTime } from './getLapTimes';
+import { deleteLapTimeValidators, deleteLapTime } from './deleteLapTime';
 
 
 admin.initializeApp();
@@ -49,12 +50,14 @@ async function validateFirebaseIdToken(req: express.Request, res: express.Respon
 }
 
 
+// local base path: http://localhost:5001/assettocorsatimetracker/us-central1/api/<path>
 try {
-    // local base path: http://localhost:5001/assettocorsatimetracker/us-central1/api/<path>
-    app.post("/lapTimes/new", validateFirebaseIdToken, ...newLapTimeValidators, newLapTime);
+    // Create an alias, it will be reachable with and without the /new piece
+    app.post(["/lapTimes", "/lapTimes/new"], validateFirebaseIdToken, ...newLapTimeValidators, newLapTime);
     app.post("/lapTimes/upgrade", validateFirebaseIdToken, ...upgradeLapTimeValidators, upgradeLapTime);
     app.post("/lapTimes/upgradeAll", validateFirebaseIdToken, upgradeAllLapTimes);
     app.get("/lapTimes", validateFirebaseIdToken, ...getLapTimesValidators, getLapTime);
+    app.delete("/lapTimes/:id?", validateFirebaseIdToken, ...deleteLapTimeValidators, deleteLapTime);
 } catch (err) {
     console.log(err);
 }
