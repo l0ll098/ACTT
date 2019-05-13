@@ -177,6 +177,21 @@ export abstract class FirebaseService {
         );
     }
 
+    /**
+     * Returns the defualt assists for the current user
+     * @param uid User ID
+     */
+    public static async getDefaultLapAssists(uid: string): Promise<LapAssists> {
+        try {
+            const snap = await admin.database()
+                .ref(`/users/${uid}/settings/assists`)
+                .once("value");
+
+            return Promise.resolve(snap.val());
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
 
     /**
      * Formats multiple LapTime data.
