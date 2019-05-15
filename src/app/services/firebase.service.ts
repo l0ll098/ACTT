@@ -4,6 +4,7 @@ import { DataSnapshot } from "@angular/fire/database/interfaces";
 
 import { AuthService } from "./auth.service";
 import { LapTime, Track, Car, IsBetterLapTime, LapAssists, Time } from "../models/data.model";
+import { HttpService } from './http.service';
 
 /**
  * @constant userRefInitializer This is used to initialize the user object in the database
@@ -33,7 +34,8 @@ export class FirebaseService {
 
     constructor(
         private authService: AuthService,
-        private db: AngularFireDatabase) {
+        private db: AngularFireDatabase,
+        private httpService: HttpService) {
 
         this.uid = this.authService.getCurrentUser().uid;
     }
@@ -225,60 +227,15 @@ export class FirebaseService {
 
 
     public getLapTimes(limitTo: number = 25): Promise<LapTime[]> {
-        return new Promise((resolve, reject) => {
-            this.getRef("/users/" + this.uid + "/lapTimes")
-                .query
-                .limitToLast(limitTo)
-                .once("value", (data) => {
-                    return resolve(this._formatLapTimeQueryResults(data));
-                }, (err) => {
-                    return reject(err);
-                });
-        });
+        return this.httpService.getLapTimes(limitTo);
     }
 
     public getLapTimesByTrack(track: Track, limitTo: number = 25): Promise<LapTime[]> {
-        return new Promise((resolve, reject) => {
-            this.getRef("/users/" + this.uid + "/lapTimes")
-                .query
-                .orderByChild("track/name")
-                .equalTo(track.name)
-                .limitToLast(limitTo)
-                .once("value", (data) => {
-                    // Convert it to an array
-                    const dataArray: LapTime[] = Object.keys(data.val()).map((key) => {
-                        return data.val()[key];
-                    });
-                    // Sort the data
-                    return resolve(dataArray.sort((a: LapTime, b: LapTime) => {
-                        return a.time.millisecs - b.time.millisecs;
-                    }));
-                }, (err) => {
-                    return reject(err);
-                });
-        });
+        return this.httpService.getLapTimes(limitTo, { track: track });
     }
 
     public getLapTimesByCar(car: Car, limitTo: number = 25): Promise<LapTime[]> {
-        return new Promise((resolve, reject) => {
-            this.getRef("/users/" + this.uid + "/lapTimes")
-                .query
-                .orderByChild("car/name")
-                .equalTo(car.name)
-                .limitToLast(limitTo)
-                .once("value", (data) => {
-                    // Convert it to an array
-                    const dataArray: LapTime[] = Object.keys(data.val()).map((key) => {
-                        return data.val()[key];
-                    });
-                    // Sort the data
-                    return resolve(dataArray.sort((a: LapTime, b: LapTime) => {
-                        return a.time.millisecs - b.time.millisecs;
-                    }));
-                }, (err) => {
-                    return reject(err);
-                });
-        });
+        return this.httpService.getLapTimes(limitTo, { car: car });
     }
 
     /**
