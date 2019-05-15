@@ -6,3 +6,11 @@ export interface GetLapTimeFunction {
         lapTimes: LapTime[]
     };
 }
+
+export interface DeleteLapTime {
+    success: boolean;
+    data: {
+        code: number;
+        msg: string;
+    };
+}

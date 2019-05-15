@@ -327,18 +327,7 @@ export class FirebaseService {
      * @param lapTime The LapTime that has to be deleted
      */
     private deleteASingleLapTime(lapTime: LapTime): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            this.getLapTimeKeyByTimestamp(lapTime).then(key => {
-                this.getRef("/users/" + this.uid + "/lapTimes/" + key + "/")
-                    .remove()
-                    .then(done => {
-                        return resolve(true);
-                    })
-                    .catch(err => {
-                        return reject(false);
-                    });
-            });
-        });
+        return this.httpService.deleteLapTime(lapTime);
     }
 
     /**

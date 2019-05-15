@@ -7,13 +7,14 @@ import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
 import * as fn from '../models/fnResponses.model';
-import { Track, Car } from '../models/data.model';
+import { Track, Car, LapTime } from '../models/data.model';
 
 
 interface KeyVal { [param: string]: string | string[]; }
 type Params = HttpParams | KeyVal;
 type Headers = HttpHeaders | KeyVal;
 
+const MAX_RETRY = 3;
 
 @Injectable()
 export class HttpService {
@@ -29,11 +30,18 @@ export class HttpService {
      * This function takes a relative path (to the /api/ path).
      * @param path The function path
      * @param headers Headers to use when calling the function
-     * @param params GET parameters that will be used as the query string
      */
-    private async _get<T = any>(path: string, headers?: Headers, params?: Params): Promise<T> {
+    private async _get<T = any>(path: string, headers?: Headers): Promise<T> {
         const observable = this.http
-            .get(`${this.baseUrl}/${path}`, { headers: headers, params: params })
+            .get(`${this.baseUrl}/${path}`, { headers: headers })
+            .pipe(retry(MAX_RETRY));
+        const response = await observable.toPromise();
+        return response as T;
+    }
+
+    private async _delete<T = any>(path: string, headers?: Headers): Promise<T> {
+        const observable = this.http
+            .delete(`${this.baseUrl}/${path}`, { headers: headers })
             .pipe(retry());
         const response = await observable.toPromise();
         return response as T;
@@ -50,7 +58,7 @@ export class HttpService {
     public async getLapTimes(limitTo: number, params?: { track?: Track; car?: Car }) {
         const token = await this.authService.getToken();
 
-        let queryString: string;
+        let queryString = "";
         const headers = new HttpHeaders({
             "Authorization": `Bearer ${token}`
         });
@@ -76,4 +84,20 @@ export class HttpService {
         return Promise.resolve(response.data.lapTimes);
     }
 
+
+    public async deleteLapTime(lapTime: LapTime) {
+        const token = await this.authService.getToken();
+
+        const headers = new HttpHeaders({
+            "Authorization": `Bearer ${token}`
+        });
+
+        const response = await this._delete<fn.DeleteLapTime>(`lapTimes/${lapTime.id}`, headers);
+
+        if (response.success) {
+            return Promise.resolve(true);
+        } else {
+            return Promise.reject(false);
+        }
+    }
 }
