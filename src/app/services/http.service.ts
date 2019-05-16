@@ -47,6 +47,16 @@ export class HttpService {
         return response as T;
     }
 
+    private async setFunctionsHeaders() {
+        const token = await this.authService.getToken();
+
+        const headers = new HttpHeaders({
+            "Authorization": `Bearer ${token}`
+        });
+
+        return headers;
+    }
+
     /**
      * Used to fetch saved LapTimes.
      * If no optional parameter is passed, it would be unfiltered.
@@ -56,12 +66,9 @@ export class HttpService {
      * @param params An optional parameter. It could be a Car or a Track
      */
     public async getLapTimes(limitTo: number, params?: { track?: Track; car?: Car }) {
-        const token = await this.authService.getToken();
+        const headers = await this.setFunctionsHeaders();
 
         let queryString = "";
-        const headers = new HttpHeaders({
-            "Authorization": `Bearer ${token}`
-        });
 
         // Check if the optional paramters have been passed
         if (params) {
@@ -86,12 +93,7 @@ export class HttpService {
 
 
     public async deleteLapTime(lapTime: LapTime) {
-        const token = await this.authService.getToken();
-
-        const headers = new HttpHeaders({
-            "Authorization": `Bearer ${token}`
-        });
-
+        const headers = await this.setFunctionsHeaders();
         const response = await this._delete<fn.DeleteLapTime>(`lapTimes/${lapTime.id}`, headers);
 
         if (response.success) {
@@ -102,24 +104,14 @@ export class HttpService {
     }
 
     public async getPreferredLapAssists() {
-        const token = await this.authService.getToken();
-
-        const headers = new HttpHeaders({
-            "Authorization": `Bearer ${token}`
-        });
-
+        const headers = await this.setFunctionsHeaders();
         const response = await this._get<fn.GetLapAssists>(`settings/assists`, headers);
 
         return Promise.resolve(response.data);
     }
 
     public async getLapTimeById(id: string) {
-        const token = await this.authService.getToken();
-
-        const headers = new HttpHeaders({
-            "Authorization": `Bearer ${token}`
-        });
-
+        const headers = await this.setFunctionsHeaders();
         const response = await this._get<fn.GetLapTimeById>(`lapTimes/${id}`, headers);
 
         return Promise.resolve(response.data.lapTime);
