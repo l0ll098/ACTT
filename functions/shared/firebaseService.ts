@@ -71,7 +71,7 @@ export abstract class FirebaseService {
                 .limitToLast(limitTo)
                 .once("value");
 
-            return this._formatLapTimeQueryResults(data);
+            return this._formatMultipleLapTimeQueryResults(data);
         } catch (err) {
             throw err;
         }
@@ -99,7 +99,7 @@ export abstract class FirebaseService {
                 .once("value");
 
             // Finally, format data and return them
-            return this._formatLapTimeQueryResults(data);
+            return this._formatMultipleLapTimeQueryResults(data);
         } catch (err) {
             throw err;
         }
@@ -116,7 +116,7 @@ export abstract class FirebaseService {
                 .once("value");
 
             // Finally, format data and return them
-            return this._formatLapTimeQueryResults(snap);
+            return this._formatMultipleLapTimeQueryResults(snap);
         } catch (err) {
             throw err;
         }
@@ -133,7 +133,11 @@ export abstract class FirebaseService {
                 .ref(`/users/${uid}/lapTimes/${lapTimeId}`)
                 .once("value");
 
-            return Promise.resolve(snap.val() as LapTime);
+            if (snap.hasChildren()) {
+                return this._formatSingleLapTimeQueryResult(snap);
+            } else {
+                return Promise.reject({ done: false, error: "LapTime not found", status: HttpStatus.NotFound });
+            }
         } catch (err) {
             throw err;
         }
@@ -209,30 +213,41 @@ export abstract class FirebaseService {
         }
     }
 
+
+    /**
+     * Formats a single LapTime data
+     * @param rawData DataSnapshot returned from Firebase DB
+     */
+    private static _formatSingleLapTimeQueryResult(rawData: DataSnapshot) {
+        const lapTime: LapTime = rawData.val();
+        if (!lapTime) {
+            return null;
+        }
+
+        lapTime.id = rawData.key as string;
+        lapTime.humanTime = this._msToHumanTime(lapTime.time.millisecs);
+
+        return lapTime;
+    }
+
     /**
      * Formats multiple LapTime data.
      * @param rawData DataSnapshot returned from Firebase DB
      */
-    private static _formatLapTimeQueryResults(rawData: DataSnapshot) {
+    private static _formatMultipleLapTimeQueryResults(rawData: DataSnapshot) {
         const data = rawData.val();
         if (!data) {
             return [];
         }
 
-        // Convert it to an array
+        // Convert it to an array and format data
         const dataArray: LapTime[] = Object.keys(data).map((key) => {
-            const lapTime: LapTime = data[key];
-            lapTime.id = key;
-            return lapTime;
+            return this._formatSingleLapTimeQueryResult(rawData.child(key)) as LapTime;
         });
+
         // Sort the data
         const sorted = dataArray.sort((a: LapTime, b: LapTime) => {
             return a.time.millisecs - b.time.millisecs;
-        });
-
-        // Calculate the human time
-        sorted.forEach((lapTime: LapTime) => {
-            lapTime.humanTime = this._msToHumanTime(lapTime.time.millisecs);
         });
 
         return sorted;

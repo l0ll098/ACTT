@@ -8,7 +8,7 @@ import { sendErr } from '../shared/helpers';
 
 import { newLapTimeValidators, newLapTime } from './newLapTime';
 import { upgradeLapTimeValidators, upgradeLapTime, upgradeAllLapTimes } from './upgradeLapTime';
-import { getLapTimesValidators, getLapTime } from './getLapTimes';
+import { getLapTimesValidators, getLapTime, getLapTimeByIdValidators, getLapTimeById } from './getLapTimes';
 import { deleteLapTimeValidators, deleteLapTime } from './deleteLapTime';
 import { getDefaultAssists } from './getDefaultAssists';
 import { newDefaultAssistsValidators, newDefaultAssists } from './newDefaultAssists';
@@ -59,6 +59,7 @@ try {
     app.post("/lapTimes/upgrade", validateFirebaseIdToken, ...upgradeLapTimeValidators, upgradeLapTime);
     app.post("/lapTimes/upgradeAll", validateFirebaseIdToken, upgradeAllLapTimes);
     app.get("/lapTimes", validateFirebaseIdToken, ...getLapTimesValidators, getLapTime);
+    app.get("/lapTimes/:id", validateFirebaseIdToken, ...getLapTimeByIdValidators, getLapTimeById);
     app.delete("/lapTimes/:id?", validateFirebaseIdToken, ...deleteLapTimeValidators, deleteLapTime);
     app.get("/settings/assists", validateFirebaseIdToken, getDefaultAssists);
     app.post("/settings/assists", validateFirebaseIdToken, ...newDefaultAssistsValidators, newDefaultAssists);

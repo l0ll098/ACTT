@@ -305,20 +305,7 @@ export class FirebaseService {
      * @param id Id of the LapTime to return
      */
     public getLapTimeById(id: string): Promise<LapTime> {
-        return new Promise((resolve, reject) => {
-            this.getRef("/users/" + this.uid + "/lapTimes/" + id)
-                .query
-                .once("value", (data) => {
-                    const lapTime: LapTime = data.val();
-
-                    if (lapTime) {
-                        lapTime.humanTime = this._msToHumanTime(lapTime.time.millisecs);
-                        return resolve(lapTime);
-                    } else {
-                        return reject({ notFound: true });
-                    }
-                });
-        });
+        return this.httpService.getLapTimeById(id);
     }
 
     /**
@@ -346,17 +333,7 @@ export class FirebaseService {
      * It represents assists used by the current user.
      */
     public getLapAssists(): Promise<LapAssists> {
-        return new Promise((resolve, reject) => {
-            this.getRef("/users/" + this.uid + "/settings/assists")
-                .query
-                .once("value")
-                .then((data: DataSnapshot) => {
-                    return resolve(data.val());
-                })
-                .catch((err) => {
-                    return reject(err);
-                });
-        });
+        return this.httpService.getPreferredLapAssists();
     }
 
     /**
@@ -374,36 +351,6 @@ export class FirebaseService {
                     return reject(err);
                 });
         });
-    }
-
-
-    /**
-     * Formats multiple LapTime data.
-     * @param rawData DataSnapshot returned from Firebase DB
-     */
-    private _formatLapTimeQueryResults(rawData: DataSnapshot) {
-        const data = rawData.val();
-        if (!data) {
-            return [];
-        }
-
-        // Convert it to an array
-        const dataArray: LapTime[] = Object.keys(data).map((key) => {
-            const lapTime: LapTime = data[key];
-            lapTime.id = key;
-            return lapTime;
-        });
-        // Sort the data
-        const sorted = dataArray.sort((a: LapTime, b: LapTime) => {
-            return a.time.millisecs - b.time.millisecs;
-        });
-
-        // Calculate the human time
-        sorted.forEach((lapTime: LapTime) => {
-            lapTime.humanTime = this._msToHumanTime(lapTime.time.millisecs);
-        });
-
-        return sorted;
     }
 
     /**

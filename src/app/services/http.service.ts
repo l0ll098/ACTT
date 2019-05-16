@@ -42,7 +42,7 @@ export class HttpService {
     private async _delete<T = any>(path: string, headers?: Headers): Promise<T> {
         const observable = this.http
             .delete(`${this.baseUrl}/${path}`, { headers: headers })
-            .pipe(retry());
+            .pipe(retry(MAX_RETRY));
         const response = await observable.toPromise();
         return response as T;
     }
@@ -99,5 +99,29 @@ export class HttpService {
         } else {
             return Promise.reject(false);
         }
+    }
+
+    public async getPreferredLapAssists() {
+        const token = await this.authService.getToken();
+
+        const headers = new HttpHeaders({
+            "Authorization": `Bearer ${token}`
+        });
+
+        const response = await this._get<fn.GetLapAssists>(`settings/assists`, headers);
+
+        return Promise.resolve(response.data);
+    }
+
+    public async getLapTimeById(id: string) {
+        const token = await this.authService.getToken();
+
+        const headers = new HttpHeaders({
+            "Authorization": `Bearer ${token}`
+        });
+
+        const response = await this._get<fn.GetLapTimeById>(`lapTimes/${id}`, headers);
+
+        return Promise.resolve(response.data.lapTime);
     }
 }

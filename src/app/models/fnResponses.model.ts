@@ -1,4 +1,4 @@
-import { LapTime } from './data.model';
+import { LapTime, LapAssists } from './data.model';
 
 export interface GetLapTimeFunction {
     success: boolean;
@@ -12,5 +12,17 @@ export interface DeleteLapTime {
     data: {
         code: number;
         msg: string;
+    };
+}
+
+export interface GetLapAssists {
+    success: boolean;
+    data: LapAssists;
+}
+
+export interface GetLapTimeById {
+    success: boolean;
+    data: {
+        lapTime: LapTime
     };
 }

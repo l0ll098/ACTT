@@ -61,3 +61,27 @@ export async function getLapTime(req: Request, res: Response) {
     }
 
 }
+
+
+export const getLapTimeByIdValidators = [
+    check("id").isString().not().isEmpty()
+];
+
+export async function getLapTimeById(req: Request, res: Response) {
+    if (!validate(req, res)) {
+        return false;
+    }
+
+    const uid = ((req as any).user as admin.auth.DecodedIdToken).uid;
+    const lapTimeId: string = req.params.id;
+
+    try {
+        const lapTime = await FirebaseService.getLapTimeById(uid, lapTimeId);
+        return sendOK(res, { success: true, lapTime: lapTime });
+    } catch (err) {
+        if (err && err.status === HttpStatus.NotFound) {
+            return sendErr(res, HttpStatus.NotFound, err);
+        }
+        return sendErr(res, HttpStatus.InternalServerError, err);
+    }
+}
