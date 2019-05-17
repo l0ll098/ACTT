@@ -38,6 +38,14 @@ export class FirebaseService {
         private httpService: HttpService) {
 
         this.uid = this.authService.getCurrentUser().uid;
+
+        this.upgradeAllLapTimes()
+            .then((data) => {
+                console.log(data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     /**
@@ -125,6 +133,13 @@ export class FirebaseService {
      */
     public saveLapAssists(lapAssists: LapAssists) {
         return this.httpService.savePreferredLapAssists(lapAssists);
+    }
+
+    /**
+     * Upgrades all user's LapTimes
+     */
+    private upgradeAllLapTimes() {
+        return this.httpService.upgradeAllLapTimes();
     }
 
 }

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { retry } from 'rxjs/operators';
 
@@ -138,4 +138,22 @@ export class HttpService {
 
         return Promise.resolve(response.data.lapTime);
     }
+
+    public async upgradeAllLapTimes() {
+        const headers = await this.setFunctionsHeaders();
+
+        try {
+            const response = await this._post<fn.UpgradeLapTimes>(`lapTimes/upgradeAll`, headers);
+            return Promise.resolve(response.data.lapTimes);
+        } catch (err) {
+            // Check if the response was 304. In that case, don't treat it like a real error
+            if ((err as HttpErrorResponse).status === 304) {
+                return Promise.reject(null);
+            }
+
+            // Otherwise propagate the error
+            return Promise.reject(err);
+        }
+    }
+
 }

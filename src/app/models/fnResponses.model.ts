@@ -40,3 +40,10 @@ export interface PostNewLapTime {
         lapTime: LapTime;
     };
 }
+
+export interface UpgradeLapTimes {
+    success: boolean;
+    data: {
+        lapTimes: LapTime[];
+    };
+}
