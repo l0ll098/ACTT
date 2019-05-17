@@ -187,8 +187,6 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
     }
 
     ngAfterContentInit() {
-        this.firebaseService.initializeCurrentUserRef();
-
         // Initialize defualt settings
         this.settingsService.initDefaultSettingsValues();
 

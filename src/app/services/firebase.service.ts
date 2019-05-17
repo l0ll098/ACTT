@@ -1,72 +1,26 @@
 import { Injectable } from "@angular/core";
-import { AngularFireDatabase } from "@angular/fire/database";
-import { DataSnapshot } from "@angular/fire/database/interfaces";
 
-import { AuthService } from "./auth.service";
-import { LapTime, Track, Car, IsBetterLapTime, LapAssists, Time } from "../models/data.model";
+import { LapTime, Track, Car, LapAssists } from "../models/data.model";
 import { HttpService } from './http.service';
+import { LoggerService } from "./log.service";
 
-/**
- * @constant userRefInitializer This is used to initialize the user object in the database
- * (even though it's pretty useless if properties aren't specified).
- */
-const userRefInitializer = {
-    settings: {
-        receiveNotifications: false,
-        assists: {
-
-        }
-    },
-    notifications: {
-        tokens: {
-
-        }
-    },
-    lapTimes: {
-
-    }
-};
 
 @Injectable()
 export class FirebaseService {
 
-    private uid;
-
-    constructor(
-        private authService: AuthService,
-        private db: AngularFireDatabase,
-        private httpService: HttpService) {
-
-        this.uid = this.authService.getCurrentUser().uid;
+    constructor(private httpService: HttpService, private loggerService: LoggerService) {
 
         this.upgradeAllLapTimes()
             .then((data) => {
-                console.log(data);
+                if (data && data.length > 0) {
+                    this.loggerService.info(`Upgraded ${data.length} LapTimes`);
+                } else {
+                    this.loggerService.info("No LapTimes to upgrade");
+                }
             })
             .catch((err) => {
-                console.log(err);
-            });
-    }
-
-    /**
-     * Returns the current user's object stored in the DataBase
-     * @returns A reference to the user's object
-     */
-    public getUserRef() {
-        return this.db.object("/users/" + this.uid);
-    }
-
-    /**
-     * This will initialize the current user ref ONLY if it doesn't already contains some data.
-     * @see {userRefInitializer} This object will be used as a template to initialize the referenced object.
-     */
-    public initializeCurrentUserRef() {
-        return this.getUserRef()
-            .valueChanges()
-            .subscribe(data => {
-                if (!(data)) {
-                    this.getUserRef().update(userRefInitializer);
-                }
+                this.loggerService.log("An error occured while upgrading some LapTime.");
+                this.loggerService.error(err);
             });
     }
 

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { retry } from 'rxjs/operators';
 
@@ -10,9 +10,7 @@ import * as fn from '../models/fnResponses.model';
 import { Track, Car, LapTime, LapAssists } from '../models/data.model';
 
 
-interface KeyVal { [param: string]: string | string[]; }
-type Params = HttpParams | KeyVal;
-type Headers = HttpHeaders | KeyVal;
+type Headers = HttpHeaders | { [param: string]: string | string[]; };
 
 const MAX_RETRY = 3;
 
@@ -55,6 +53,9 @@ export class HttpService {
         return response as T;
     }
 
+    /**
+     * An helper function to set headers required to call Firebase Functions
+     */
     private async setFunctionsHeaders() {
         const token = await this.authService.getToken();
 
@@ -148,7 +149,7 @@ export class HttpService {
         } catch (err) {
             // Check if the response was 304. In that case, don't treat it like a real error
             if ((err as HttpErrorResponse).status === 304) {
-                return Promise.reject(null);
+                return Promise.resolve(null);
             }
 
             // Otherwise propagate the error
