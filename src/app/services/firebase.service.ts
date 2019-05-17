@@ -285,20 +285,6 @@ export class FirebaseService {
         });
     }
 
-    private getLapTimeKeyByTimestamp(lapTime: LapTime): Promise<string> {
-        return new Promise((resolve, reject) => {
-            this.getRef("/users/" + this.uid + "/lapTimes/")
-                .query
-                .orderByChild("timestamp")
-                .limitToFirst(1)
-                .equalTo(lapTime.timestamp)
-                .once("value", (data) => {
-                    const savedLapTime = data.val();
-                    return resolve(Object.keys(savedLapTime)[0]);
-                });
-        });
-    }
-
     /**
      * Returns details of a LapTime given its ID.
      * In case it doesn't exist, the promise will be rejected.
@@ -341,31 +327,7 @@ export class FirebaseService {
      * @param lapAssists Assists used by current user
      */
     public saveLapAssists(lapAssists: LapAssists) {
-        return new Promise((resolve, reject) => {
-            this.getRef("/users/" + this.uid + "/settings/assists")
-                .set(lapAssists)
-                .then((ok) => {
-                    return resolve(true);
-                })
-                .catch((err) => {
-                    return reject(err);
-                });
-        });
+        return this.httpService.savePreferredLapAssists(lapAssists);
     }
 
-    /**
-     * Converts milliseconds in "human time" (minutes:seconds:milliseconds)
-     * @param ms LapTime time in milliseconds (lapTime.time.millisecs)
-     */
-    private _msToHumanTime(ms: number): Time {
-        const min = Math.floor(ms / 60000);
-        ms = ms - (min * 60000);
-        const secs = Math.floor(ms / 1000);
-        ms = ms - (secs * 1000);
-        return {
-            millisecs: ms,
-            seconds: secs,
-            minutes: min
-        };
-    }
 }

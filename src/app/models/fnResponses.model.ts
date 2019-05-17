@@ -26,3 +26,10 @@ export interface GetLapTimeById {
         lapTime: LapTime
     };
 }
+
+export interface PostLapAssists {
+    success: boolean;
+    data: {
+        lapAssists: LapAssists
+    };
+}

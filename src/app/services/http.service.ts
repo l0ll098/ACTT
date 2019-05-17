@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
 import * as fn from '../models/fnResponses.model';
-import { Track, Car, LapTime } from '../models/data.model';
+import { Track, Car, LapTime, LapAssists } from '../models/data.model';
 
 
 interface KeyVal { [param: string]: string | string[]; }
@@ -42,6 +42,14 @@ export class HttpService {
     private async _delete<T = any>(path: string, headers?: Headers): Promise<T> {
         const observable = this.http
             .delete(`${this.baseUrl}/${path}`, { headers: headers })
+            .pipe(retry(MAX_RETRY));
+        const response = await observable.toPromise();
+        return response as T;
+    }
+
+    private async _post<T = any>(path: string, headers?: Headers, params?: Object): Promise<T> {
+        const observable = this.http
+            .post(`${this.baseUrl}/${path}`, params, { headers: headers })
             .pipe(retry(MAX_RETRY));
         const response = await observable.toPromise();
         return response as T;
@@ -115,5 +123,12 @@ export class HttpService {
         const response = await this._get<fn.GetLapTimeById>(`lapTimes/${id}`, headers);
 
         return Promise.resolve(response.data.lapTime);
+    }
+
+    public async savePreferredLapAssists(lapAssists: LapAssists) {
+        const headers = await this.setFunctionsHeaders();
+        const response = await this._post<fn.PostLapAssists>(`settings/assists`, headers, { assists: lapAssists });
+
+        return Promise.resolve(response.data.lapAssists);
     }
 }

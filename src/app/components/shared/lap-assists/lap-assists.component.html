@@ -25,7 +25,7 @@
 
             <mat-form-field class="select">
                 <mat-label>Choose one</mat-label>
-                <mat-select formControlName="tractionControl" (change)="onInput()">
+                <mat-select formControlName="tractionControl" (selectionChange)="onInput()">
                     <mat-option *ngFor="let val of TRACTION_CONTROL_VALUES" [value]="val">
                         {{val}}%
                     </mat-option>
@@ -39,7 +39,7 @@
 
             <mat-form-field class="select">
                 <mat-label>Pick one</mat-label>
-                <mat-select formControlName="abs" (change)="onInput()">
+                <mat-select formControlName="abs" (selectionChange)="onInput()">
                     <mat-option *ngFor="let val of ABS_VALUE" [value]="val">
                         {{val}}
                     </mat-option>
@@ -52,7 +52,7 @@
 
             <mat-form-field class="select">
                 <mat-label>Choose one</mat-label>
-                <mat-select formControlName="stabilityControl" (change)="onInput()">
+                <mat-select formControlName="stabilityControl" (selectionChange)="onInput()">
                     <mat-option *ngFor="let val of STABILITY_CONTROL_VALUES" [value]="val">
                         {{val}}%
                     </mat-option>
@@ -65,7 +65,7 @@
 
             <mat-form-field class="select">
                 <mat-label>Select one</mat-label>
-                <mat-select formControlName="mechanicalDamages" (change)="onInput()">
+                <mat-select formControlName="mechanicalDamages" (selectionChange)="onInput()">
                     <mat-option *ngFor="let val of MECHANICAL_DAMAGES_VALUES" [value]="val">
                         {{val}}%
                     </mat-option>

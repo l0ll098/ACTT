@@ -1,8 +1,8 @@
 import {
-    Component, ChangeDetectionStrategy, Input, ViewChild, Optional,
-    Self, ElementRef, OnDestroy, ChangeDetectorRef
+    Component, Input, ViewChild, ElementRef, OnDestroy,
+    ChangeDetectorRef, forwardRef, ChangeDetectionStrategy
 } from '@angular/core';
-import { FormControl, FormGroup, ControlValueAccessor, DefaultValueAccessor, NgControl } from '@angular/forms';
+import { FormControl, FormGroup, ControlValueAccessor, DefaultValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { LapAssists } from '../../../models/data.model';
 import { Subject } from 'rxjs';
 
@@ -11,7 +11,14 @@ import { Subject } from 'rxjs';
     selector: "app-lap-assists",
     templateUrl: "lap-assists.component.html",
     styleUrls: ["./lap-assists.component.css"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => LapAssistsComponent),
+            multi: true
+        }
+    ]
 })
 export class LapAssistsComponent implements ControlValueAccessor, OnDestroy {
 
@@ -36,12 +43,13 @@ export class LapAssistsComponent implements ControlValueAccessor, OnDestroy {
     }
     set value(lapAssists: LapAssists | null) {
         this._value = lapAssists;
-        this.propagateChange(this._value);
+        this.propagateChange(lapAssists);
 
         if (lapAssists) {
             this.lapAssistsFG.setValue(lapAssists);
-            this.changeDetectorRef.markForCheck();
         }
+
+        this.changeDetectorRef.markForCheck();
     }
     private _value: LapAssists = null;
 
@@ -80,12 +88,7 @@ export class LapAssistsComponent implements ControlValueAccessor, OnDestroy {
 
     constructor(
         private elRef: ElementRef<HTMLElement>,
-        private changeDetectorRef: ChangeDetectorRef,
-        @Optional() @Self() public ngControl: NgControl) {
-
-        if (this.ngControl != null) {
-            this.ngControl.valueAccessor = this;
-        }
+        private changeDetectorRef: ChangeDetectorRef) {
 
         this.lapAssistsFG = new FormGroup({
             autoShifter: this.FormControls.autoShifter,
