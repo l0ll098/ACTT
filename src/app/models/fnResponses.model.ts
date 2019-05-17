@@ -33,3 +33,10 @@ export interface PostLapAssists {
         lapAssists: LapAssists
     };
 }
+
+export interface PostNewLapTime {
+    success: boolean;
+    data: {
+        lapTime: LapTime;
+    };
+}

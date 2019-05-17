@@ -131,4 +131,11 @@ export class HttpService {
 
         return Promise.resolve(response.data.lapAssists);
     }
+
+    public async saveNewLapTime(lapTime: LapTime) {
+        const headers = await this.setFunctionsHeaders();
+        const response = await this._post<fn.PostNewLapTime>(`lapTimes`, headers, lapTime);
+
+        return Promise.resolve(response.data.lapTime);
+    }
 }
