@@ -3,7 +3,7 @@ import * as admin from "firebase-admin";
 import { check } from "express-validator/check";
 
 import { LapTime } from "../shared/appModels";
-import { validate, sendErr, sendOK, upgradeData } from "../shared/helpers";
+import { validate, sendErr, sendOK, FirebaseService } from "../shared/helpers";
 import { HttpStatus } from "../shared/httpStatus";
 
 
@@ -35,7 +35,7 @@ export async function upgradeLapTime(req: Request, res: Response) {
         .val();
 
     try {
-        const upgrade = await upgradeData(uid, lapTime, lapTimeId);
+        const upgrade = await FirebaseService.upgradeData(uid, lapTime, lapTimeId);
         if (upgrade.done) {
             return sendOK(res, { done: true, lapTime: lapTime });
         }
@@ -83,7 +83,7 @@ export async function upgradeAllLapTimes(req: Request, res: Response) {
 
     try {
         const upgradedData = await Promise.all(lapTimes.map((lapTime) => {
-            return upgradeData(uid, lapTime, lapTime.id as string);
+            return FirebaseService.upgradeData(uid, lapTime, lapTime.id as string);
         }));
 
         return sendOK(res, { done: true, lapTimes: upgradedData });

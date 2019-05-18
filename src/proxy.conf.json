@@ -1,0 +1,8 @@
+{
+    "/api": {
+        "target": "http://localhost:5001/assettocorsatimetracker/us-central1/",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug"
+    }
+}

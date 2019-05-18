@@ -28,11 +28,6 @@ export interface Time {
 }
 
 
-export interface IsBetterLapTime {
-    isBetter: boolean;
-    reason: "Better time" | "Better LapNumber" | "First time saved" | "Worse Time" | "Worse LapNumber";
-}
-
 export interface Log {
     id?: number;
     timestamp?: number;

@@ -58,6 +58,7 @@ import { FirebaseService } from "./services/firebase.service";
 import { IndexedDBService } from "./services/indexedDb.service";
 import { SettingsService } from './services/settings.service';
 import { LoggerService } from './services/log.service';
+import { HttpService } from './services/http.service';
 
 import { LapTimePipe } from './pipes/lap-time.pipe';
 
@@ -178,7 +179,8 @@ const appRoutes: Routes = [
 		FirebaseService,
 		IndexedDBService,
 		SettingsService,
-		LoggerService
+		LoggerService,
+		HttpService
 	],
 	bootstrap: [
 		AppComponent

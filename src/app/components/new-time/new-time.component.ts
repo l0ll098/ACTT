@@ -159,23 +159,7 @@ export class NewTimeComponent implements AfterViewInit {
             .then((data) => {
                 this.loggerService.log(data);
 
-                if (data.isBetter) {
-                    this.router.navigate(["/times"]);
-                } else {
-                    this.dialog.open(DialogComponent, {
-                        data: {
-                            title: "Error",
-                            message: "You have already saved a better lap time using this car on this track.",
-                            doActionBtn: {
-                                text: "Ok"
-                            }
-                        }
-                    });
-
-                    this.disableSaveButton = false;
-                    // Force view update
-                    this.changeDetectorRef.markForCheck();
-                }
+                this.router.navigate(["/times"]);
             })
             .catch(err => {
                 this.loggerService.log(err);
