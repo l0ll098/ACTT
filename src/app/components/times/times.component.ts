@@ -1,4 +1,6 @@
-import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
+import { Component, ViewChild, AfterViewInit,
+	ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from "@angular/core";
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatPaginator, Sort, MatDialog } from "@angular/material";
 import { SelectionModel } from "@angular/cdk/collections";
 
@@ -9,7 +11,6 @@ import { LapTime } from "../../models/data.model";
 import { FirebaseService } from "../../services/firebase.service";
 import { SettingsService, SettingsName } from "../../services/settings.service";
 import { LoggerService } from "../../services/log.service";
-import { Router } from '@angular/router';
 
 
 @Component({
@@ -18,7 +19,7 @@ import { Router } from '@angular/router';
 	styleUrls: ['./times.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TimesComponent implements AfterViewInit {
+export class TimesComponent implements AfterViewInit, OnInit {
 
 	public lapTimes: LapTime[] = [];
 	public displayedColumns: string[] = [
@@ -42,6 +43,7 @@ export class TimesComponent implements AfterViewInit {
 
 	constructor(
 		private changeDetectorRef: ChangeDetectorRef,
+		private route: ActivatedRoute,
 		private router: Router,
 		private dialog: MatDialog,
 		private firebaseService: FirebaseService,
@@ -49,6 +51,10 @@ export class TimesComponent implements AfterViewInit {
 		private loggerService: LoggerService
 	) {
 		this.selection = new SelectionModel<LapTime>(this.allowMultiSelect, this.initialSelection);
+	}
+
+	ngOnInit() {
+		this.filter = this.route.snapshot.queryParamMap.get("filter") || "";
 	}
 
 	ngAfterViewInit() {
@@ -193,7 +199,7 @@ export class TimesComponent implements AfterViewInit {
 								this.loggerService.groupEnd();
 
 								// De-select all the checkboxes
-								this.selection.clear();		// TODO: Can be personalized through settings
+								this.selection.clear();
 							}
 						}
 					}
