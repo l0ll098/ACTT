@@ -45,7 +45,11 @@ A PWA to keep track of your personal best lap times in Assetto Corsa
 
 - Production (AOT builds and Service Worker generation)
     ```
-        npm run buildProd
+        npm run build:prod
+    ```
+- Production (AOT builds, Service Worker generation and Angular Universal (SSR))
+    ```
+        npm run gulp
     ```
 
 ## Deploy
