@@ -6,12 +6,14 @@ import * as cors from "cors";
 import { HttpStatus } from '../shared/httpStatus';
 import { sendErr } from '../shared/helpers';
 
-import { newLapTimeValidators, newLapTime } from './newLapTime';
-import { upgradeLapTimeValidators, upgradeLapTime, upgradeAllLapTimes } from './upgradeLapTime';
-import { getLapTimesValidators, getLapTime, getLapTimeByIdValidators, getLapTimeById } from './getLapTimes';
-import { deleteLapTimeValidators, deleteLapTime } from './deleteLapTime';
-import { getDefaultAssists } from './getDefaultAssists';
-import { newDefaultAssistsValidators, newDefaultAssists } from './newDefaultAssists';
+import { newLapTimeValidators, newLapTime } from './ACTT/newLapTime';
+import { upgradeLapTimeValidators, upgradeLapTime, upgradeAllLapTimes } from './ACTT/upgradeLapTime';
+import { getLapTimesValidators, getLapTime, getLapTimeByIdValidators, getLapTimeById } from './ACTT/getLapTimes';
+import { deleteLapTimeValidators, deleteLapTime } from './ACTT/deleteLapTime';
+import { getDefaultAssists } from './ACTT/getDefaultAssists';
+import { newDefaultAssistsValidators, newDefaultAssists } from './ACTT/newDefaultAssists';
+
+const universal = require(`${process.cwd()}/dist/server`).app;
 
 
 admin.initializeApp();
@@ -69,3 +71,6 @@ try {
 
 // Expose Express API as a single Cloud Function:
 export const api = functions.https.onRequest(app);
+
+// SSR function
+export const ssr = functions.https.onRequest(universal);

@@ -8,6 +8,7 @@
 /dist
 /tmp
 /out-tsc
+/functions/dist
 
 # Firebase
 .firebaserc

@@ -2,10 +2,10 @@ import { Response, Request } from "express";
 import { check } from "express-validator/check";
 import * as admin from "firebase-admin";
 
-import { FirebaseService } from "../shared/firebaseService";
-import { validate, sendErr, sendOK, isValidStringPercentage, isValidAbsValue } from "../shared/helpers";
-import { HttpStatus } from "../shared/httpStatus";
-import { LapAssists } from "../shared/appModels";
+import { FirebaseService } from "../../shared/firebaseService";
+import { validate, sendErr, sendOK, isValidStringPercentage, isValidAbsValue } from "../../shared/helpers";
+import { HttpStatus } from "../../shared/httpStatus";
+import { LapAssists } from "../../shared/appModels";
 
 export const newDefaultAssistsValidators = [
     check("assists.autoShifter").isBoolean(),

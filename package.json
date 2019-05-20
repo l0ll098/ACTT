@@ -59,6 +59,7 @@
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~10.9.4",
+    "bufferutil": "^4.0.1",
     "codelyzer": "~4.4.4",
     "gulp": "^4.0.0",
     "gulp-exec": "^3.0.2",
@@ -75,6 +76,9 @@
     "ts-node": "~7.0.1",
     "tslint": "~5.11.0",
     "typescript": "3.1.6",
-    "webpack-cli": "^3.1.0"
+    "utf-8-validate": "^5.0.2",
+    "webpack-cli": "^3.1.0",
+    "ws": "^7.0.0",
+    "xhr2": "^0.1.4"
   }
 }
