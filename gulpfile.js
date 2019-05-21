@@ -8,7 +8,7 @@ const Tasks = Object.freeze({
 
     BuildClient: "BuildClient",
     BuildFunctions: "BuildFunctions",
-    BuildServer: "BuildServer"
+    BuildServerAndClient: "BuildServerAndClient"
 });
 
 const DIST_FOLDER = "dist";
@@ -24,7 +24,7 @@ gulp.task(Tasks.BuildClient, () => {
 /**
  * Compiles Server and client by executing the build:prod command specified in the package.json file
  */
-gulp.task(Tasks.BuildServer, () => {
+gulp.task(Tasks.BuildServerAndClient, () => {
     return gulp
         .src(".")
         .pipe(exec("npm run build:ssr:prod"));
@@ -41,7 +41,8 @@ gulp.task(Tasks.BuildFunctions, () => {
 gulp.task(Tasks.Clean, () => {
     return del([
         `${DIST_FOLDER}/**`,
-        `${FUNCTIONS_FOLDER}/lib/**`
+        `${FUNCTIONS_FOLDER}/lib/**`,
+        `${FUNCTIONS_FOLDER}/dist/**`
     ]);
 });
 
@@ -49,9 +50,7 @@ gulp.task(Tasks.Clean, () => {
 gulp.task("default", (done) => {
     return gulp.series(
         Tasks.Clean,
-        gulp.parallel([
-            Tasks.BuildServer,
-            Tasks.BuildFunctions
-        ])
+        Tasks.BuildServerAndClient,
+        Tasks.BuildFunctions
     )(done);
 });
