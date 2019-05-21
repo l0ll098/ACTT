@@ -137,7 +137,7 @@ const appRoutes: Routes = [
 		LapTimePipe
 	],
 	imports: [
-		BrowserModule,
+		BrowserModule.withServerTransition({ appId: 'serverApp' }),
 		BrowserAnimationsModule,
 		RouterModule.forRoot(
 			appRoutes,

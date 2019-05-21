@@ -1,4 +1,4 @@
-import { firebaseui, firebase } from "firebaseui-angular";
+import { firebase } from "firebaseui-angular";
 
 export const environment = {
 	production: true,
@@ -11,7 +11,8 @@ export const environment = {
 		databaseURL: "<your-database-URL>",
 		projectId: "<your-project-id>",
 		storageBucket: "<your-storage-bucket>",
-		messagingSenderId: "<your-messaging-sender-id>"
+		messagingSenderId: "<your-messaging-sender-id>",
+		functionsUrl: "https://<region>-<appname>.cloudfunctions.net/api"
 	}
 };
 
@@ -23,5 +24,5 @@ export const firebaseUIConfigs: firebaseui.auth.Config = {
 	],
 	tosUrl: '<your-tos-link>',
 	privacyPolicyUrl: '<your-privacyPolicyUrl-link>',
-	credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
+	credentialHelper: "googleyolo"
 };

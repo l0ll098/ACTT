@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import * as admin from "firebase-admin";
 import { check } from "express-validator/check";
 
-import { LapTime } from "../shared/appModels";
-import { validate, sendErr, sendOK, FirebaseService } from "../shared/helpers";
-import { HttpStatus } from "../shared/httpStatus";
+import { LapTime } from "../../shared/appModels";
+import { validate, sendErr, sendOK, FirebaseService } from "../../shared/helpers";
+import { HttpStatus } from "../../shared/httpStatus";
 
 
 export const upgradeLapTimeValidators = [

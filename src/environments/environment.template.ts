@@ -1,4 +1,4 @@
-import { firebaseui, firebase } from "firebaseui-angular";
+import { firebase } from "firebaseui-angular";
 
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
@@ -16,7 +16,8 @@ export const environment = {
 		databaseURL: "<your-database-URL>",
 		projectId: "<your-project-id>",
 		storageBucket: "<your-storage-bucket>",
-		messagingSenderId: "<your-messaging-sender-id>"
+		messagingSenderId: "<your-messaging-sender-id>",
+		functionsUrl: "<function-url>/api"
 	}
 };
 
@@ -28,5 +29,5 @@ export const firebaseUIConfigs: firebaseui.auth.Config = {
 	],
 	tosUrl: '<your-tos-link>',
 	privacyPolicyUrl: '<your-privacyPolicyUrl-link>',
-	credentialHelper: firebaseui.auth.CredentialHelper.GOOGLE_YOLO
+	credentialHelper: "googleyolo"
 };

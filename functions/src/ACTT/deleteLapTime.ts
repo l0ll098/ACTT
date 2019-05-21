@@ -2,9 +2,9 @@ import { Response, Request } from "express";
 import { check } from "express-validator/check";
 import * as admin from "firebase-admin";
 
-import { FirebaseService } from "../shared/firebaseService";
-import { validate, sendErr, sendOK } from "../shared/helpers";
-import { HttpStatus } from "../shared/httpStatus";
+import { FirebaseService } from "../../shared/firebaseService";
+import { validate, sendErr, sendOK } from "../../shared/helpers";
+import { HttpStatus } from "../../shared/httpStatus";
 
 export const deleteLapTimeValidators = [
     check("id").isString().not().isEmpty().optional(),
