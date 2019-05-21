@@ -1,4 +1,4 @@
-<div class="centered" *ngIf="isBrowser">
+<div class="centered">
 	<p>
 		Login is required.
 	</p>
@@ -6,4 +6,4 @@
 		Please use one of the following providers to sign in
 	</p>
 </div>
-<firebase-ui></firebase-ui>
+<firebase-ui *ngIf="isBrowser"></firebase-ui>
