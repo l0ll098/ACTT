@@ -1,6 +1,6 @@
 import { Response, Request } from "express";
 import { check } from "express-validator/check";
-import * as admin from "firebase-admin";
+import { auth } from "firebase-admin";
 
 import { FirebaseService } from "../../shared/firebaseService";
 import { validate, sendErr, sendOK } from "../../shared/helpers";
@@ -24,7 +24,7 @@ export async function deleteLapTime(req: Request, res: Response) {
         return sendErr(res, HttpStatus.BadRequest, { done: false, msg: "You have to pass a lapTimeId or an array of lapTimeIds" });
     }
 
-    const uid = ((req as any).user as admin.auth.DecodedIdToken).uid;
+    const uid = ((req as any).user as auth.DecodedIdToken).uid;
 
     try {
 

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as admin from "firebase-admin";
+import { auth } from "firebase-admin";
 import { check } from "express-validator/check";
 
 import { LapTime } from "../../shared/appModels";
@@ -26,13 +26,10 @@ export async function upgradeLapTime(req: Request, res: Response) {
 
     // At this point the uid is defined as it's checked by the "validateFirebaseIdToken" 
     //  Express middleware
-    const uid = ((req as any).user as admin.auth.DecodedIdToken).uid;
+    const uid = ((req as any).user as auth.DecodedIdToken).uid;
 
     // Get current LapTime data
-    const lapTime: LapTime = (await admin.database()
-        .ref("users/" + uid + "/lapTimes/" + lapTimeId + "/")
-        .once("value"))
-        .val();
+    const lapTime: LapTime = await FirebaseService.getLapTimeById(uid, lapTimeId);
 
     try {
         const upgrade = await FirebaseService.upgradeData(uid, lapTime, lapTimeId);
@@ -57,29 +54,18 @@ export async function upgradeAllLapTimes(req: Request, res: Response) {
 
     // At this point the uid is defined as it's checked by the "validateFirebaseIdToken" 
     //  Express middleware
-    const uid = ((req as any).user as admin.auth.DecodedIdToken).uid;
+    const uid = ((req as any).user as auth.DecodedIdToken).uid;
 
     // ! NOTE: This has to be separated in two parts as adding the .val() would break it
-    // The .endAt(0) is used to filter data in order to get only records where the "version"
+    // The value 0 is used to filter data in order to get only records where the "version"
     // property is not defined.
-    const snap = await admin.database()
-        .ref("users/" + uid + "/lapTimes/")
-        .orderByChild("version")
-        .endAt(0)
-        .once("value");
-    const rawData = snap.val();
+    const lapTimes = await FirebaseService.getLapTimesByVersion(uid, 0);
 
     // If query didn't returned anything, send user a 304 message
-    if (!rawData) {
+    if (!lapTimes || lapTimes.length === 0) {
         return sendErr(res, HttpStatus.NotModified, { done: false, error: "Records were already updated" });
     }
 
-    // Convert fetched LapTimes from an object to an array and set the "id" property
-    const lapTimes: LapTime[] = Object.keys(rawData).map((key) => {
-        const lapTime: LapTime = rawData[key];
-        lapTime.id = key;
-        return lapTime;
-    });
 
     try {
         const upgradedData = await Promise.all(lapTimes.map((lapTime) => {

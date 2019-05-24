@@ -1,9 +1,9 @@
-import * as admin from "firebase-admin";
+import { auth } from "firebase-admin";
 import { Request, Response } from "express";
 import { check } from "express-validator/check";
 
 import { LapTime, LapAssists, LAST_SUPPORTED_LAP_TIME_VERSION } from "../../shared/appModels";
-import { isValidStringPercentage, isValidAbsValue, validate, sendOK, sendErr } from "../../shared/helpers";
+import { isValidStringPercentage, isValidAbsValue, validate, sendOK, sendErr, FirebaseService } from "../../shared/helpers";
 import { HttpStatus } from "../../shared/httpStatus";
 
 export const newLapTimeValidators = [
@@ -62,11 +62,11 @@ export const newLapTimeValidators = [
  * @param res Http response
  */
 export async function newLapTime(req: Request, res: Response) {
-    
+
     if (!validate(req, res)) {
         return false;
     }
-    
+
     const lapTime: LapTime = {
         lap: req.body.lap,
         car: {
@@ -86,20 +86,15 @@ export async function newLapTime(req: Request, res: Response) {
 
     // At this point the uid is defined as it's checked by the "validateFirebaseIdToken" 
     //  Express middleware
-    const uid = ((req as any).user as admin.auth.DecodedIdToken).uid;
+    const uid = ((req as any).user as auth.DecodedIdToken).uid;
 
     // If assists are not provided, assume default
     if (!lapTime.assists) {
-        const assists = await admin.database()
-            .ref("users/" + uid + "/settings/assists")
-            .once("value");
-        lapTime.assists = assists.val();
+        lapTime.assists = await FirebaseService.getDefaultLapAssists(uid);
     }
 
     try {
-        const snapshot = await admin.database()
-            .ref("users/" + uid + "/lapTimes")
-            .push(lapTime);
+        const snapshot = await FirebaseService.saveLapTime(uid, lapTime);
 
         lapTime.id = snapshot.key || undefined;
         return sendOK(res, { laptime: lapTime });

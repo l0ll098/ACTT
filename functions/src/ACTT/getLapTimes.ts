@@ -1,6 +1,6 @@
 import { check } from "express-validator/check";
 import { Request, Response } from "express";
-import * as admin from "firebase-admin";
+import { auth } from "firebase-admin";
 
 import { validate, FirebaseService, sendOK, sendErr } from "../../shared/helpers";
 import { LapTime, Track, Car } from "../../shared/appModels";
@@ -33,7 +33,7 @@ export async function getLapTime(req: Request, res: Response) {
 
     // At this point the uid is defined as it's checked by the "validateFirebaseIdToken" 
     //  Express middleware
-    const uid = ((req as any).user as admin.auth.DecodedIdToken).uid;
+    const uid = ((req as any).user as auth.DecodedIdToken).uid;
 
 
     try {
@@ -72,7 +72,7 @@ export async function getLapTimeById(req: Request, res: Response) {
         return false;
     }
 
-    const uid = ((req as any).user as admin.auth.DecodedIdToken).uid;
+    const uid = ((req as any).user as auth.DecodedIdToken).uid;
     const lapTimeId: string = req.params.id;
 
     try {

@@ -127,17 +127,31 @@ export abstract class FirebaseService {
      * @param uid User ID
      * @param lapTimeId LapTime id
      */
-    public static async getLapTimeById(uid: string, lapTimeId: string) {
+    public static async getLapTimeById(uid: string, lapTimeId: string): Promise<LapTime> {
         try {
             const snap = await admin.database()
                 .ref(`/users/${uid}/lapTimes/${lapTimeId}`)
                 .once("value");
 
             if (snap.hasChildren()) {
-                return this._formatSingleLapTimeQueryResult(snap);
+                return this._formatSingleLapTimeQueryResult(snap) as LapTime;
             } else {
                 return Promise.reject({ done: false, error: "LapTime not found", status: HttpStatus.NotFound });
             }
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    public static async getLapTimesByVersion(uid: string, version: number): Promise<LapTime[]> {
+        try {
+            const snap = await admin.database()
+                .ref(`/users/${uid}/lapTimes`)
+                .orderByChild("version")
+                .endAt(version)
+                .once("value");
+
+            return this._formatMultipleLapTimeQueryResults(snap) as LapTime[];
         } catch (err) {
             throw err;
         }
@@ -213,6 +227,21 @@ export abstract class FirebaseService {
         }
     }
 
+    /**
+     * Saves a new LapTime for the current user
+     * @param uid User ID
+     * @param assists An LapTime object
+     */
+    public static async saveLapTime(uid: string, lapTime: LapTime) {
+        try {
+            const snap = await admin.database()
+                .ref(`/users/${uid}/lapTimes`)
+                .push(lapTime);
+            return Promise.resolve(snap);
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
 
     /**
      * Formats a single LapTime data
