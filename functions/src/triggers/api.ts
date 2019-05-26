@@ -72,4 +72,3 @@ try {
 
 // Expose Express API as a single Cloud Function:
 export const api = https.onRequest(app);
-// exports = module.exports = https.onRequest(app);
