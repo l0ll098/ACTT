@@ -12,7 +12,6 @@ import { PlatformModule } from "@angular/cdk/platform";
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
-import { NotFoundComponent } from './components/not-found/not-found.component';
 import { LoginComponent } from './components/login/login.component';
 import { LapTimeDetailsComponent } from './components/lap-time-details/lap-time-details.component';
 
@@ -56,7 +55,7 @@ const appRoutes: Routes = [
 			},
 			{
 				path: "notFound",
-				component: NotFoundComponent
+				loadChildren: "./components/not-found/not-found.module#NotFoundModule"
 			},
 		]
 	},
@@ -74,7 +73,6 @@ const appRoutes: Routes = [
 	declarations: [
 		AppComponent,
 		HomeComponent,
-		NotFoundComponent,
 		LapTimeDetailsComponent
 	],
 	imports: [
