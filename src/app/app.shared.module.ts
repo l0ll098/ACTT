@@ -13,7 +13,6 @@ import { PlatformModule } from "@angular/cdk/platform";
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { LapTimeDetailsComponent } from './components/lap-time-details/lap-time-details.component';
 
 import { AuthService } from './services/auth.service';
 import { FirebaseService } from "./services/firebase.service";
@@ -39,7 +38,7 @@ const appRoutes: Routes = [
 		children: [
 			{
 				path: "times/:id",
-				component: LapTimeDetailsComponent
+				loadChildren: "./components/lap-time-details/lap-time-details.module#LapTimeDetailsModule"
 			},
 			{
 				path: "times",
@@ -72,8 +71,7 @@ const appRoutes: Routes = [
 @NgModule({
 	declarations: [
 		AppComponent,
-		HomeComponent,
-		LapTimeDetailsComponent
+		HomeComponent
 	],
 	imports: [
 		BrowserModule.withServerTransition({ appId: 'serverApp' }),
