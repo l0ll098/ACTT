@@ -14,8 +14,6 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { LoginComponent } from './components/login/login.component';
-// import { NewTimeComponent } from "./components/new-time/new-time.component";
-import { LogsComponent } from './components/logs/logs.component';
 import { LapTimeDetailsComponent } from './components/lap-time-details/lap-time-details.component';
 import { SettingsContainerComponent } from './components/settings/settings-container.component';
 import { SettingsComponent } from './components/settings/settings-component/settings.component';
@@ -54,7 +52,6 @@ const appRoutes: Routes = [
 			{
 				path: "new",
 				loadChildren: "./components/new-time/new-time.module#NewTimeModule"
-				// component: NewTimeComponent
 			},
 			{
 				path: "settings",
@@ -78,7 +75,7 @@ const appRoutes: Routes = [
 	},
 	{
 		path: "logs",
-		component: LogsComponent
+		loadChildren: "./components/logs/logs.module#LogsModule"
 	},
 	{
 		path: "**",
@@ -93,8 +90,6 @@ const appRoutes: Routes = [
 		NotFoundComponent,
 		SettingsContainerComponent,
 		SettingsComponent,
-		// NewTimeComponent,
-		LogsComponent,
 		SettingsAssistsComponent,
 		LapTimeDetailsComponent
 	],
@@ -109,7 +104,7 @@ const appRoutes: Routes = [
 		HttpClientModule,
 		FormsModule,
 		ReactiveFormsModule,
-		// Angular Material modules
+
 		AppUIModule,
 		SharedComponentsModule,
 		PipesModule
