@@ -26,6 +26,9 @@ import { ReactiveFormsModule } from '@angular/forms';
         LapAssistsComponent,
         LapTimeFormInputComponent,
         LoadingSpinnerComponent
+    ],
+    entryComponents: [
+        DialogComponent
     ]
 })
 export class SharedComponentsModule { }

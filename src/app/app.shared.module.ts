@@ -14,7 +14,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { LoginComponent } from './components/login/login.component';
-import { NewTimeComponent } from "./components/new-time/new-time.component";
+// import { NewTimeComponent } from "./components/new-time/new-time.component";
 import { LogsComponent } from './components/logs/logs.component';
 import { LapTimeDetailsComponent } from './components/lap-time-details/lap-time-details.component';
 import { SettingsContainerComponent } from './components/settings/settings-container.component';
@@ -53,7 +53,8 @@ const appRoutes: Routes = [
 			},
 			{
 				path: "new",
-				component: NewTimeComponent
+				loadChildren: "./components/new-time/new-time.module#NewTimeModule"
+				// component: NewTimeComponent
 			},
 			{
 				path: "settings",
@@ -92,7 +93,7 @@ const appRoutes: Routes = [
 		NotFoundComponent,
 		SettingsContainerComponent,
 		SettingsComponent,
-		NewTimeComponent,
+		// NewTimeComponent,
 		LogsComponent,
 		SettingsAssistsComponent,
 		LapTimeDetailsComponent
