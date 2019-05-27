@@ -15,9 +15,6 @@ import { HomeComponent } from './components/home/home.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { LoginComponent } from './components/login/login.component';
 import { LapTimeDetailsComponent } from './components/lap-time-details/lap-time-details.component';
-import { SettingsContainerComponent } from './components/settings/settings-container.component';
-import { SettingsComponent } from './components/settings/settings-component/settings.component';
-import { SettingsAssistsComponent } from "./components/settings/settings-assists/settings-assists.component";
 
 import { AuthService } from './services/auth.service';
 import { FirebaseService } from "./services/firebase.service";
@@ -55,17 +52,7 @@ const appRoutes: Routes = [
 			},
 			{
 				path: "settings",
-				component: SettingsContainerComponent,
-				children: [
-					{
-						path: "",
-						component: SettingsComponent
-					},
-					{
-						path: "assists",
-						component: SettingsAssistsComponent
-					}
-				]
+				loadChildren: "./components/settings/settings.module#SettingsModule"
 			},
 			{
 				path: "notFound",
@@ -88,9 +75,6 @@ const appRoutes: Routes = [
 		AppComponent,
 		HomeComponent,
 		NotFoundComponent,
-		SettingsContainerComponent,
-		SettingsComponent,
-		SettingsAssistsComponent,
 		LapTimeDetailsComponent
 	],
 	imports: [
