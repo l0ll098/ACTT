@@ -8,45 +8,11 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-	MatToolbarModule,
-	MatButtonModule,
-	MatIconModule,
-	MatListModule,
-	MatSidenavModule,
-	MatCheckboxModule,
-	MatSlideToggleModule,
-	MatFormFieldModule,
-	MatAutocompleteModule,
-	MatInputModule,
-	MatSelectModule,
-	MatTableModule,
-	MatPaginatorModule,
-	MatSortModule,
-	MatSnackBarModule,
-	MatDialogModule,
-	MatExpansionModule,
-	MatSliderModule,
-	MatMenuModule,
-	MatProgressSpinnerModule
-} from '@angular/material';
 import { PlatformModule } from "@angular/cdk/platform";
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
-import { NotFoundComponent } from './components/not-found/not-found.component';
 import { LoginComponent } from './components/login/login.component';
-import { TimesComponent } from "./components/times/times.component";
-import { NewTimeComponent } from "./components/new-time/new-time.component";
-import { DialogComponent } from "./components/shared/dialog/dialog.component";
-import { LapTimeFormInputComponent } from "./components/shared/lap-time/lap-time.component";
-import { LoadingSpinnerComponent } from "./components/shared/loading-spinner/loading-spinner.component";
-import { LogsComponent } from './components/logs/logs.component';
-import { LapTimeDetailsComponent } from './components/lap-time-details/lap-time-details.component';
-import { LapAssistsComponent } from "./components/shared/lap-assists/lap-assists.component";
-import { SettingsContainerComponent } from './components/settings/settings-container.component';
-import { SettingsComponent } from './components/settings/settings-component/settings.component';
-import { SettingsAssistsComponent } from "./components/settings/settings-assists/settings-assists.component";
 
 import { AuthService } from './services/auth.service';
 import { FirebaseService } from "./services/firebase.service";
@@ -55,7 +21,9 @@ import { SettingsService } from './services/settings.service';
 import { LoggerService } from './services/log.service';
 import { HttpService } from './services/http.service';
 
-import { LapTimePipe } from './pipes/lap-time.pipe';
+import { AppUIModule } from './app.ui.module';
+import { SharedComponentsModule } from './components/shared/shared.module';
+import { PipesModule } from './pipes/pipes.module';
 
 
 const appRoutes: Routes = [
@@ -70,39 +38,29 @@ const appRoutes: Routes = [
 		children: [
 			{
 				path: "times/:id",
-				component: LapTimeDetailsComponent
+				loadChildren: "./components/lap-time-details/lap-time-details.module#LapTimeDetailsModule"
 			},
 			{
 				path: "times",
-				component: TimesComponent
+				loadChildren: "./components/times/times.module#TimesModule"
 			},
 			{
 				path: "new",
-				component: NewTimeComponent
+				loadChildren: "./components/new-time/new-time.module#NewTimeModule"
 			},
 			{
 				path: "settings",
-				component: SettingsContainerComponent,
-				children: [
-					{
-						path: "",
-						component: SettingsComponent
-					},
-					{
-						path: "assists",
-						component: SettingsAssistsComponent
-					}
-				]
+				loadChildren: "./components/settings/settings.module#SettingsModule"
 			},
 			{
 				path: "notFound",
-				component: NotFoundComponent
+				loadChildren: "./components/not-found/not-found.module#NotFoundModule"
 			},
 		]
 	},
 	{
 		path: "logs",
-		component: LogsComponent
+		loadChildren: "./components/logs/logs.module#LogsModule"
 	},
 	{
 		path: "**",
@@ -113,22 +71,7 @@ const appRoutes: Routes = [
 @NgModule({
 	declarations: [
 		AppComponent,
-		HomeComponent,
-		NotFoundComponent,
-		SettingsContainerComponent,
-		SettingsComponent,
-		TimesComponent,
-		NewTimeComponent,
-		LogsComponent,
-		SettingsAssistsComponent,
-		LapTimeDetailsComponent,
-
-		DialogComponent,
-		LapTimeFormInputComponent,
-		LapAssistsComponent,
-		LoadingSpinnerComponent,
-
-		LapTimePipe
+		HomeComponent
 	],
 	imports: [
 		BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -141,27 +84,10 @@ const appRoutes: Routes = [
 		HttpClientModule,
 		FormsModule,
 		ReactiveFormsModule,
-		// Angular Material modules
-		MatToolbarModule,
-		MatButtonModule,
-		MatIconModule,
-		MatListModule,
-		MatSidenavModule,
-		MatCheckboxModule,
-		MatSlideToggleModule,
-		MatFormFieldModule,
-		MatAutocompleteModule,
-		MatInputModule,
-		MatSelectModule,
-		MatTableModule,
-		MatPaginatorModule,
-		MatSortModule,
-		MatSnackBarModule,
-		MatDialogModule,
-		MatExpansionModule,
-		MatSliderModule,
-		MatMenuModule,
-		MatProgressSpinnerModule
+
+		AppUIModule,
+		SharedComponentsModule,
+		PipesModule
 	],
 	providers: [
 		AuthService,
@@ -173,9 +99,6 @@ const appRoutes: Routes = [
 	],
 	bootstrap: [
 		AppComponent
-	],
-	entryComponents: [
-		DialogComponent
 	],
 	exports: [
 		AppComponent
