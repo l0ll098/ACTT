@@ -6,10 +6,7 @@ import { SwUpdate } from "@angular/service-worker";
 import { MatSnackBar, MatSidenav, MatDialog } from '@angular/material';
 import { Platform } from "@angular/cdk/platform";
 
-import { DialogComponent } from '../shared/dialog/dialog.component';
-
 import { AuthService } from '../../services/auth.service';
-import { FirebaseService } from "../../services/firebase.service";
 import { SettingsService, SettingsName } from '../../services/settings.service';
 
 import { SidenavButton } from '../../models/lists.model';
@@ -82,13 +79,11 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         private location: LocationStrategy,
         private elementRef: ElementRef,
         private authService: AuthService,
-        private firebaseService: FirebaseService,
         private loggerService: LoggerService,
         private platform: Platform,
         private swUpdate: SwUpdate,
         private settingsService: SettingsService,
-        private snackBar: MatSnackBar,
-        private dialog: MatDialog) {
+        private snackBar: MatSnackBar) {
 
         this.authService.getUserData().subscribe(data => {
             this.loggerService.log(data);
@@ -163,25 +158,12 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         this.swUpdate.available.subscribe(event => {
             this.loggerService.log("Update available: current version is", event.current, "available version is", event.available);
 
-            // Show a dialog asking user if he want to update
-            this.dialog.open(DialogComponent, {
-                data: {
-                    title: "Update",
-                    message: "An update is available. Do you want to update now?",
-                    doActionBtn: {
-                        text: "Yes",
-                        onClick: () => {
-                            // If he presses ok, reload the window, installing the new version
-                            window.location.reload();
-                        }
-                    },
-                    cancelBtn: {
-                        text: "No",
-                        onClick: () => {
-                            this.loggerService.log("Installing the update the next time window is loaded");
-                        }
-                    }
-                }
+            // Show a SnackBar asking user if he want to update
+            this.snackBar.open("A new version is available. Install now?", "Yes.", {
+                duration: 15000
+            }).onAction().subscribe(() => {
+                // If he presses ok, reload the window, installing the new version
+                window.location.reload();
             });
         });
     }
