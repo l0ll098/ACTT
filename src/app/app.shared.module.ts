@@ -38,29 +38,29 @@ const appRoutes: Routes = [
 		children: [
 			{
 				path: "times/:id",
-				loadChildren: "./components/lap-time-details/lap-time-details.module#LapTimeDetailsModule"
+				loadChildren: () => import("./components/lap-time-details/lap-time-details.module").then(m => m.LapTimeDetailsModule)
 			},
 			{
 				path: "times",
-				loadChildren: "./components/times/times.module#TimesModule"
+				loadChildren: () => import("./components/times/times.module").then(m => m.TimesModule)
 			},
 			{
 				path: "new",
-				loadChildren: "./components/new-time/new-time.module#NewTimeModule"
+				loadChildren: () => import("./components/new-time/new-time.module").then(m => m.NewTimeModule)
 			},
 			{
 				path: "settings",
-				loadChildren: "./components/settings/settings.module#SettingsModule"
+				loadChildren: () => import("./components/settings/settings.module").then(m => m.SettingsModule)
 			},
 			{
 				path: "notFound",
-				loadChildren: "./components/not-found/not-found.module#NotFoundModule"
+				loadChildren: () => import("./components/not-found/not-found.module").then(m => m.NotFoundModule)
 			},
 		]
 	},
 	{
 		path: "logs",
-		loadChildren: "./components/logs/logs.module#LogsModule"
+		loadChildren: () => import("./components/logs/logs.module").then(m => m.LogsModule)
 	},
 	{
 		path: "**",

@@ -33,7 +33,8 @@ export class LapAssistsComponent implements ControlValueAccessor, OnDestroy {
         "0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"
     ];
 
-    @ViewChild(DefaultValueAccessor) private valueAccessor: DefaultValueAccessor;
+    @ViewChild(DefaultValueAccessor, { static: false })
+    private valueAccessor: DefaultValueAccessor;
     stateChanges = new Subject<void>();
 
 

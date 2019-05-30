@@ -1,5 +1,7 @@
-import { Component, ViewChild, AfterViewInit,
-	ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from "@angular/core";
+import {
+	Component, ViewChild, AfterViewInit,
+	ChangeDetectionStrategy, ChangeDetectorRef, OnInit
+} from "@angular/core";
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource, MatPaginator, Sort, MatDialog } from "@angular/material";
 import { SelectionModel } from "@angular/cdk/collections";
@@ -34,7 +36,8 @@ export class TimesComponent implements AfterViewInit, OnInit {
 
 	public filter = "";
 
-	@ViewChild(MatPaginator) paginator: MatPaginator;
+	@ViewChild(MatPaginator, { static: false })
+	paginator: MatPaginator;
 
 	public deleteFAB = {
 		show: true,
