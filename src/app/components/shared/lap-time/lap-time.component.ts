@@ -20,7 +20,7 @@ import {
 
 import { Subject } from "rxjs";
 
-import { MatFormFieldControl } from "@angular/material";
+import { MatFormFieldControl } from "@angular/material/form-field";
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from "@angular/cdk/a11y";
 

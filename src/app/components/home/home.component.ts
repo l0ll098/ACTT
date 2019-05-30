@@ -3,7 +3,8 @@ import { Router, NavigationStart } from '@angular/router';
 import { LocationStrategy } from '@angular/common';
 import { SwUpdate } from "@angular/service-worker";
 
-import { MatSnackBar, MatSidenav, MatDialog } from '@angular/material';
+import { MatSnackBar } from "@angular/material/";
+import { MatSidenav } from "@angular/material/";
 import { Platform } from "@angular/cdk/platform";
 
 import { AuthService } from '../../services/auth.service';
