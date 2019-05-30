@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { MatDialog, } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 
 import { Track, Car, LapTime, Time, LapAssists } from "../../models/data.model";
 import { tracks } from "../../models/tracks";

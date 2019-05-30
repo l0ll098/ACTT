@@ -3,7 +3,8 @@ import { Router, NavigationStart } from '@angular/router';
 import { LocationStrategy } from '@angular/common';
 import { SwUpdate } from "@angular/service-worker";
 
-import { MatSnackBar, MatSidenav, MatDialog } from '@angular/material';
+import { MatSnackBar } from "@angular/material/";
+import { MatSidenav } from "@angular/material/";
 import { Platform } from "@angular/cdk/platform";
 
 import { AuthService } from '../../services/auth.service';
@@ -31,7 +32,7 @@ const PATH_WHERE_NEW_FAB_SHOULD_BE_DISPLAYED = [
 })
 export class HomeComponent implements AfterViewInit, AfterContentInit {
 
-    @ViewChild(MatSidenav)
+    @ViewChild(MatSidenav, { static: false })
     public sidenav: MatSidenav;
 
     // Cheat: Doing so the html part can see the enum

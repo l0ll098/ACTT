@@ -20,7 +20,7 @@ import {
 
 import { Subject } from "rxjs";
 
-import { MatFormFieldControl } from "@angular/material";
+import { MatFormFieldControl } from "@angular/material/form-field";
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import { FocusMonitor } from "@angular/cdk/a11y";
 
@@ -51,7 +51,7 @@ export class LapTimeFormInputComponent
     errorState: any = false;
     controlType = 'app-laptime-form-input';
 
-    @ViewChild(DefaultValueAccessor) private valueAccessor: DefaultValueAccessor;
+    @ViewChild(DefaultValueAccessor, { static: false }) private valueAccessor: DefaultValueAccessor;
 
     @HostBinding() id = `app-laptime-form-input-${LapTimeFormInputComponent.nextId++}`;
     @HostBinding("attr.aria-describedby") describedBy = "";
