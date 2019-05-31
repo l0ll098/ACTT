@@ -51,7 +51,7 @@ export class LapTimeFormInputComponent
     errorState: any = false;
     controlType = 'app-laptime-form-input';
 
-    @ViewChild(DefaultValueAccessor, { static: false }) private valueAccessor: DefaultValueAccessor;
+    @ViewChild(DefaultValueAccessor, { static: true }) private valueAccessor: DefaultValueAccessor;
 
     @HostBinding() id = `app-laptime-form-input-${LapTimeFormInputComponent.nextId++}`;
     @HostBinding("attr.aria-describedby") describedBy = "";
