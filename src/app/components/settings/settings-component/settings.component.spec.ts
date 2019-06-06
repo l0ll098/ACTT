@@ -17,16 +17,15 @@ import { LoggerService } from '../../../services/log.service';
 import { AuthService } from '../../../services/auth.service';
 import { IndexedDBService } from '../../../services/indexedDb.service';
 import { SettingsService } from '../../../services/settings.service';
+import { MockFirebaseService } from '../../../mock/MockFirebaseService';
+import { MockHttpService } from '../../../mock/MockHttpService';
+import { MockLoggerService } from '../../../mock/MockLoggerService';
+import { MockAuthService } from '../../../mock/MockAuthService';
+import { MockIndexedDBService } from '../../../mock/MockIndexedDBService';
+import { MockSettingsService } from '../../../mock/MockSettingsService';
 
 import { SettingsComponent } from "./settings.component";
 
-
-class MockFirebaseService extends FirebaseService { }
-class MockHttpService extends HttpService { }
-class MockLoggerService extends LoggerService { }
-class MockAuthService extends AuthService { }
-class MockIndexedDBService extends IndexedDBService { }
-class MockSettingsService extends SettingsService { }
 
 describe('SettingsComponent', () => {
     let component: SettingsComponent;

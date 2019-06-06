@@ -6,9 +6,9 @@ import { MatDialogRef, MatDialogModule, MAT_DIALOG_DATA } from '@angular/materia
 
 import { AppUIModule } from '../../../app.ui.module';
 import { SharedComponentsModule } from '../../shared/shared.module';
-import { DialogData } from '../../../models/dialog.model';
 
 import { DialogComponent } from "./dialog.component";
+import { MockData } from '../../../mock/data';
 
 
 describe('DialogComponent', () => {
@@ -16,17 +16,6 @@ describe('DialogComponent', () => {
     let fixture: ComponentFixture<DialogComponent>;
 
     beforeEach(async(() => {
-        const dialogData: DialogData = {
-            title: "Testing",
-            message: "Just testing",
-            doActionBtn: {
-                text: "Ok"
-            },
-            cancelBtn: {
-                text: "Cancel plz"
-            }
-        };
-
         TestBed.configureTestingModule({
             imports: [
                 AppUIModule,
@@ -44,7 +33,7 @@ describe('DialogComponent', () => {
                 },
                 {
                     provide: MAT_DIALOG_DATA,
-                    useValue: dialogData
+                    useValue: MockData.dialog
                 }
             ]
         })

@@ -6,26 +6,14 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { FirebaseUIModule } from 'firebaseui-angular';
-import { User } from 'firebase';
-
-import { Observable, of } from 'rxjs';
 
 import { AppUIModule } from '../../app.ui.module';
 import { firebaseUIConfigs, environment } from '../../../environments/environment';
+
 import { AuthService } from '../../services/auth.service';
+import { MockAuthService } from '../../mock/MockAuthService';
 
 
-class MockAuthService extends AuthService {
-    getUserData(): Observable<User> {
-        const user = {
-            displayName: "Just tesing",
-            email: "just.testing@example.com",
-            photoURL: `${location.protocol}//${location.host}/assets/images/favicon-32x32.png`,
-            emailVerified: false
-        };
-        return of(user as User);
-    }
-}
 
 describe('LoginComponent', () => {
     let component: LoginComponent;

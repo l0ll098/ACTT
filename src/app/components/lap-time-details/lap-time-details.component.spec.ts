@@ -16,37 +16,14 @@ import { HttpService } from '../../services/http.service';
 import { AuthService } from '../../services/auth.service';
 import { LoggerService } from '../../services/log.service';
 import { IndexedDBService } from '../../services/indexedDb.service';
+import { MockFirebaseService } from '../../mock/MockFirebaseService';
+import { MockHttpService } from '../../mock/MockHttpService';
+import { MockAuthService } from '../../mock/MockAuthService';
+import { MockLoggerService } from '../../mock/MockLoggerService';
+import { MockIndexedDBService } from '../../mock/MockIndexedDBService';
+
 import { LapTimeDetailsComponent } from './lap-time-details.component';
 
-import { LapTime } from '../../models/data.model';
-
-
-class MockFirebaseService extends FirebaseService {
-    getLapTimeById(id: string): Promise<LapTime> {
-        const lapTime: LapTime = {
-            car: {
-                name: "Ferrari SF70H"
-            },
-            lap: 1,
-            time: {
-                minutes: 1,
-                seconds: 25,
-                millisecs: 123
-            },
-            track: {
-                name: "Monza",
-                length: 5793
-            },
-            timestamp: Date.now(),
-            id: "-Just-A-Test"
-        };
-        return Promise.resolve(lapTime);
-    }
-}
-class MockHttpService extends HttpService { }
-class MockAuthService extends AuthService { }
-class MockLoggerService extends LoggerService { }
-class MockIndexedDBService extends IndexedDBService { }
 
 describe('LapTimesDetailsComponent', () => {
     let component: LapTimeDetailsComponent;

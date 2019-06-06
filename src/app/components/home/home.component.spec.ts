@@ -5,9 +5,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
-import { User } from 'firebase';
-import { Observable, of } from 'rxjs';
-
 import { AppUIModule } from '../../app.ui.module';
 
 import { environment } from "../../../environments/environment";
@@ -16,27 +13,14 @@ import { AuthService } from '../../services/auth.service';
 import { IndexedDBService } from '../../services/indexedDb.service';
 import { LoggerService } from '../../services/log.service';
 import { SettingsService } from '../../services/settings.service';
+import { MockAuthService } from '../../mock/MockAuthService';
+import { MockLoggerService } from '../../mock/MockLoggerService';
+import { MockIndexedDBService } from '../../mock/MockIndexedDBService';
+import { MockSettingsService } from '../../mock/MockSettingsService';
 
 import { HomeComponent } from './home.component';
 import { By } from '@angular/platform-browser';
 
-
-class MockAuthService extends AuthService {
-	canActivate(): Observable<boolean> { return of(true); }
-	getUserData(): Observable<User> {
-		const user = {
-			displayName: "Just tesing",
-			email: "just.testing@example.com",
-			photoURL: `${location.protocol}//${location.host}/assets/images/favicon-32x32.png`,
-			emailVerified: false
-		};
-		return of(user as User);
-	}
-}
-
-class MockLoggerService extends LoggerService { }
-class MockIndexedDBService extends IndexedDBService { }
-class MockSettingsService extends SettingsService { }
 
 describe('HomeComponent', () => {
 	let component: HomeComponent;

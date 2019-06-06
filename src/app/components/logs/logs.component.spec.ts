@@ -3,30 +3,12 @@ import { ComponentFixture, async, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { By } from '@angular/platform-browser';
 
 import { AppUIModule } from '../../app.ui.module';
 import { IndexedDBService } from '../../services/indexedDb.service';
-import { By } from '@angular/platform-browser';
+import { MockIndexedDBService } from '../../mock/MockIndexedDBService';
 
-const logs = [
-    {
-        id: 0,
-        log: "Log 1",
-        timestamp: Date.now()
-    },
-    {
-        id: 1,
-        log: "Log 2",
-        timestamp: Date.now()
-    }
-];
-
-class MockIndexedDBService extends IndexedDBService {
-    getLogs() {
-        console.log(logs);
-        return Promise.resolve(logs);
-    }
-}
 
 
 describe('LoginComponent', () => {
