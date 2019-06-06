@@ -6,20 +6,18 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AppUIModule } from '../../app.ui.module';
-import { SharedComponentsModule } from '../shared/shared.module';
-import { PipesModule } from '../../pipes/pipes.module';
+import { AppUIModule } from '../../../app.ui.module';
+import { SharedComponentsModule } from '../../shared/shared.module';
 
-import { environment } from "../../../environments/environment";
+import { environment } from "../../../../environments/environment";
 
-import { FirebaseService } from '../../services/firebase.service';
-import { HttpService } from '../../services/http.service';
-import { LoggerService } from '../../services/log.service';
-import { AuthService } from '../../services/auth.service';
-import { IndexedDBService } from '../../services/indexedDb.service';
+import { FirebaseService } from '../../../services/firebase.service';
+import { HttpService } from '../../../services/http.service';
+import { LoggerService } from '../../../services/log.service';
+import { AuthService } from '../../../services/auth.service';
+import { IndexedDBService } from '../../../services/indexedDb.service';
 
-import { TimesComponent } from "./times.component";
-import { SettingsService } from '../../services/settings.service';
+import { SettingsAssistsComponent } from "./settings-assists.component";
 
 
 class MockFirebaseService extends FirebaseService { }
@@ -27,18 +25,16 @@ class MockHttpService extends HttpService { }
 class MockLoggerService extends LoggerService { }
 class MockAuthService extends AuthService { }
 class MockIndexedDBService extends IndexedDBService { }
-class MockSettingsService extends SettingsService { }
 
-describe('TimesComponent', () => {
-    let component: TimesComponent;
-    let fixture: ComponentFixture<TimesComponent>;
+describe('SettingsAssistsComponent', () => {
+    let component: SettingsAssistsComponent;
+    let fixture: ComponentFixture<SettingsAssistsComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TimesComponent],
+            declarations: [SettingsAssistsComponent],
             imports: [
                 AppUIModule,
-                PipesModule,
                 SharedComponentsModule,
                 FormsModule,
                 ReactiveFormsModule,
@@ -68,10 +64,6 @@ describe('TimesComponent', () => {
                 {
                     provide: IndexedDBService,
                     useClass: MockIndexedDBService
-                },
-                {
-                    provide: SettingsService,
-                    useClass: MockSettingsService
                 }
             ]
         })
@@ -79,7 +71,7 @@ describe('TimesComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(TimesComponent);
+        fixture = TestBed.createComponent(SettingsAssistsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

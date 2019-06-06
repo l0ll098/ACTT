@@ -8,37 +8,55 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppUIModule } from '../../app.ui.module';
 import { SharedComponentsModule } from '../shared/shared.module';
-import { PipesModule } from '../../pipes/pipes.module';
 
 import { environment } from "../../../environments/environment";
 
 import { FirebaseService } from '../../services/firebase.service';
 import { HttpService } from '../../services/http.service';
-import { LoggerService } from '../../services/log.service';
 import { AuthService } from '../../services/auth.service';
+import { LoggerService } from '../../services/log.service';
 import { IndexedDBService } from '../../services/indexedDb.service';
+import { LapTimeDetailsComponent } from './lap-time-details.component';
 
-import { TimesComponent } from "./times.component";
-import { SettingsService } from '../../services/settings.service';
+import { LapTime } from '../../models/data.model';
 
 
-class MockFirebaseService extends FirebaseService { }
+class MockFirebaseService extends FirebaseService {
+    getLapTimeById(id: string): Promise<LapTime> {
+        const lapTime: LapTime = {
+            car: {
+                name: "Ferrari SF70H"
+            },
+            lap: 1,
+            time: {
+                minutes: 1,
+                seconds: 25,
+                millisecs: 123
+            },
+            track: {
+                name: "Monza",
+                length: 5793
+            },
+            timestamp: Date.now(),
+            id: "-Just-A-Test"
+        };
+        return Promise.resolve(lapTime);
+    }
+}
 class MockHttpService extends HttpService { }
-class MockLoggerService extends LoggerService { }
 class MockAuthService extends AuthService { }
+class MockLoggerService extends LoggerService { }
 class MockIndexedDBService extends IndexedDBService { }
-class MockSettingsService extends SettingsService { }
 
-describe('TimesComponent', () => {
-    let component: TimesComponent;
-    let fixture: ComponentFixture<TimesComponent>;
+describe('LapTimesDetailsComponent', () => {
+    let component: LapTimeDetailsComponent;
+    let fixture: ComponentFixture<LapTimeDetailsComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TimesComponent],
+            declarations: [LapTimeDetailsComponent],
             imports: [
                 AppUIModule,
-                PipesModule,
                 SharedComponentsModule,
                 FormsModule,
                 ReactiveFormsModule,
@@ -58,20 +76,16 @@ describe('TimesComponent', () => {
                     useClass: MockHttpService
                 },
                 {
-                    provide: LoggerService,
-                    useClass: MockLoggerService
-                },
-                {
                     provide: AuthService,
                     useClass: MockAuthService
                 },
                 {
-                    provide: IndexedDBService,
-                    useClass: MockIndexedDBService
+                    provide: LoggerService,
+                    useClass: MockLoggerService
                 },
                 {
-                    provide: SettingsService,
-                    useClass: MockSettingsService
+                    provide: IndexedDBService,
+                    useClass: MockIndexedDBService
                 }
             ]
         })
@@ -79,7 +93,7 @@ describe('TimesComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(TimesComponent);
+        fixture = TestBed.createComponent(LapTimeDetailsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
