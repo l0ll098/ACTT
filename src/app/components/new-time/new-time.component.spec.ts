@@ -23,12 +23,17 @@ import { MockAuthService } from '../../mock/MockAuthService';
 import { MockIndexedDBService } from '../../mock/MockIndexedDBService';
 
 import { NewTimeComponent } from "./new-time.component";
+import { DebugElement } from '@angular/core';
+import { MockData } from '../../mock/data';
+import { By } from '@angular/platform-browser';
 
 
 
 describe('NewTimeComponent', () => {
     let component: NewTimeComponent;
     let fixture: ComponentFixture<NewTimeComponent>;
+    let de: DebugElement;
+    let firebaseService: FirebaseService;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -73,11 +78,38 @@ describe('NewTimeComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(NewTimeComponent);
         component = fixture.componentInstance;
+        de = fixture.debugElement;
+
+        firebaseService = de.injector.get(FirebaseService);
+        const mockedFirebase = new MockFirebaseService(de.injector.get(HttpService), de.injector.get(LoggerService));
+
+        spyOn(firebaseService, "saveUserLapTime");
+
         fixture.detectChanges();
     });
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    function testFormInputByFormControlName(testName: string, formControlName: string, expectedValue: any) {
+        it(testName, async(() => {
+            fixture.whenStable().then(() => {
+                const el = de.queryAll(By.css(`[formcontrolname='${formControlName}']`));
+                expect(el).toBeTruthy();
+                expect(el.length).toBe(1);
+                el[0].nativeElement.value = expectedValue;
+                expect(el[0].nativeElement.value).toBe(expectedValue);
+            });
+        }));
+    }
+
+    describe("should fill in form", () => {
+        const lapTime = MockData.lapTime;
+        testFormInputByFormControlName("should select track", "track", lapTime.track.name);
+        testFormInputByFormControlName("should set car", "car", lapTime.car.name);
+        testFormInputByFormControlName("should set lap time", "lapTime", lapTime.time as any);
+        testFormInputByFormControlName("should set lap number", "lapNumber", `${lapTime.lap}`);
     });
 
     afterEach(() => {

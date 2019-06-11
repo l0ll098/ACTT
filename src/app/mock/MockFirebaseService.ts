@@ -8,4 +8,11 @@ export class MockFirebaseService extends FirebaseService {
         return Promise.resolve(MockData.lapTime);
     }
 
+    saveUserLapTime(lapTime: LapTime): Promise<LapTime> {
+        return Promise.resolve(lapTime);
+    }
+
+    getLapTimes(): Promise<LapTime[]> {
+        return Promise.resolve(MockData.lapTimes);
+    }
 }

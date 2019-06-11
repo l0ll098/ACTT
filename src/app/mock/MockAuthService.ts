@@ -12,6 +12,9 @@ export class MockAuthService extends AuthService {
 
     public static setUser(newUser: User | null) {
         MockAuthService._user = newUser;
+        MockAuthService._user.getIdToken = (forceRefresh?: boolean): Promise<string> => {
+            return Promise.resolve("-token-");
+        };
     }
 
     canActivate(): Observable<boolean> {
@@ -20,5 +23,9 @@ export class MockAuthService extends AuthService {
 
     getUserData(): Observable<User> {
         return of(MockAuthService._user);
+    }
+
+    getToken(): Promise<string> {
+        return Promise.resolve("-token-");
     }
 }

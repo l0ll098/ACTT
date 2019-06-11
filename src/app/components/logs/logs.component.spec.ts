@@ -8,12 +8,13 @@ import { By } from '@angular/platform-browser';
 import { AppUIModule } from '../../app.ui.module';
 import { IndexedDBService } from '../../services/indexedDb.service';
 import { MockIndexedDBService } from '../../mock/MockIndexedDBService';
+import { MockData } from '../../mock/data';
 
 
-
-describe('LoginComponent', () => {
+describe('LogsComponent', () => {
     let component: LogsComponent;
     let fixture: ComponentFixture<LogsComponent>;
+    let idbService: IndexedDBService;
     let de: DebugElement;
 
     beforeEach(async(() => {
@@ -38,14 +39,19 @@ describe('LoginComponent', () => {
         fixture = TestBed.createComponent(LogsComponent);
         component = fixture.componentInstance;
         de = fixture.debugElement;
+
+        idbService = de.injector.get(IndexedDBService);
+        const mockedIdb = new MockIndexedDBService();
+
+        spyOn(idbService, "getLogs").and.returnValue(mockedIdb.getLogs());
         fixture.detectChanges();
     });
 
-    it('should create', () => {
+    it(`should create`, () => {
         expect(component).toBeTruthy();
     });
 
-    it("should contain a table with 3 cols", () => {
+    it(`should contain a table with 3 cols`, () => {
         const idTh = de.queryAll(By.css(".mat-header-cell.cdk-column-id.mat-column-id.mat-table-sticky"));
         const tsTh = de.queryAll(By.css(".mat-header-cell.cdk-column-timestamp.mat-column-timestamp.mat-table-sticky"));
         const logTh = de.queryAll(By.css(".mat-header-cell.cdk-column-log mat-column-log.mat-table-sticky"));
@@ -54,6 +60,13 @@ describe('LoginComponent', () => {
         expect(tsTh).toBeDefined();
         expect(logTh).toBeDefined();
     });
+
+    it(`should show ${MockData.logs.length} logs`, async(() => {
+        fixture.whenStable().then(() => {
+            expect(component.dataSource).toBeTruthy();
+            expect(component.dataSource.length).toBe(MockData.logs.length);
+        });
+    }));
 
     afterEach(() => {
         if (fixture.nativeElement && 'remove' in fixture.nativeElement) {

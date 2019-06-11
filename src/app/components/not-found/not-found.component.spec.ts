@@ -23,6 +23,7 @@ import { MockAuthService } from '../../mock/MockAuthService';
 import { MockIndexedDBService } from '../../mock/MockIndexedDBService';
 
 import { NotFoundComponent } from "./not-found.component";
+import { By } from '@angular/platform-browser';
 
 
 
@@ -78,6 +79,20 @@ describe('NotFoundComponent', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    it("should contain some links", () => {
+        const links = fixture.debugElement.queryAll(By.css("a"));
+        expect(links).toBeTruthy();
+        expect(links.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it("should contain a link to return to home page", () => {
+        const links = fixture.debugElement.queryAll(By.css("#returnToHome"));
+
+        expect(links).toBeTruthy();
+        expect(links.length).toBe(1);
+        expect(links[0]).toBeTruthy();
     });
 
     afterEach(() => {

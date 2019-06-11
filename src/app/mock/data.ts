@@ -27,6 +27,27 @@ export abstract class MockData {
         id: "-Just-A-Test"
     };
 
+    public static lapTimes: LapTime[] = [
+        MockData.lapTime,
+        {
+            car: {
+                name: "Ferrari SF70H"
+            },
+            lap: 1,
+            time: {
+                minutes: 0,
+                seconds: 10,
+                millisecs: 10
+            },
+            track: {
+                name: "Drag",
+                length: 200
+            },
+            timestamp: Date.now(),
+            id: "-Just-A-Test-2"
+        }
+    ];
+
     public static logs: Log[] = [
         {
             id: 0,
