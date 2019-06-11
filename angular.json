@@ -85,7 +85,8 @@
               "src/assets",
               "src/favicon.ico",
               "src/manifest.json"
-            ]
+            ],
+            "codeCoverage": true
           }
         },
         "lint": {

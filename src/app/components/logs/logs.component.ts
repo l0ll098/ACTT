@@ -13,7 +13,6 @@ import { Log } from "../../models/data.model";
 })
 export class LogsComponent implements OnInit {
 
-    public logs;
     public dataSource: Log[] = null;
     displayedColumns: string[] = ['id', 'timestamp', 'log'];
 
@@ -32,7 +31,7 @@ export class LogsComponent implements OnInit {
                 this.changeDetectorRef.markForCheck();
             })
             .catch(err => {
-                this.logs = [];
+                this.dataSource = [];
             });
     }
 }
