@@ -1,3 +1,5 @@
+export const LAST_SUPPORTED_LAP_TIME_VERSION = 1;
+
 export interface LapTime {
     // minutes:seconds:millisecs
     humanTime?: Time;

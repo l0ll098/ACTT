@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { auth } from "firebase-admin";
 
 import { validate, FirebaseService, sendOK, sendErr } from "../../shared/helpers";
-import { LapTime, Track, Car } from "../../shared/appModels";
+import { LapTime, Track, Car } from "../../../shared/data.model";
 import { HttpStatus } from "../../shared/httpStatus";
 
 

@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, OnInit, ChangeDetectorRef } from "@
 
 import { IndexedDBService } from "../../services/indexedDb.service";
 
-import { Log } from "../../models/data.model";
+import { Log } from "../../../../shared/data.model";
 
 
 @Component({

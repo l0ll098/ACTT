@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 
-import { LapTime, LapAssists, LAST_SUPPORTED_LAP_TIME_VERSION, Time, Track, Car } from "./appModels";
+import { LapTime, LapAssists, LAST_SUPPORTED_LAP_TIME_VERSION, Time, Track, Car } from "../../shared/data.model";
 import { HttpStatus } from "./httpStatus";
 
 // Create an alias for the admin.database.DataSnapshot type 

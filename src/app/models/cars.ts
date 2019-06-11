@@ -1,4 +1,4 @@
-import { Car } from "./data.model";
+import { Car } from "../../../shared/data.model";
 
 export const cars: Car[] = [
     {

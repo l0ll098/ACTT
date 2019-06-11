@@ -1,4 +1,4 @@
-import { Track } from "./data.model";
+import { Track } from "../../../shared/data.model";
 
 export const tracks: Track[] = [
     {

@@ -12,7 +12,7 @@ import { SelectionModel } from "@angular/cdk/collections";
 
 import { DialogComponent } from "../shared/dialog/dialog.component";
 
-import { LapTime } from "../../models/data.model";
+import { LapTime } from "../../../../shared/data.model";
 
 import { FirebaseService } from "../../services/firebase.service";
 import { SettingsService, SettingsName } from "../../services/settings.service";

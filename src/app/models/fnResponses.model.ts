@@ -1,4 +1,4 @@
-import { LapTime, LapAssists } from './data.model';
+import { LapTime, LapAssists } from '../../../shared/data.model';
 
 export interface GetLapTimeFunction {
     success: boolean;

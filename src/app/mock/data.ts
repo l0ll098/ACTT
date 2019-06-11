@@ -1,4 +1,4 @@
-import { LapTime, Log } from '../models/data.model';
+import { LapTime, Log } from '../../../shared/data.model';
 import { DialogData } from '../models/dialog.model';
 
 export abstract class MockData {

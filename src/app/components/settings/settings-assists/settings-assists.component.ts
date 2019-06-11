@@ -8,7 +8,7 @@ import { DialogComponent } from '../../shared/dialog/dialog.component';
 import { FirebaseService } from '../../../services/firebase.service';
 import { LoggerService } from '../../../services/log.service';
 
-import { LapAssists } from '../../../models/data.model';
+import { LapAssists } from '../../../../../shared/data.model';
 
 
 @Component({

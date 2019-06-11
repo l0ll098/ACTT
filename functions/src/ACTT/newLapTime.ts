@@ -2,7 +2,7 @@ import { auth } from "firebase-admin";
 import { Request, Response } from "express";
 import { check } from "express-validator/check";
 
-import { LapTime, LapAssists, LAST_SUPPORTED_LAP_TIME_VERSION } from "../../shared/appModels";
+import { LapTime, LapAssists, LAST_SUPPORTED_LAP_TIME_VERSION } from "../../../shared/data.model";
 import { isValidStringPercentage, isValidAbsValue, validate, sendOK, sendErr, FirebaseService } from "../../shared/helpers";
 import { HttpStatus } from "../../shared/httpStatus";
 

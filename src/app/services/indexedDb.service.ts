@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import idb, { UpgradeDB, DB, ObjectStore } from "idb";
-import { Log } from "../models/data.model";
+import { Log } from "../../../shared/data.model";
 
 enum ObjectStores {
     "laptimes" = "laptimes",

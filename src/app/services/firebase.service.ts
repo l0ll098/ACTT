@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 
-import { LapTime, Track, Car, LapAssists } from "../models/data.model";
+import { LapTime, Track, Car, LapAssists } from "../../../shared/data.model";
 import { HttpService } from './http.service';
 import { LoggerService } from "./log.service";
 

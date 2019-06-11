@@ -1,5 +1,5 @@
 import { FirebaseService } from "../services/firebase.service";
-import { LapTime } from '../models/data.model';
+import { LapTime } from '../../../shared/data.model';
 import { MockData } from './data';
 
 export class MockFirebaseService extends FirebaseService {

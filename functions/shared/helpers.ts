@@ -2,7 +2,7 @@ import { Response, Request } from "express";
 import { validationResult } from "express-validator/check";
 
 import { Status, HttpStatus } from "./httpStatus";
-import { ValidAbsValues } from "./appModels";
+import { ValidAbsValues } from "../../shared/data.model";
 
 /**
  * Sends a response to the client

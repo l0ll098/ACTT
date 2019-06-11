@@ -3,7 +3,7 @@ import {
     ChangeDetectorRef, forwardRef, ChangeDetectionStrategy
 } from '@angular/core';
 import { FormControl, FormGroup, ControlValueAccessor, DefaultValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { LapAssists } from '../../../models/data.model';
+import { LapAssists } from '../../../../../shared/data.model';
 import { Subject } from 'rxjs';
 
 

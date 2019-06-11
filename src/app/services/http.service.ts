@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
 import * as fn from '../models/fnResponses.model';
-import { Track, Car, LapTime, LapAssists } from '../models/data.model';
+import { Track, Car, LapTime, LapAssists } from '../../../shared/data.model';
 
 
 type Headers = HttpHeaders | { [param: string]: string | string[]; };

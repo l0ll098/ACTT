@@ -1,5 +1,5 @@
 import { PipeTransform, Pipe } from "@angular/core";
-import { Time } from "../models/data.model";
+import { Time } from "../../../shared/data.model";
 
 @Pipe({
     name: "lapTime",
