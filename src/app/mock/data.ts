@@ -65,10 +65,16 @@ export abstract class MockData {
         title: "Testing",
         message: "Just testing",
         doActionBtn: {
-            text: "Ok"
+            text: "Ok",
+            onClick: () => {
+                console.log("Ok");
+            }
         },
         cancelBtn: {
-            text: "Cancel plz"
+            text: "Cancel",
+            onClick: () => {
+                console.log("Cancel");
+            }
         }
     };
 }

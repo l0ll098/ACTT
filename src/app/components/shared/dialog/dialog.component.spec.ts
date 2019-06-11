@@ -50,6 +50,24 @@ describe('DialogComponent', () => {
         expect(component).toBeTruthy();
     });
 
+    it("should perform the confirm action", async(() => {
+        const spy = spyOn(component, "onDoClick").and.returnValue(component.onDoClick());
+
+        component.onDoClick();
+        fixture.whenStable().then(() => {
+            expect(spy).toHaveBeenCalled();
+        });
+    }));
+
+    it("should perform the cancel action", async(() => {
+        const spy = spyOn(component, "onCancelClick").and.returnValue(component.onCancelClick());
+
+        component.onCancelClick();
+        fixture.whenStable().then(() => {
+            expect(spy).toHaveBeenCalled();
+        });
+    }));
+
     afterEach(() => {
         if (fixture.nativeElement && 'remove' in fixture.nativeElement) {
             (fixture.nativeElement as HTMLElement).remove();
