@@ -37,6 +37,10 @@ const appRoutes: Routes = [
 		canActivate: [AuthService],
 		children: [
 			{
+				path: "",
+				loadChildren: () => import("./components/dashboard/dashboard.module").then(m => m.DashboardModule)
+			},
+			{
 				path: "times/:id",
 				loadChildren: () => import("./components/lap-time-details/lap-time-details.module").then(m => m.LapTimeDetailsModule)
 			},
