@@ -1,8 +1,7 @@
 <div class="centered">
     <mat-grid-list [cols]="calcGridCols()" [rowHeight]="calcGridRowHeight()">
-        <mat-grid-tile *ngFor="let tile of tiles" [colspan]="tile.cols" [rowspan]="tile.rows"
-            [style.background]="tile.color">
-            {{tile.text}}
+        <mat-grid-tile *ngFor="let tile of tiles" [colspan]="tile.cols" [rowspan]="tile.rows">
+            <app-dashboard-widget-container [widget]="tile.widget"></app-dashboard-widget-container>
         </mat-grid-tile>
     </mat-grid-list>
 </div>
