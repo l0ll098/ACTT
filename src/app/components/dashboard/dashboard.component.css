@@ -1,0 +1,9 @@
+.widget-header {
+    border-bottom: 1px solid #bbbbbb;
+    /*padding-top: 16px;
+    height: 32px;*/
+}
+
+mat-card-header div mat-icon {
+    padding-top: 12px;
+}

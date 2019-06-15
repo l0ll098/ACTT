@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
 import { AppUIModule } from '../../app.ui.module';
 
 import { DashboardWidgetsDirective } from './dashboard-widgets.directive';
@@ -30,7 +31,8 @@ const path: Routes = [
         CommonModule,
         RouterModule.forChild(path),
         AppUIModule,
-        MatGridListModule
+        MatGridListModule,
+        MatCardModule
     ],
     exports: [
         RouterModule

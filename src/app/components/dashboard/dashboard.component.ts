@@ -2,13 +2,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 
 import { TimeGraphsComponent } from './widgets/time-graphs/time-graphs.component';
-import { WidgetItem } from '../../models/widgets.model';
+import { WidgetItem, Tile } from '../../models/widgets.model';
 
-export interface Tile {
-    cols: number;
-    rows: number;
-    widget: WidgetItem;
-}
 
 @Component({
     selector: "app-dashboard",
@@ -24,7 +19,13 @@ export class DashboardComponent {
     private ROWS_HEIGHT_DESKTOP = "192px";
     private ROWS_HEIGHT_MOBILE = "128px";
     tiles: Tile[] = [
-        { cols: 2, rows: 2, widget: new WidgetItem(TimeGraphsComponent, null), }
+        {
+            cols: 2,
+            rows: 2,
+            widgetName: "Times trend",
+            widgetCategory: "Times",
+            widget: new WidgetItem(TimeGraphsComponent, null),
+        }
     ];
 
     constructor(private platform: Platform) {

@@ -1,7 +1,18 @@
 <div class="centered">
     <mat-grid-list [cols]="calcGridCols()" [rowHeight]="calcGridRowHeight()">
         <mat-grid-tile *ngFor="let tile of tiles" [colspan]="tile.cols" [rowspan]="tile.rows">
-            <app-dashboard-widget-container [widget]="tile.widget"></app-dashboard-widget-container>
+            <mat-card style="width: 100%; height: 100%">
+                <mat-card-header class="widget-header">
+                    <div mat-card-avatar>
+                        <mat-icon>home</mat-icon>
+                    </div>
+                    <mat-card-title>{{tile.widgetName}}</mat-card-title>
+                    <mat-card-subtitle>{{tile.widgetCategory}}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <app-dashboard-widget-container [widget]="tile.widget"></app-dashboard-widget-container>
+                </mat-card-content>
+            </mat-card>
         </mat-grid-tile>
     </mat-grid-list>
 </div>
