@@ -20,7 +20,7 @@ export class DashboardComponent {
     private ROWS_HEIGHT_MOBILE = "128px";
     tiles: Tile[] = [
         {
-            cols: 2,
+            cols: 4,
             rows: 2,
             widgetName: "Times trend",
             widgetCategory: "Times",
