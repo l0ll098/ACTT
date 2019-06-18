@@ -21,6 +21,8 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { MatSliderModule } from "@angular/material/slider";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from "@angular/material/card";
 
 
 /**
@@ -46,7 +48,9 @@ const angularMaterialModules = [
     MatExpansionModule,
     MatSliderModule,
     MatMenuModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatGridListModule,
+    MatCardModule,
 ];
 
 @NgModule({
