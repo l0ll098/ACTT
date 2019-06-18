@@ -11,6 +11,7 @@ import { DashboardWidgetsDirective } from './dashboard-widgets.directive';
 import { DashboardComponent } from './dashboard.component';
 import { TimeGraphsComponent } from './widgets/time-graphs/time-graphs.component';
 import { DashboardWidgetContainerComponent } from './dashboard-widget-container/dashboard-widget-container.component';
+import { WidgetService } from '../../services/widgets.service';
 
 const path: Routes = [
     {
@@ -36,6 +37,9 @@ const path: Routes = [
     ],
     exports: [
         RouterModule
+    ],
+    providers: [
+        WidgetService
     ],
     entryComponents: [
         TimeGraphsComponent

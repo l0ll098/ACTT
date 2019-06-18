@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, ViewChild, ComponentFactoryResolver, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ComponentFactoryResolver } from '@angular/core';
 import { DashboardWidgetsDirective } from '../dashboard-widgets.directive';
-import { WidgetItem } from '../../../models/widgets.model';
+import { WidgetItem, WidgetComponent } from '../../../models/widgets.model';
 
 @Component({
     selector: "app-dashboard-widget-container",
     template: `<ng-template appWidget></ng-template>`,
-    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardWidgetContainerComponent implements OnInit {
     @Input() widget: WidgetItem;
@@ -24,6 +23,6 @@ export class DashboardWidgetContainerComponent implements OnInit {
         viewContainerRef.clear();
 
         const componentRef = viewContainerRef.createComponent(componentFactory);
-        (<any>componentRef.instance).data = this.widget.data;
+        (<WidgetComponent>componentRef.instance).details = this.widget.tileDetails;
     }
 }

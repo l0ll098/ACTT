@@ -1,8 +1,8 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Type } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 
-import { TimeGraphsComponent } from './widgets/time-graphs/time-graphs.component';
-import { WidgetItem, Tile } from '../../models/widgets.model';
+import { WidgetItem } from '../../models/widgets.model';
+import { WidgetService } from '../../services/widgets.service';
 
 
 @Component({
@@ -18,22 +18,19 @@ export class DashboardComponent {
     private COLS_ON_MOBILE = 4;
     private ROWS_HEIGHT_DESKTOP = "192px";
     private ROWS_HEIGHT_MOBILE = "128px";
-    tiles: Tile[] = [
-        {
-            cols: 4,
-            rows: 2,
-            widgetName: "Times trend",
-            widgetCategory: "Times",
-            widget: new WidgetItem(TimeGraphsComponent, null),
-        }
-    ];
+    tiles: WidgetItem[];
 
-    constructor(private platform: Platform) {
+    constructor(
+        private platform: Platform,
+        private widgetService: WidgetService) {
+
         if (this.platform.ANDROID || this.platform.IOS) {
             this.isDesktop = false;
         } else {
             this.isDesktop = true;
         }
+
+        this.tiles = this.widgetService.getWidgets();
     }
 
     calcGridCols() {
@@ -42,5 +39,27 @@ export class DashboardComponent {
 
     calcGridRowHeight() {
         return this.isDesktop ? this.ROWS_HEIGHT_DESKTOP : this.ROWS_HEIGHT_MOBILE;
+    }
+
+    getRows(widget: WidgetItem) {
+        if (typeof widget.tileDetails.rows === "number") {
+            return widget.tileDetails.rows;
+        }
+        return this.isDesktop ? widget.tileDetails.rows.desktop : widget.tileDetails.rows.mobile;
+    }
+
+    getCols(widget: WidgetItem) {
+        if (typeof widget.tileDetails.cols === "number") {
+            return widget.tileDetails.cols;
+        }
+        return this.isDesktop ? widget.tileDetails.cols.desktop : widget.tileDetails.cols.mobile;
+    }
+
+    getCategory(widget: WidgetItem) {
+        return widget.tileDetails.widgetCategory;
+    }
+
+    getName(widget: WidgetItem) {
+        return widget.tileDetails.widgetName;
     }
 }
