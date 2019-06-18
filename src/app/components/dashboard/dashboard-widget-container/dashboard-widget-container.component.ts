@@ -1,16 +1,19 @@
-import { Component, OnInit, Input, ViewChild, ComponentFactoryResolver } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ComponentFactoryResolver, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { DashboardWidgetsDirective } from '../dashboard-widgets.directive';
 import { WidgetItem, WidgetComponent } from '../../../models/widgets.model';
 
 @Component({
     selector: "app-dashboard-widget-container",
     template: `<ng-template appWidget></ng-template>`,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardWidgetContainerComponent implements OnInit {
     @Input() widget: WidgetItem;
     @ViewChild(DashboardWidgetsDirective, { static: true }) widgetHost: DashboardWidgetsDirective;
 
-    constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
+    constructor(
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private changeDetectorRef: ChangeDetectorRef) { }
 
     ngOnInit() {
         this.loadComponent();
@@ -24,5 +27,7 @@ export class DashboardWidgetContainerComponent implements OnInit {
 
         const componentRef = viewContainerRef.createComponent(componentFactory);
         (<WidgetComponent>componentRef.instance).details = this.widget.tileDetails;
+
+        this.changeDetectorRef.markForCheck();
     }
 }

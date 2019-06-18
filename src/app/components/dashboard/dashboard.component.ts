@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Type } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 
 import { WidgetItem } from '../../models/widgets.model';
@@ -55,11 +55,4 @@ export class DashboardComponent {
         return this.isDesktop ? widget.tileDetails.cols.desktop : widget.tileDetails.cols.mobile;
     }
 
-    getCategory(widget: WidgetItem) {
-        return widget.tileDetails.widgetCategory;
-    }
-
-    getName(widget: WidgetItem) {
-        return widget.tileDetails.widgetName;
-    }
 }
