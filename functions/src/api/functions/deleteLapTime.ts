@@ -1,10 +1,10 @@
-import { Response, Request } from "express";
+import { Response, Request, Router } from "express";
 import { check } from "express-validator/check";
 import { auth } from "firebase-admin";
 
-import { FirebaseService } from "../../shared/firebaseService";
-import { validate, sendErr, sendOK } from "../../shared/helpers";
-import { HttpStatus } from "../../shared/httpStatus";
+import { FirebaseService } from "../../../shared/firebaseService";
+import { validate, sendErr, sendOK, validateFirebaseIdToken } from "../../../shared/helpers";
+import { HttpStatus } from "../../../shared/httpStatus";
 
 export const deleteLapTimeValidators = [
     check("id").isString().not().isEmpty().optional(),
@@ -44,3 +44,8 @@ export async function deleteLapTime(req: Request, res: Response) {
         return sendErr(res, HttpStatus.InternalServerError, err);
     }
 }
+
+const router = Router();
+router.delete("/lapTimes/:id?", validateFirebaseIdToken, ...deleteLapTimeValidators, deleteLapTime);
+
+export { router };
