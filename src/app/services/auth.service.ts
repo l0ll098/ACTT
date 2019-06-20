@@ -1,5 +1,5 @@
 import { Injectable, PLATFORM_ID, Inject } from "@angular/core";
-import { CanActivate, Router } from "@angular/router";
+import { CanActivate, Router, RouterStateSnapshot, ActivatedRouteSnapshot } from "@angular/router";
 import { isPlatformBrowser } from '@angular/common';
 
 import { AngularFireAuth } from "@angular/fire/auth";
@@ -34,7 +34,7 @@ export class AuthService implements CanActivate {
 	/**
 	 * This method will say if user can load the main path (and its' children)
 	 */
-	public canActivate() {
+	public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 		const isBrowser = isPlatformBrowser(this.platformId);
 
 		return this.afAuth.authState.pipe(
@@ -53,7 +53,7 @@ export class AuthService implements CanActivate {
 
 				// Otherwise, redirect user to the login path and return false
 				console.log(`No permission to access this page! Redirecting to /login`);
-				this.router.navigate(["/login"]);
+				this.router.navigate(["/login"], { queryParams: { returnUrl: state.url } });
 				return of(false);
 			})
 		);
