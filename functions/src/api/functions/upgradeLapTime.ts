@@ -1,9 +1,9 @@
-import { Request, Response, Router } from "express";
+import { Request, Response } from "express";
 import { auth } from "firebase-admin";
 import { check } from "express-validator/check";
 
 import { LapTime } from "../../../../shared/data.model";
-import { validate, sendErr, sendOK, FirebaseService, validateFirebaseIdToken } from "../../../shared/helpers";
+import { validate, sendErr, sendOK, FirebaseService } from "../../../shared/helpers";
 import { HttpStatus } from "../../../shared/httpStatus";
 
 

@@ -1,9 +1,9 @@
 import { auth } from "firebase-admin";
-import { Request, Response, Router } from "express";
+import { Request, Response } from "express";
 import { check } from "express-validator/check";
 
 import { LapTime, LapAssists, LAST_SUPPORTED_LAP_TIME_VERSION } from "../../../../shared/data.model";
-import { isValidStringPercentage, isValidAbsValue, validate, sendOK, sendErr, FirebaseService, validateFirebaseIdToken } from "../../../shared/helpers";
+import { isValidStringPercentage, isValidAbsValue, validate, sendOK, sendErr, FirebaseService } from "../../../shared/helpers";
 import { HttpStatus } from "../../../shared/httpStatus";
 
 export const newLapTimeValidators = [
