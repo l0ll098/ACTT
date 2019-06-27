@@ -12,7 +12,7 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
-  "main": "lib/src/index.js",
+  "main": "lib/functions/src/index.js",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.0",
