@@ -9,7 +9,7 @@ import { AppSharedModule } from './app.shared.module';
   imports: [
     AppSharedModule,
     ServerModule,
-    ModuleMapLoaderModule,
+    ModuleMapLoaderModule
   ],
   bootstrap: [AppComponent],
 })
