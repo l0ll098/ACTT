@@ -33,6 +33,7 @@ export interface TileDetails {
     rows: TileDimensions | number;
     widgetName: string;
     widgetCategory: string;
+    widgetIcon: string;
 }
 
 export interface TileDimensions {
