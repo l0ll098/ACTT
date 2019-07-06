@@ -23,6 +23,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from "@angular/material/card";
+import { ScrollDispatchModule } from "@angular/cdk/scrolling";
 
 
 /**
@@ -51,6 +52,7 @@ const angularMaterialModules = [
     MatProgressSpinnerModule,
     MatGridListModule,
     MatCardModule,
+    ScrollDispatchModule
 ];
 
 @NgModule({

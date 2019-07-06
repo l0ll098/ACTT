@@ -40,3 +40,12 @@ export interface TileDimensions {
     mobile: number;
     desktop: number;
 }
+
+export interface NotificationItem {
+    icon: string;
+    name: string;
+    description: string;
+
+    path?: string;
+    onClick?: () => void;
+}

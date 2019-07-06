@@ -1,5 +1,6 @@
-import { Component, ChangeDetectionStrategy, Input } from "@angular/core";
-import { TileDetails, WidgetComponent } from '../../../../models/widgets.model';
+import { Component, ChangeDetectionStrategy, Input, ViewChild, ElementRef, ChangeDetectorRef, AfterViewInit } from "@angular/core";
+import { TileDetails, WidgetComponent, NotificationItem } from '../../../../models/widgets.model';
+import { Router } from '@angular/router';
 
 @Component({
     selector: "app-notifications-widget",
@@ -7,7 +8,21 @@ import { TileDetails, WidgetComponent } from '../../../../models/widgets.model';
     styleUrls: ["./notifications-widget.component.css"],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NotificationsWidgetComponent implements WidgetComponent {
+export class NotificationsWidgetComponent implements WidgetComponent, AfterViewInit {
     @Input() details: TileDetails;
+    @ViewChild("notificationsList", { static: false }) notificationsList: ElementRef;
 
+    notifications: NotificationItem[] = [ ];
+
+    constructor(
+        private changeDetectorRef: ChangeDetectorRef,
+        private router: Router) { }
+
+    ngAfterViewInit() {
+        this.changeDetectorRef.markForCheck();
+    }
+
+    navigate(path) {
+        this.router.navigate([path]);
+    }
 }
