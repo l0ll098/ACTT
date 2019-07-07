@@ -1,4 +1,4 @@
-import { LapTime, LapAssists } from '../../../shared/data.model';
+import { LapTime, LapAssists, Notification } from '../../../shared/data.model';
 
 export interface GetLapTimeFunction {
     success: boolean;
@@ -45,5 +45,12 @@ export interface UpgradeLapTimes {
     success: boolean;
     data: {
         lapTimes: LapTime[];
+    };
+}
+
+export interface GetNotifications {
+    success: boolean;
+    data: {
+        notifications: Notification[];
     };
 }

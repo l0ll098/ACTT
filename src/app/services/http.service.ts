@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
 
 import * as fn from '../models/fnResponses.model';
-import { Track, Car, LapTime, LapAssists } from '../../../shared/data.model';
+import { Track, Car, LapTime, LapAssists, Notification } from '../../../shared/data.model';
 
 
 type Headers = HttpHeaders | { [param: string]: string | string[]; };
@@ -157,4 +157,14 @@ export class HttpService {
         }
     }
 
+    public async getNotifications(): Promise<Notification[]> {
+        try {
+            const headers = await this.setFunctionsHeaders();
+            const response = await this._get<fn.GetNotifications>("notifications", headers);
+
+            return Promise.resolve(response.data.notifications);
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
 }
