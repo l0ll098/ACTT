@@ -18,7 +18,7 @@ export class WidgetService {
                 widgetCategory: "Info",
                 widgetName: "Notifications",
                 widgetIcon: "notification_important"
-            }),
+            })/*,
             new WidgetItem(TimeGraphsComponent, {
                 cols: {
                     desktop: 2,
@@ -28,7 +28,7 @@ export class WidgetService {
                 widgetCategory: "Times",
                 widgetName: "Times trend",
                 widgetIcon: "timeline"
-            })
+            })*/
         ];
     }
 }

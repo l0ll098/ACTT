@@ -103,3 +103,7 @@ export async function validateFirebaseIdToken(req: Request, res: Response, next:
 		return sendErr(res, HttpStatus.Unauthorized, { error: "You have to be authenticated" });
 	}
 }
+
+export function getUid(req: Request){
+	return ((req as any).user as auth.DecodedIdToken).uid;
+}

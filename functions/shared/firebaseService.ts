@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 
-import { LapTime, LapAssists, LAST_SUPPORTED_LAP_TIME_VERSION, Time, Track, Car } from "../../shared/data.model";
+import { LapTime, LapAssists, LAST_SUPPORTED_LAP_TIME_VERSION, Time, Track, Car, Notification, NotificationSource } from "../../shared/data.model";
 import { HttpStatus } from "./httpStatus";
 
 // Create an alias for the admin.database.DataSnapshot type 
@@ -241,6 +241,122 @@ export abstract class FirebaseService {
         } catch (err) {
             return Promise.reject(err);
         }
+    }
+
+    /**
+     * Changes the property "alreadyRead" of a user notification given its id
+     * @param uid User ID
+     * @param notificationId ID of the notification to update 
+     */
+    public static async markNotificationAsRead(uid: string, notificationId: string): Promise<boolean> {
+        try {
+            const path = `/users/${uid}/notifications/${notificationId}/`;
+
+            // Get the saved notification
+            const snap = await admin.database()
+                .ref(path)
+                .once("value");
+
+            const notification: Notification = snap.val() || null;
+            // Check if it was present
+            if (notification) {
+                // If it has been found but it's already read, reject
+                if (notification.alreadyRead) {
+                    return Promise.reject({ done: false, error: "Already read", status: HttpStatus.NotModified });
+                }
+
+                // Otherwise set the alreadyRead property to true 
+                notification.alreadyRead = true;
+
+                // And save the new value 
+                await admin.database()
+                    .ref(path)
+                    .set(notification);
+                return Promise.resolve(true);
+            } else {
+                // If the notification was not found, reject
+                return Promise.reject({ done: false, error: "Notification not found", status: HttpStatus.NotFound });
+            }
+
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    /**
+     * Returns only notifications of the current user (private)
+     * @param uid User ID
+     */
+    public static async getUserSpecificNotifications(uid: string) {
+        try {
+            const notifications = await this._getNotifications(`/users/${uid}/notifications`, "user");
+            return Promise.resolve(notifications);
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    /**
+     * Returns only public notifications
+     * @description Those notifications are the one that are shared between users, such as changelogs
+     */
+    public static async getGeneralNotifications() {
+        try {
+            const notifications = await this._getNotifications(`/notifications`, "general");
+            return Promise.resolve(notifications);
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    /**
+     * Returns a list of notifications from db given its path
+     * @param dbPath Search path
+     */
+    private static async _getNotifications(dbPath: string, source: NotificationSource): Promise<Notification[]> {
+        try {
+            let snap;
+
+            if (source !== "user") {
+                snap = await admin.database()
+                    .ref(`${dbPath}`)
+                    .once("value");
+            } else {
+                snap = await admin.database()
+                    .ref(`${dbPath}`)
+                    .orderByChild("alreadyRead")
+                    .equalTo(false)
+                    .once("value");
+            }
+
+            return Promise.resolve(this._formatNotificationsQueryResult(snap, source));
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    /**
+     * Transforms the notifications query result into an array
+     * @param rawData DataSnapshot returned from Firebase DB
+     */
+    private static _formatNotificationsQueryResult(rawData: DataSnapshot, source: NotificationSource): Notification[] {
+        const data = rawData.val();
+        if (!data) {
+            return [];
+        }
+
+        // Convert it to an array and format data
+        const dataArray: Notification[] = Object.keys(data).map((key) => {
+            const notification: Notification = rawData.child(key).val();
+
+            // Add calculable fields
+            notification.id = key;
+            notification.source = source;
+
+            return notification;
+        });
+
+        return dataArray;
     }
 
     /**

@@ -12,6 +12,11 @@
                         "time/millisecs",
                         "version"
                     ]
+                },
+                "notifications": {
+                    ".indexOn": [
+                        "alreadyRead"
+                    ]
                 }
             }
         }

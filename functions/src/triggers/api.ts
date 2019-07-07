@@ -5,6 +5,7 @@ import * as cors from "cors";
 
 import { lapTimesRouter } from "../api/lapTimes";
 import { settingsRouter } from "../api/settings";
+import { notificationsRouter } from '../api/notifications';
 
 try {
     admin.initializeApp();
@@ -20,6 +21,7 @@ app.use(cors({ origin: true }));
 try {
     app.use(lapTimesRouter);
     app.use(settingsRouter);
+    app.use(notificationsRouter);
 } catch (err) {
     console.log("[Error Reporter] -> Try/Catch router: ", err);
 }

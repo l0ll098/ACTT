@@ -56,3 +56,15 @@ export enum ValidAbsValues {
     Factory = "Factory",
     Off = "Off"
 }
+
+export type NotificationSource = "general" | "user";
+
+export interface Notification {
+    title: string;
+    description: string;
+    id?: string;
+    timestamp: number;
+    alreadyRead?: boolean;
+    category: "general" | "info" | "warning" | "error";
+    source?: NotificationSource;
+}
