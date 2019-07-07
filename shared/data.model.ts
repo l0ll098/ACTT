@@ -63,7 +63,7 @@ export interface Notification {
     title: string;
     description: string;
     id?: string;
-    timestamp: number;
+    timestamp?: number;
     alreadyRead?: boolean;
     category: "general" | "info" | "warning" | "error";
     source?: NotificationSource;

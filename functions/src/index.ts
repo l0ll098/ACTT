@@ -2,7 +2,8 @@
 enum Functions {
     Ping = "ping",
     Ssr = "ssr",
-    Api = "api"
+    Api = "api",
+    NewUser = "newUser"
 };
 
 // Foreach entry in the enum

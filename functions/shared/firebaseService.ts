@@ -284,6 +284,40 @@ export abstract class FirebaseService {
     }
 
     /**
+     * Creates an new notification.
+     * The UID parameter is optional. If passed, this function creates a new notification for that specific
+     * user. Otherwise it will be a general one.
+     * @param notification The Notification object that will be pushed to DB
+     * @param uid (optional) User ID. If passed, this notification will be tied to the user. 
+     */
+    public static async createNotification(notification: Notification, uid?: string): Promise<Notification> {
+        try {
+            // Add some details such as creation timestamp and if user has alreadyRead it
+            const toPush = notification;
+            toPush.timestamp = Date.now();
+
+            if (uid) {
+                toPush.alreadyRead = false;
+            }
+
+            // Choose db path
+            const dbPath = uid ? `/users/${uid}/notifications/` : "/notifications";
+            const snap = await admin.database()
+                .ref(dbPath)
+                .push(toPush)
+                .once("value");
+
+            if (snap.hasChildren()) {
+                return Promise.resolve(snap.val());
+            } else {
+                return Promise.reject({ done: false, msg: "Empty snapshot" });
+            }
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    /**
      * Returns only notifications of the current user (private)
      * @param uid User ID
      */
