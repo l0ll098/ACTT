@@ -57,6 +57,17 @@ export enum ValidAbsValues {
     Off = "Off"
 }
 
+export interface ServerAction {
+    method: "GET" | "POST" | "PUT" | "DELETE";
+    path: string;
+    description?: string;
+}
+
+export interface ClientAction {
+    name: EClientActions;
+}
+
+export type NotificationAction = ServerAction | ClientAction;
 export type NotificationSource = "general" | "user";
 
 export interface Notification {
@@ -67,4 +78,9 @@ export interface Notification {
     alreadyRead?: boolean;
     category: "general" | "info" | "warning" | "error";
     source?: NotificationSource;
+    actions?: NotificationAction[];
+}
+
+export enum EClientActions {
+    verify = "verify"
 }

@@ -2,7 +2,7 @@ import { auth } from 'firebase-functions';
 import * as admin from "firebase-admin";
 
 import { FirebaseService } from '../../shared/helpers';
-import { Notification } from '../../../shared/data.model';
+import { Notification, EClientActions } from '../../../shared/data.model';
 
 try {
     admin.initializeApp();
@@ -18,7 +18,17 @@ export const newUser = auth.user()
             const notification: Notification = {
                 title: "Verify your account",
                 description: "Please verify your account",
-                category: "warning"
+                category: "warning",
+                actions: [
+                    {
+                        method: "POST",
+                        path: "notifications/$id",
+                        description: "Mark as read"
+                    },
+                    {
+                        name: EClientActions.verify
+                    }
+                ]
             };
 
             await FirebaseService.createNotification(notification, user.uid);
