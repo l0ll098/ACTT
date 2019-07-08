@@ -3,7 +3,7 @@
         <mat-list id="notifications-list">
             <div *ngFor="let notification of notifications" class="noSelect">
                 <div *ngIf="notification.onClick; else notificationWithLink">
-                    <mat-list-item (click)="notification.onClick()">
+                    <mat-list-item (click)="notification.onClick(notification)">
                         <mat-icon mat-list-icon>{{notification.icon}}</mat-icon>
                         <h4 mat-line>{{notification.name}}</h4>
                         <p mat-line> {{notification.description}} </p>
@@ -15,7 +15,7 @@
                         <h4 mat-line>{{notification.name}}</h4>
                         <p mat-line> {{notification.description}} </p>
                         <button mat-icon-button>
-                            <mat-icon>open_in_new_tab</mat-icon>
+                            <mat-icon>open_in_new</mat-icon>
                         </button>
                     </mat-list-item>
                 </ng-template>

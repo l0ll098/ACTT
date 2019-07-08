@@ -1,4 +1,5 @@
 import { Type } from '@angular/core';
+import { Notification } from "../../../shared/data.model";
 
 /**
  * Abstraction of a widget.
@@ -47,5 +48,5 @@ export interface NotificationItem {
     description: string;
 
     path?: string;
-    onClick?: () => void;
+    onClick?: (notification?: Notification) => void;
 }

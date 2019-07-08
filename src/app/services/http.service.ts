@@ -160,9 +160,20 @@ export class HttpService {
     public async getNotifications(): Promise<Notification[]> {
         try {
             const headers = await this.setFunctionsHeaders();
-            const response = await this._get<fn.GetNotifications>("notifications", headers);
+            const response = await this._get<fn.GetNotifications>(`notifications`, headers);
 
             return Promise.resolve(response.data.notifications);
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    public async markNotificationAsRead(id: string) {
+        try {
+            const headers = await this.setFunctionsHeaders();
+            const response = await this._post<fn.MarkNotificationAsRead>(`notifications/${id}`, headers);
+
+            return Promise.resolve(response.data.done);
         } catch (err) {
             return Promise.reject(err);
         }

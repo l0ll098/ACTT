@@ -54,3 +54,10 @@ export interface GetNotifications {
         notifications: Notification[];
     };
 }
+
+export interface MarkNotificationAsRead {
+    success: boolean;
+    data: {
+        done: boolean;
+    };
+}
