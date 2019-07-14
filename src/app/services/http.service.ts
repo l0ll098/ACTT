@@ -168,6 +168,17 @@ export class HttpService {
         }
     }
 
+    public async getNotificationById(id: string): Promise<Notification> {
+        try {
+            const headers = await this.setFunctionsHeaders();
+            const response = await this._get<fn.GetNotificationById>(`notifications/${id}`, headers);
+
+            return Promise.resolve(response.data.notification);
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
     public async markNotificationAsRead(id: string) {
         try {
             const headers = await this.setFunctionsHeaders();

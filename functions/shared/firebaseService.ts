@@ -317,13 +317,36 @@ export abstract class FirebaseService {
         }
     }
 
+    public static async getNotificationById(id: string, uid: string): Promise<Notification | null> {
+        try {
+            // Get the notification even if it was already read
+            const user = await this._getNotifications(`/users/${uid}/notifications/${id}`, "user", false, true);
+            const general = await this._getNotifications(`/notifications/${id}`, "general", false, true);
+            let notification: Notification | null = null;
+
+            // * This could lead to some problems if it happens that two IDs (in different paths) are the same. 
+            // * However it should not be a problem as it is really hard to happen, as described here:
+            // https://firebase.googleblog.com/2015/02/the-2120-ways-to-ensure-unique_68.html
+            if (user && user.length > 0 && user[0]) {
+                notification = user[0];
+            }
+            if (general && general.length > 0 && general[0]) {
+                notification = general[0];
+            }
+
+            return notification;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
     /**
      * Returns only notifications of the current user (private)
      * @param uid User ID
      */
     public static async getUserSpecificNotifications(uid: string) {
         try {
-            const notifications = await this._getNotifications(`/users/${uid}/notifications`, "user");
+            const notifications = await this._getNotifications(`/users/${uid}/notifications`, "user", true, false);
             return Promise.resolve(notifications);
         } catch (err) {
             return Promise.reject(err);
@@ -336,7 +359,7 @@ export abstract class FirebaseService {
      */
     public static async getGeneralNotifications() {
         try {
-            const notifications = await this._getNotifications(`/notifications`, "general");
+            const notifications = await this._getNotifications(`/notifications`, "general", false, false);
             return Promise.resolve(notifications);
         } catch (err) {
             return Promise.reject(err);
@@ -346,12 +369,17 @@ export abstract class FirebaseService {
     /**
      * Returns a list of notifications from db given its path
      * @param dbPath Search path
+     * @param source Source of the notification
+     * @param filterOutAlreadyReadMessages Returns only messages that where not already read
+     * @param singleResult Should this query return a single Notification or multiple?
      */
-    private static async _getNotifications(dbPath: string, source: NotificationSource): Promise<Notification[]> {
+    private static async _getNotifications(dbPath: string, source: NotificationSource,
+        filterOutAlreadyReadMessages: boolean, singleResult: boolean): Promise<Notification[]> {
+
         try {
             let snap;
 
-            if (source !== "user") {
+            if (!filterOutAlreadyReadMessages) {
                 snap = await admin.database()
                     .ref(`${dbPath}`)
                     .once("value");
@@ -363,17 +391,34 @@ export abstract class FirebaseService {
                     .once("value");
             }
 
-            return Promise.resolve(this._formatNotificationsQueryResult(snap, source));
+            if (singleResult) {
+                return Promise.resolve([this._formatSingleNotificationsQueryResult(snap, source) as Notification]);
+            } else {
+                return Promise.resolve(this._formatMultipleNotificationsQueryResult(snap, source));
+            }
         } catch (err) {
             return Promise.reject(err);
         }
+    }
+
+    private static _formatSingleNotificationsQueryResult(rawData: DataSnapshot, source: NotificationSource) {
+        const notification: Notification = rawData.val();
+        if (!notification) {
+            return null;
+        }
+
+        // Add calculable fields
+        notification.id = rawData.key as string;
+        notification.source = source;
+
+        return notification;
     }
 
     /**
      * Transforms the notifications query result into an array
      * @param rawData DataSnapshot returned from Firebase DB
      */
-    private static _formatNotificationsQueryResult(rawData: DataSnapshot, source: NotificationSource): Notification[] {
+    private static _formatMultipleNotificationsQueryResult(rawData: DataSnapshot, source: NotificationSource): Notification[] {
         const data = rawData.val();
         if (!data) {
             return [];
@@ -381,13 +426,7 @@ export abstract class FirebaseService {
 
         // Convert it to an array and format data
         const dataArray: Notification[] = Object.keys(data).map((key) => {
-            const notification: Notification = rawData.child(key).val();
-
-            // Add calculable fields
-            notification.id = key;
-            notification.source = source;
-
-            return notification;
+            return this._formatSingleNotificationsQueryResult(rawData.child(key), source) as Notification;
         });
 
         return dataArray;

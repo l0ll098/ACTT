@@ -41,6 +41,11 @@ const appRoutes: Routes = [
 				loadChildren: () => import("./components/dashboard/dashboard.module").then(m => m.DashboardModule)
 			},
 			{
+				path: "notifications/:id",
+				loadChildren: () => import("./components/notification-details/notification-details.component.module")
+					.then(m => m.NotificationDetailsModule)
+			},
+			{
 				path: "times/:id",
 				loadChildren: () => import("./components/lap-time-details/lap-time-details.module").then(m => m.LapTimeDetailsModule)
 			},

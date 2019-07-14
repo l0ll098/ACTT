@@ -1,0 +1,13 @@
+<app-loading-spinner *ngIf="showLoadingSpinner"></app-loading-spinner>
+
+<mat-card class="form noSelect">   
+    <mat-card-header>
+        <mat-icon mat-card-avatar id="icon">{{icon}}</mat-icon>
+        <mat-card-title>{{notification?.title}}</mat-card-title>
+        <mat-card-subtitle>{{notification?.timestamp | date}}</mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+        <p id="content">{{notification?.description}}</p>
+    </mat-card-content>
+</mat-card>

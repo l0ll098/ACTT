@@ -87,7 +87,7 @@ export class NotificationsWidgetComponent implements WidgetComponent, AfterViewI
         } else {
             // Otherwise if it's a general one, add the path property so that it can be opened in a special
             // page where more data can be shown.
-            item.path = `/notification/${notification.id}`;
+            item.path = `notifications/${notification.id}`;
         }
 
         return item;

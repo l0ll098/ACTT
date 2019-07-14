@@ -27,8 +27,28 @@ export async function getNotifications(req: Request, res: Response) {
     } catch (err) {
         return sendErr(res, HttpStatus.InternalServerError, err);
     }
-
 }
+
+export const getNotificationByIdValidators = [
+    check("id").isString().not().isEmpty()
+];
+
+export async function getNotificationById(req: Request, res: Response) {
+    const uid = getUid(req);
+    const notificationId = req.params.id;
+
+    try {
+        const notification = await FirebaseService.getNotificationById(notificationId, uid);
+        if (notification) {
+            return sendOK(res, { notification: notification });
+        } else {
+            return sendErr(res, HttpStatus.NotFound, { notification: null });
+        }
+    } catch (err) {
+        return sendErr(res, HttpStatus.InternalServerError, err);
+    }
+}
+
 
 export const markNotificationAsReadValidators = [
     check("id").isString().not().isEmpty()

@@ -82,5 +82,6 @@ export interface Notification {
 }
 
 export enum EClientActions {
-    verify = "verify"
+    verify = "verify",
+    markAsRead = "markAsRead"
 }
