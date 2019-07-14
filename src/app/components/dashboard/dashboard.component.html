@@ -1,7 +1,7 @@
 <div>
     <mat-grid-list [cols]="calcGridCols()" [rowHeight]="calcGridRowHeight()">
         <mat-grid-tile *ngFor="let tile of tiles" [colspan]="getCols(tile)" [rowspan]="getRows(tile)">
-            <mat-card style="width: 100%; height: 90%;">
+            <mat-card class="dashboardTile">
                 <mat-card-header class="widget-header">
                     <mat-icon mat-card-avatar class="widget-icon">{{tile.tileDetails.widgetIcon}}</mat-icon>
                     <mat-card-title>{{tile.tileDetails.widgetName}}</mat-card-title>

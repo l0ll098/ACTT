@@ -1,7 +1,5 @@
 .widget-header {
     border-bottom: 1px solid #bbbbbb;
-    /*padding-top: 16px;
-    height: 32px;*/
 }
 
 mat-card-subtitle {
@@ -12,4 +10,9 @@ mat-card-subtitle {
     text-align: right;
     margin-top: 10px;
     margin-left: -8px;
+}
+
+.dashboardTile {
+    width: 100%;
+    height: calc(100% - 32px);
 }

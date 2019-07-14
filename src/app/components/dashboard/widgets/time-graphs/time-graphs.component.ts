@@ -2,14 +2,10 @@ import { Component, Input, AfterViewInit, ChangeDetectorRef, ChangeDetectionStra
 import { WidgetComponent, TileDetails } from '../../../../models/widgets.model';
 
 @Component({
-    template: `
-    <div>
-        <h4>Time Graphs</h4>
-    </div>
-    `,
+    templateUrl: "time-graphs.component.html",
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TimeGraphsComponent implements WidgetComponent, AfterViewInit {
+export class TimeGraphsWidgetComponent implements WidgetComponent, AfterViewInit {
     @Input() details: TileDetails;
 
     constructor(private changeDetectorRef: ChangeDetectorRef) { }
