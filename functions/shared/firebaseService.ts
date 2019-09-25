@@ -151,7 +151,7 @@ export abstract class FirebaseService {
                 .endAt(version)
                 .once("value");
 
-            return this._formatMultipleLapTimeQueryResults(snap) as LapTime[];
+            return this._formatMultipleLapTimeQueryResults(snap);
         } catch (err) {
             throw err;
         }
