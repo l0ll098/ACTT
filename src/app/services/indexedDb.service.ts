@@ -3,9 +3,12 @@ import idb, { UpgradeDB, DB, ObjectStore } from "idb";
 import { Log } from "../../../shared/data.model";
 
 enum ObjectStores {
-    "laptimes" = "laptimes",
-    "settings" = "settings",
-    "logs" = "logs"
+    /**
+     * @deprecated
+     */
+    laptimes = "laptimes",
+    settings = "settings",
+    logs = "logs"
 }
 const ACTT_IDB_VERSION = 2;
 
@@ -81,11 +84,13 @@ export class IndexedDBService {
             return this.open("ACTT", version, (upgradeDB) => {
                 switch (upgradeDB.oldVersion) {
                     case 0:
-                        const laptimesStore = upgradeDB.createObjectStore(ObjectStores.laptimes);
                         const settingsStore = upgradeDB.createObjectStore(ObjectStores.settings);
                     case 1:
                         const logsStore = upgradeDB.createObjectStore(ObjectStores.logs, { keyPath: "id", autoIncrement: true });
                     case 2:
+                        if (upgradeDB.objectStoreNames.contains(ObjectStores.laptimes)) {
+                            upgradeDB.deleteObjectStore(ObjectStores.laptimes);
+                        }
                         break;
                 }
             });
