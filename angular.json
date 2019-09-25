@@ -21,7 +21,8 @@
               "src/favicon.ico",
               "src/manifest.json",
               "src/browserconfig.xml",
-              "src/manifest.json"
+              "src/manifest.json",
+              "src/robots.txt"
             ],
             "styles": [
               "src/styles.css",
