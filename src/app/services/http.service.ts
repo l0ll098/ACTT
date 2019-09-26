@@ -5,6 +5,7 @@ import { retry } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 import { AuthService } from './auth.service';
+import { IndexedDBService } from './indexedDb.service';
 
 import * as fn from '../models/fnResponses.model';
 import { Track, Car, LapTime, LapAssists } from '../../../shared/data.model';
@@ -19,7 +20,11 @@ export class HttpService {
 
     private baseUrl: string;
 
-    constructor(private http: HttpClient, private authService: AuthService) {
+    constructor(
+        private http: HttpClient,
+        private authService: AuthService,
+        private idbService: IndexedDBService) {
+
         this.baseUrl = environment.firebase.functionsUrl;
     }
 
@@ -37,20 +42,54 @@ export class HttpService {
         return response as T;
     }
 
+    /**
+     * Tries to make a DELETE request to the passed path.
+     * If it fails multiple times, it will log this action in IDB so we can try again later on
+     * @param path API path
+     * @param headers Headers to use
+     */
     private async _delete<T = any>(path: string, headers?: Headers): Promise<T> {
-        const observable = this.http
-            .delete(`${this.baseUrl}/${path}`, { headers: headers })
-            .pipe(retry(MAX_RETRY));
-        const response = await observable.toPromise();
-        return response as T;
+        try {
+            const observable = this.http
+                .delete(`${this.baseUrl}/${path}`, { headers: headers })
+                .pipe(retry(MAX_RETRY));
+            const response = await observable.toPromise();
+            return response as T;
+        } catch (err) {
+            this.idbService.addNewOfflineAction({
+                headers: headers,
+                url: `${this.baseUrl}/${path}`,
+                method: "DELETE"
+            });
+
+            throw err;
+        }
     }
 
+    /**
+     * Tries to make a POST request to the passed path.
+     * If it fails multiple times, it will log this action in IDB so we can try again later on
+     * @param path API path
+     * @param headers Headers to use
+     * @param params Request's Body
+     */
     private async _post<T = any>(path: string, headers?: Headers, params?: Object): Promise<T> {
-        const observable = this.http
-            .post(`${this.baseUrl}/${path}`, params, { headers: headers })
-            .pipe(retry(MAX_RETRY));
-        const response = await observable.toPromise();
-        return response as T;
+        try {
+            const observable = this.http
+                .post(`${this.baseUrl}/${path}`, params, { headers: headers })
+                .pipe(retry(MAX_RETRY));
+            const response = await observable.toPromise();
+            return response as T;
+        } catch (err) {
+            this.idbService.addNewOfflineAction({
+                headers: headers,
+                body: params,
+                url: `${this.baseUrl}/${path}`,
+                method: "POST"
+            });
+
+            throw err;
+        }
     }
 
     /**

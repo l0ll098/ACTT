@@ -1,6 +1,9 @@
 import { Injectable } from "@angular/core";
 import idb, { UpgradeDB, DB, ObjectStore } from "idb";
 import { Log } from "../../../shared/data.model";
+import { OfflineAction } from '../models/types.model';
+
+type IDBAccessMode = "readonly" | "readwrite";
 
 enum ObjectStores {
     /**
@@ -8,7 +11,8 @@ enum ObjectStores {
      */
     laptimes = "laptimes",
     settings = "settings",
-    logs = "logs"
+    logs = "logs",
+    offlineActions = "offlineActions"
 }
 const ACTT_IDB_VERSION = 2;
 
@@ -91,6 +95,7 @@ export class IndexedDBService {
                         if (upgradeDB.objectStoreNames.contains(ObjectStores.laptimes)) {
                             upgradeDB.deleteObjectStore(ObjectStores.laptimes);
                         }
+                        upgradeDB.createObjectStore(ObjectStores.offlineActions, { keyPath: "id", autoIncrement: true });
                         break;
                 }
             });
@@ -100,38 +105,25 @@ export class IndexedDBService {
 
     }
 
-    /**
-     * Reads data from the ObjectStore "laptimes"
-     * @param mode This indicates the opening mode of the ObjectStore
-     */
-    public getResultsObjectStore(mode: "readonly" | "readwrite" = "readonly"): Promise<ObjectStore<any, any>> {
-        if (this.isSupported) {
-            return this.openACTTDB().then(db => {
-                return db.transaction(ObjectStores.laptimes, mode).objectStore(ObjectStores.laptimes);
-            });
-        } else {
-            return new Promise(null);
+    public async getObjectStore(name: ObjectStores, mode: IDBAccessMode = "readonly"): Promise<ObjectStore<any, any>> {
+        if (!this.isSupported) {
+            return null;
         }
+
+        const db = await this.openACTTDB();
+        return db.transaction(name, mode).objectStore(name);
     }
 
-    public getSettingsObjectStore(mode: "readonly" | "readwrite" = "readonly"): Promise<ObjectStore<any, any>> {
-        if (this.isSupported) {
-            return this.openACTTDB().then(db => {
-                return db.transaction(ObjectStores.settings, mode).objectStore(ObjectStores.settings);
-            });
-        } else {
-            return new Promise(null);
-        }
+    public getSettingsObjectStore(mode: IDBAccessMode = "readonly"): Promise<ObjectStore<any, any>> {
+        return this.getObjectStore(ObjectStores.settings, mode);
     }
 
-    public getLogsObjectStore(mode: "readonly" | "readwrite" = "readonly"): Promise<ObjectStore<any, any>> {
-        if (this.isSupported) {
-            return this.openACTTDB().then(db => {
-                return db.transaction(ObjectStores.logs, mode).objectStore(ObjectStores.logs);
-            });
-        } else {
-            return new Promise(null);
-        }
+    public getLogsObjectStore(mode: IDBAccessMode = "readonly"): Promise<ObjectStore<any, any>> {
+        return this.getObjectStore(ObjectStores.logs, mode);
+    }
+
+    public getOfflineActionsObjectStore(mode: IDBAccessMode = "readonly") {
+        return this.getObjectStore(ObjectStores.offlineActions, mode);
     }
 
     public updateSettingValue(value: any, settingName: string): Promise<IDBValidKey> {
@@ -200,5 +192,32 @@ export class IndexedDBService {
         };
 
         return objStore.add(log);
+    }
+
+    public async addNewOfflineAction(action: OfflineAction) {
+        if (!this.isSupported) {
+            return null;
+        }
+
+        const objStore = await this.getOfflineActionsObjectStore("readwrite");
+        objStore.add(action);
+    }
+
+    public async getAllOfflineActions(): Promise<OfflineAction[]> {
+        if (!this.isSupported) {
+            return null;
+        }
+
+        const objStore = await this.getOfflineActionsObjectStore("readwrite");
+        return objStore.getAll();
+    }
+
+    public async removeOfflineAction(id: string) {
+        if (!this.isSupported) {
+            return null;
+        }
+
+        const objStore = await this.getOfflineActionsObjectStore("readwrite");
+        return objStore.deleteIndex(id);
     }
 }
