@@ -2,109 +2,100 @@
 /// <reference lib="webworker" />
 /// <reference path="./app/models/types.model.ts" />
 
+importScripts("./ngsw-worker.js");
 
-// Import the Angular CLI generated SW to extend it
-importScripts('./ngsw-worker.js');
+var token = "";
 
-self.addEventListener("sync", (e) => {
-    switch (e.tag) {
-        case "offlineActionsSync":
-            if (navigator.onLine) {
-                e.waitUntil(syncOfflineActions());
-            }
-            break;
+self.addEventListener("message", (event) => {
+    try {
+        const data = JSON.parse(event.data);
+
+        if (data.token) {
+            token = data.token;
+        }
+    } catch (err) {
+
     }
 });
 
-function syncOfflineActions() {
-    return new Promise(async (resolve, reject) => {
-        try {
-            /** @type {IDBDatabase} */
-            const db = await openIDB("ACTT");
-            const objStore = db.transaction("offlineActions", "readwrite").objectStore("offlineActions");
-
-            objStore.openCursor().onsuccess = async (e) => {
-                let cursor = e.target.result;
-                if (cursor) {
-                    const response = await replayAction(cursor.value);
-                    console.log(response);
-
-                    deleteAction(objStore, cursor.primaryKey);
-
-                    // Cycle to the next stored value
-                    cursor.continue();
-                } else {
-                    console.log("Empty IDB");
-                    // Empty IDB, return
-                    return Promise.resolve(true);
-                }
-            }
-        } catch (err) {
-            return reject(err);
-        }
-    });
-}
+self.addEventListener("sync", (event) => {
+    if (event.tag === "offlineActionsSync") {
+        event.waitUntil(processOfflineActions());
+    }
+});
 
 /**
- * Opens the IndexedDB with the passed name
- * @param {string} name Name of the IDB
+ * Fetches stored Actions from the IDB and make those requests another time
  */
-function openIDB(name) {
+function processOfflineActions() {
     return new Promise((resolve, reject) => {
-        const req = indexedDB.open(name);
+        const req = indexedDB.open("ACTT");
         let db;
 
         req.onerror = (e) => {
             return reject(e);
         }
 
-        req.onsuccess =  /** @param {*} e */(e) => {
+        req.onsuccess = (e) => {
+            // @ts-ignore
             db = e.target.result;
-            return resolve(db);
+
+            const objectStore = db.transaction("offlineActions", "readwrite")
+                .objectStore("offlineActions");
+
+            // Open a cursor so we can cycle every stored Action
+            objectStore.openCursor().onsuccess = (e) => {
+                let cursor = e.target.result;
+                if (cursor) {
+
+                    // Repeat that request
+                    replayAction(cursor.value)
+                        .then((response) => {
+                            console.log(response);
+                        }).catch((err) => {
+                            console.log(`${cursor.value.method} ${cursor.value.url} returned an error: `, err);
+                        });
+
+                    // Delete it from the IDB
+                    objectStore.delete(cursor.primaryKey);
+
+                    // Cycle to the next stored value
+                    cursor.continue();
+                } else {
+                    // Empty IDB, return
+                    return resolve(true);
+                }
+            }
         }
     });
 }
 
 /**
- * Removes an Action identified by the passed id from the passed db 
- * @param {IDBObjectStore} objectStore The ObjectStore reference
- * @param {number} id ID of the resource that has to be deleted
+ * Makes a request, following what the Action specifies
+ * @param {import("./app/models/types.model").OfflineAction} action An Action representing a request that has to be remade  
  */
-function deleteAction(objectStore, id) {
-    return new Promise((resolve, reject) => {
-        const req = objectStore.delete(id);
-
-        req.onsuccess = (e) => {
-            return resolve(e)
-        }
-
-        req.onerror = (e) => {
-            return reject(e);
-        }
-    })
-}
-
-/**
- * Try to make a new request following the saved and passed OfflineAction
- * @param {import("./app/models/types.model").OfflineAction} action The saved OfflineAction
- */
-async function replayAction(action) {
+function replayAction(action) {
     const options = {
         method: action.method
     };
 
     if (action.method !== "GET" && action.method !== "HEAD") {
-        options.body = action.body;
+        options.body = JSON.stringify(action.body);
     }
 
     if (action.headers) {
         options.headers = action.headers;
+
+        if (options.headers["Authentication"]) {
+            options.headers["Authentication"] = "Bearer " + token;
+        }
+
+        // Set JSON encoding
+        options.headers["Content-Type"] = "application/json";
     }
 
     try {
-        const response = await fetch(action.url, options);
-
-        return response;
+        return fetch(action.url, options);
     } catch (err) {
         return Promise.reject(err);
     }

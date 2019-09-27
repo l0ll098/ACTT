@@ -2,27 +2,12 @@ import { Injectable } from "@angular/core";
 
 import { LapTime, Track, Car, LapAssists } from "../../../shared/data.model";
 import { HttpService } from './http.service';
-import { LoggerService } from "./log.service";
 
 
 @Injectable()
 export class FirebaseService {
 
-    constructor(private httpService: HttpService, private loggerService: LoggerService) {
-
-        this.upgradeAllLapTimes()
-            .then((data) => {
-                if (data && data.length > 0) {
-                    this.loggerService.info(`Upgraded ${data.length} LapTimes`);
-                } else {
-                    this.loggerService.info("No LapTimes to upgrade");
-                }
-            })
-            .catch((err) => {
-                this.loggerService.log("An error occured while upgrading some LapTime.");
-                this.loggerService.error(err);
-            });
-    }
+    constructor(private httpService: HttpService) { }
 
     /**
      * Saves a lapTime
@@ -92,7 +77,7 @@ export class FirebaseService {
     /**
      * Upgrades all user's LapTimes
      */
-    private upgradeAllLapTimes() {
+    public upgradeAllLapTimes() {
         return this.httpService.upgradeAllLapTimes();
     }
 

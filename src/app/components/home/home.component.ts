@@ -12,6 +12,7 @@ import { StateService } from '../../services/state.service';
 
 import { SidenavButton } from '../../models/lists.model';
 import { LoggerService } from '../../services/log.service';
+import { FirebaseService } from '../../services/firebase.service';
 
 
 enum toolbarTypes {
@@ -82,6 +83,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         private authService: AuthService,
         private loggerService: LoggerService,
         private stateService: StateService,
+        private firebaseService: FirebaseService,
         private swUpdate: SwUpdate,
         private settingsService: SettingsService,
         private snackBar: MatSnackBar) {
@@ -169,6 +171,19 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
 
         // Register the background sync event to handle OfflineAction(s)
         this.stateService.registerSyncTag("offlineActionsSync");
+
+        this.firebaseService.upgradeAllLapTimes()
+            .then((data) => {
+                if (data && data.length > 0) {
+                    this.loggerService.info(`Upgraded ${data.length} LapTimes`);
+                } else {
+                    this.loggerService.info("No LapTimes to upgrade");
+                }
+            })
+            .catch((err) => {
+                this.loggerService.log("An error occured while upgrading some LapTime.");
+                this.loggerService.error(err);
+            });
     }
 
     ngAfterContentInit() {

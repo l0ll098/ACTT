@@ -11,7 +11,7 @@ import * as fn from '../models/fnResponses.model';
 import { Track, Car, LapTime, LapAssists } from '../../../shared/data.model';
 
 
-type Headers = HttpHeaders | { [param: string]: string | string[]; };
+type Headers = HttpHeaders;
 
 const MAX_RETRY = 3;
 
@@ -26,6 +26,17 @@ export class HttpService {
         private idbService: IndexedDBService) {
 
         this.baseUrl = environment.firebase.functionsUrl;
+    }
+
+    private _HeadersToObject(headers: Headers) {
+        const keys = headers.keys() || [];
+        const obj = {};
+
+        keys.forEach((key) => {
+            obj[key] = headers.get(key);
+        });
+
+        return obj;
     }
 
     /**
@@ -57,7 +68,7 @@ export class HttpService {
             return response as T;
         } catch (err) {
             this.idbService.addNewOfflineAction({
-                headers: headers,
+                headers: this._HeadersToObject(headers),
                 url: `${this.baseUrl}/${path}`,
                 method: "DELETE"
             });
@@ -81,12 +92,14 @@ export class HttpService {
             const response = await observable.toPromise();
             return response as T;
         } catch (err) {
-            this.idbService.addNewOfflineAction({
-                headers: headers,
-                body: params,
-                url: `${this.baseUrl}/${path}`,
-                method: "POST"
-            });
+            if (err.status !== 304) {
+                this.idbService.addNewOfflineAction({
+                    headers: this._HeadersToObject(headers),
+                    body: params,
+                    url: `${this.baseUrl}/${path}`,
+                    method: "POST"
+                });
+            }
 
             throw err;
         }
@@ -97,6 +110,11 @@ export class HttpService {
      */
     private async setFunctionsHeaders() {
         const token = await this.authService.getToken();
+
+        if (navigator && navigator.serviceWorker) {
+            await navigator.serviceWorker.getRegistration();
+            navigator.serviceWorker.controller.postMessage(JSON.stringify({ token: token }));
+        }
 
         const headers = new HttpHeaders({
             "Authorization": `Bearer ${token}`
