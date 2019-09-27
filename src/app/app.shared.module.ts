@@ -80,7 +80,7 @@ const appRoutes: Routes = [
 		RouterModule.forRoot(
 			appRoutes, { enableTracing: (environment.enableAngularRoutingLog ? true : false) }
 		),
-		ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+		ServiceWorkerModule.register('/sw-sync.js', { enabled: environment.production }),
 		PlatformModule,
 		HttpClientModule,
 		FormsModule,

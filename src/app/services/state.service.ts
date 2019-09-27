@@ -37,4 +37,10 @@ export class StateService {
         return (window && window.navigator) ? !window.navigator.onLine : false;
     }
 
+    public async registerSyncTag(tag: string) {
+        if (navigator) {
+            const swReg = await navigator.serviceWorker.ready;
+            return swReg.sync.register(tag);
+        }
+    }
 }

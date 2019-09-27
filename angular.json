@@ -22,7 +22,8 @@
               "src/manifest.json",
               "src/browserconfig.xml",
               "src/manifest.json",
-              "src/robots.txt"
+              "src/robots.txt",
+              "src/sw-sync.js"
             ],
             "styles": [
               "src/styles.css",

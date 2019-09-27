@@ -1,4 +1,4 @@
-export type HttpMethods = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+export type HttpMethods = "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD";
 
 export interface OfflineAction {
     id?: number;

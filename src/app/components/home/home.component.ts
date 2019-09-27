@@ -166,6 +166,9 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
                 window.location.reload();
             });
         });
+
+        // Register the background sync event to handle OfflineAction(s)
+        this.stateService.registerSyncTag("offlineActionsSync");
     }
 
     ngAfterContentInit() {
