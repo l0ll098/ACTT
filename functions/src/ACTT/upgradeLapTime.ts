@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { auth } from "firebase-admin";
-import { check } from "express-validator/check";
+import { check } from "express-validator";
 
 import { LapTime } from "../../../shared/data.model";
 import { validate, sendErr, sendOK, FirebaseService } from "../../shared/helpers";
