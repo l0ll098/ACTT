@@ -113,7 +113,9 @@ export class HttpService {
 
         if (navigator && navigator.serviceWorker) {
             await navigator.serviceWorker.getRegistration();
-            navigator.serviceWorker.controller.postMessage(JSON.stringify({ token: token }));
+            if (navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage(JSON.stringify({ token: token }));
+            }
         }
 
         const headers = new HttpHeaders({
