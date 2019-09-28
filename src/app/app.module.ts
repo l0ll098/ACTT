@@ -8,6 +8,7 @@ import { FirebaseUIModule } from 'firebaseui-angular';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from "@angular/fire/database";
+import { AngularFirePerformanceModule } from "@angular/fire/performance";
 
 import { AuthService } from "./services/auth.service";
 
@@ -23,6 +24,7 @@ import { LoginComponent } from "./components/login/login.component";
 		CommonModule,
 		AngularFireAuthModule,
 		AngularFireDatabaseModule,
+		AngularFirePerformanceModule,
 		AngularFireModule.initializeApp(environment.firebase),
 		FirebaseUIModule.forRoot(firebaseUIConfigs),
 		AppSharedModule
