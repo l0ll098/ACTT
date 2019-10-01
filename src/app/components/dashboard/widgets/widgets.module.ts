@@ -3,11 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { AppUIModule } from '../../../app.ui.module';
 
-import { TimeGraphsWidgetComponent } from './time-graphs/time-graphs.component';
 import { NotificationsWidgetComponent } from "./notifications/notifications-widget.component";
 
 const widgets: any[] = [
-    TimeGraphsWidgetComponent,
     NotificationsWidgetComponent
 ];
 

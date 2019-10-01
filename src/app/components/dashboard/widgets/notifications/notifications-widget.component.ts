@@ -102,9 +102,6 @@ export class NotificationsWidgetComponent implements WidgetComponent, AfterViewI
             .markNotificationAsRead(notificationId)
             .then((ok) => {
                 this._getNotifications();
-            })
-            .catch((err) => {
-                console.log(err);
             });
     }
 }
