@@ -1,5 +1,5 @@
 import { Injectable, PLATFORM_ID, Inject } from "@angular/core";
-import { CanActivate, Router, RouterStateSnapshot, ActivatedRouteSnapshot } from "@angular/router";
+import { CanActivate, Router, RouterStateSnapshot, ActivatedRouteSnapshot, NavigationExtras } from "@angular/router";
 import { isPlatformBrowser } from '@angular/common';
 
 import { AngularFireAuth } from "@angular/fire/auth";
@@ -53,7 +53,19 @@ export class AuthService implements CanActivate {
 
 				// Otherwise, redirect user to the login path and return false
 				console.log(`No permission to access this page! Redirecting to /login`);
-				this.router.navigate(["/login"], { queryParams: { returnUrl: state.url } });
+
+				// Extra params
+				const extras: NavigationExtras = {};
+
+				// If the URL is not the main path, add the returnUrl. Doing so it won't apper if user is
+				// has just entered the website
+				if (state.url !== "/") {
+					extras.queryParams = {
+						returnUrl: state.url
+					};
+				}
+
+				this.router.navigate(["/login"], extras);
 				return of(false);
 			})
 		);

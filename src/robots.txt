@@ -1,0 +1,7 @@
+# Block assets access
+User-agent: *
+Disallow: /assets/*
+
+# Root
+User-agent: *
+Allow: /

@@ -80,7 +80,7 @@ describe('LapTimesDetailsComponent', () => {
         de = fixture.debugElement;
 
         firebaseService = de.injector.get(FirebaseService);
-        const mockedFirebase = new MockFirebaseService(de.injector.get(HttpService), de.injector.get(LoggerService));
+        const mockedFirebase = new MockFirebaseService(de.injector.get(HttpService));
 
         spyOn(firebaseService, "getLapTimeById").and.returnValue(mockedFirebase.getLapTimeById(MockData.lapTime.id));
 

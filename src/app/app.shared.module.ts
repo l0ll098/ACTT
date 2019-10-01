@@ -20,6 +20,7 @@ import { IndexedDBService } from "./services/indexedDb.service";
 import { SettingsService } from './services/settings.service';
 import { LoggerService } from './services/log.service';
 import { HttpService } from './services/http.service';
+import { StateService } from './services/state.service';
 
 import { AppUIModule } from './app.ui.module';
 import { SharedComponentsModule } from './components/shared/shared.module';
@@ -88,7 +89,7 @@ const appRoutes: Routes = [
 		RouterModule.forRoot(
 			appRoutes, { enableTracing: (environment.enableAngularRoutingLog ? true : false) }
 		),
-		ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+		ServiceWorkerModule.register('/sw-sync.js', { enabled: environment.production }),
 		PlatformModule,
 		HttpClientModule,
 		FormsModule,
@@ -104,7 +105,8 @@ const appRoutes: Routes = [
 		IndexedDBService,
 		SettingsService,
 		LoggerService,
-		HttpService
+		HttpService,
+		StateService
 	],
 	bootstrap: [
 		AppComponent

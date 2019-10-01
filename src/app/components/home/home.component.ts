@@ -5,13 +5,14 @@ import { SwUpdate } from "@angular/service-worker";
 
 import { MatSnackBar } from "@angular/material/";
 import { MatSidenav } from "@angular/material/";
-import { Platform } from "@angular/cdk/platform";
 
 import { AuthService } from '../../services/auth.service';
 import { SettingsService, SettingsName } from '../../services/settings.service';
+import { StateService } from '../../services/state.service';
 
 import { SidenavButton } from '../../models/lists.model';
 import { LoggerService } from '../../services/log.service';
+import { FirebaseService } from '../../services/firebase.service';
 
 
 enum toolbarTypes {
@@ -81,7 +82,8 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
         private elementRef: ElementRef,
         private authService: AuthService,
         private loggerService: LoggerService,
-        private platform: Platform,
+        private stateService: StateService,
+        private firebaseService: FirebaseService,
         private swUpdate: SwUpdate,
         private settingsService: SettingsService,
         private snackBar: MatSnackBar) {
@@ -103,7 +105,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
 		    This is used to show the toolbar with the back icon on mobile and
             the toolbar with the sidenav icon on desktop
 		*/
-        if (this.platform.ANDROID || this.platform.IOS) {
+        if (this.stateService.isMobile()) {
             this.deviceType = "mobile";
         } else {
             this.deviceType = "desktop";
@@ -131,7 +133,7 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
             }
         });
 
-        window.addEventListener("offline", () => {
+        this.stateService.addEventListener("offline", () => {
             this.snackBar.open("You are offline.", "Ok", {
                 duration: 10000		// 10s
             });
@@ -148,10 +150,9 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
                     document.getElementById("newFAB").style.bottom = "16px";
                 });
             }
-
         });
 
-        window.addEventListener("online", () => {
+        this.stateService.addEventListener("online", () => {
             this.snackBar.dismiss();
         });
 
@@ -167,6 +168,22 @@ export class HomeComponent implements AfterViewInit, AfterContentInit {
                 window.location.reload();
             });
         });
+
+        // Register the background sync event to handle OfflineAction(s)
+        this.stateService.registerSyncTag("offlineActionsSync");
+
+        this.firebaseService.upgradeAllLapTimes()
+            .then((data) => {
+                if (data && data.length > 0) {
+                    this.loggerService.info(`Upgraded ${data.length} LapTimes`);
+                } else {
+                    this.loggerService.info("No LapTimes to upgrade");
+                }
+            })
+            .catch((err) => {
+                this.loggerService.log("An error occured while upgrading some LapTime.");
+                this.loggerService.error(err);
+            });
     }
 
     ngAfterContentInit() {

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { check } from "express-validator/check";
+import { check } from "express-validator";
 
 import { Notification } from "../../../../shared/data.model";
 import { sendOK, sendErr, FirebaseService, getUid, validate } from "../../../shared/helpers";

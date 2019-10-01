@@ -5,12 +5,13 @@ import { retry } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 import { AuthService } from './auth.service';
+import { IndexedDBService } from './indexedDb.service';
 
 import * as fn from '../models/fnResponses.model';
 import { Track, Car, LapTime, LapAssists, Notification } from '../../../shared/data.model';
 
 
-type Headers = HttpHeaders | { [param: string]: string | string[]; };
+type Headers = HttpHeaders;
 
 const MAX_RETRY = 3;
 
@@ -19,8 +20,23 @@ export class HttpService {
 
     private baseUrl: string;
 
-    constructor(private http: HttpClient, private authService: AuthService) {
+    constructor(
+        private http: HttpClient,
+        private authService: AuthService,
+        private idbService: IndexedDBService) {
+
         this.baseUrl = environment.firebase.functionsUrl;
+    }
+
+    private _HeadersToObject(headers: Headers) {
+        const keys = headers.keys() || [];
+        const obj = {};
+
+        keys.forEach((key) => {
+            obj[key] = headers.get(key);
+        });
+
+        return obj;
     }
 
     /**
@@ -37,20 +53,56 @@ export class HttpService {
         return response as T;
     }
 
+    /**
+     * Tries to make a DELETE request to the passed path.
+     * If it fails multiple times, it will log this action in IDB so we can try again later on
+     * @param path API path
+     * @param headers Headers to use
+     */
     private async _delete<T = any>(path: string, headers?: Headers): Promise<T> {
-        const observable = this.http
-            .delete(`${this.baseUrl}/${path}`, { headers: headers })
-            .pipe(retry(MAX_RETRY));
-        const response = await observable.toPromise();
-        return response as T;
+        try {
+            const observable = this.http
+                .delete(`${this.baseUrl}/${path}`, { headers: headers })
+                .pipe(retry(MAX_RETRY));
+            const response = await observable.toPromise();
+            return response as T;
+        } catch (err) {
+            this.idbService.addNewOfflineAction({
+                headers: this._HeadersToObject(headers),
+                url: `${this.baseUrl}/${path}`,
+                method: "DELETE"
+            });
+
+            throw err;
+        }
     }
 
+    /**
+     * Tries to make a POST request to the passed path.
+     * If it fails multiple times, it will log this action in IDB so we can try again later on
+     * @param path API path
+     * @param headers Headers to use
+     * @param params Request's Body
+     */
     private async _post<T = any>(path: string, headers?: Headers, params?: Object): Promise<T> {
-        const observable = this.http
-            .post(`${this.baseUrl}/${path}`, params, { headers: headers })
-            .pipe(retry(MAX_RETRY));
-        const response = await observable.toPromise();
-        return response as T;
+        try {
+            const observable = this.http
+                .post(`${this.baseUrl}/${path}`, params, { headers: headers })
+                .pipe(retry(MAX_RETRY));
+            const response = await observable.toPromise();
+            return response as T;
+        } catch (err) {
+            if (err.status !== 304) {
+                this.idbService.addNewOfflineAction({
+                    headers: this._HeadersToObject(headers),
+                    body: params,
+                    url: `${this.baseUrl}/${path}`,
+                    method: "POST"
+                });
+            }
+
+            throw err;
+        }
     }
 
     /**
@@ -58,6 +110,13 @@ export class HttpService {
      */
     private async setFunctionsHeaders() {
         const token = await this.authService.getToken();
+
+        if (navigator && navigator.serviceWorker) {
+            await navigator.serviceWorker.getRegistration();
+            if (navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage(JSON.stringify({ token: token }));
+            }
+        }
 
         const headers = new HttpHeaders({
             "Authorization": `Bearer ${token}`

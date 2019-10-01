@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
 		.getAuthState()
 		.subscribe(auth => {
 			// If the returnUrl query param is present, use that. Otherwise fallback to the home path
-			const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+			const returnUrl = this.route.snapshot.queryParams['returnUrl'] || "/";
 			this.router.navigateByUrl(returnUrl);
 		});
 	}

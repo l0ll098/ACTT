@@ -1,4 +1,4 @@
-import { check } from "express-validator/check";
+import { check } from "express-validator";
 import { Request, Response } from "express";
 import { auth } from "firebase-admin";
 

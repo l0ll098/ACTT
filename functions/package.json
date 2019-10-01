@@ -13,11 +13,7 @@
     "logs": "firebase functions:log",
     "webpack": "webpack --config webpack.config.js --progress --colors"
   },
-<<<<<<< HEAD
-  "main": "lib/functions/src/index.js",
-=======
   "main": "lib/index.js",
->>>>>>> 9eff08d9436804d98d44e887b2d3c716c71adab5
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",

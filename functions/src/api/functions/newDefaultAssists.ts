@@ -1,5 +1,5 @@
 import { Response, Request } from "express";
-import { check } from "express-validator/check";
+import { check } from "express-validator";
 import { auth } from "firebase-admin";
 
 import { FirebaseService } from "../../../shared/firebaseService";
