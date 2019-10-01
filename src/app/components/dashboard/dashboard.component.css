@@ -1,0 +1,18 @@
+.widget-header {
+    border-bottom: 1px solid #bbbbbb;
+}
+
+mat-card-subtitle {
+    text-align: left;
+}
+
+.widget-icon {
+    text-align: right;
+    margin-top: 10px;
+    margin-left: -8px;
+}
+
+.dashboardTile {
+    width: 100%;
+    height: calc(100% - 32px);
+}

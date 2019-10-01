@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 
-import { LapTime, LapAssists, LAST_SUPPORTED_LAP_TIME_VERSION, Time, Track, Car } from "../../shared/data.model";
+import { LapTime, LapAssists, LAST_SUPPORTED_LAP_TIME_VERSION, Time, Track, Car, Notification, NotificationSource } from "../../shared/data.model";
 import { HttpStatus } from "./httpStatus";
 
 // Create an alias for the admin.database.DataSnapshot type 
@@ -241,6 +241,195 @@ export abstract class FirebaseService {
         } catch (err) {
             return Promise.reject(err);
         }
+    }
+
+    /**
+     * Changes the property "alreadyRead" of a user notification given its id
+     * @param uid User ID
+     * @param notificationId ID of the notification to update 
+     */
+    public static async markNotificationAsRead(uid: string, notificationId: string): Promise<boolean> {
+        try {
+            const path = `/users/${uid}/notifications/${notificationId}/`;
+
+            // Get the saved notification
+            const snap = await admin.database()
+                .ref(path)
+                .once("value");
+
+            const notification: Notification = snap.val() || null;
+            // Check if it was present
+            if (notification) {
+                // If it has been found but it's already read, reject
+                if (notification.alreadyRead) {
+                    return Promise.reject({ done: false, error: "Already read", status: HttpStatus.NotModified });
+                }
+
+                // Otherwise set the alreadyRead property to true 
+                notification.alreadyRead = true;
+
+                // And save the new value 
+                await admin.database()
+                    .ref(path)
+                    .set(notification);
+                return Promise.resolve(true);
+            } else {
+                // If the notification was not found, reject
+                return Promise.reject({ done: false, error: "Notification not found", status: HttpStatus.NotFound });
+            }
+
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    /**
+     * Creates an new notification.
+     * The UID parameter is optional. If passed, this function creates a new notification for that specific
+     * user. Otherwise it will be a general one.
+     * @param notification The Notification object that will be pushed to DB
+     * @param uid (optional) User ID. If passed, this notification will be tied to the user. 
+     */
+    public static async createNotification(notification: Notification, uid?: string): Promise<Notification> {
+        try {
+            // Add some details such as creation timestamp and if user has alreadyRead it
+            const toPush = notification;
+            toPush.timestamp = Date.now();
+
+            if (uid) {
+                toPush.alreadyRead = false;
+            }
+
+            // Choose db path
+            const dbPath = uid ? `/users/${uid}/notifications/` : "/notifications";
+            const snap = await admin.database()
+                .ref(dbPath)
+                .push(toPush)
+                .once("value");
+
+            if (snap.hasChildren()) {
+                return Promise.resolve(snap.val());
+            } else {
+                return Promise.reject({ done: false, msg: "Empty snapshot" });
+            }
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    public static async getNotificationById(id: string, uid: string): Promise<Notification | null> {
+        try {
+            // Get the notification even if it was already read
+            const user = await this._getNotifications(`/users/${uid}/notifications/${id}`, "user", false, true);
+            const general = await this._getNotifications(`/notifications/${id}`, "general", false, true);
+            let notification: Notification | null = null;
+
+            // * This could lead to some problems if it happens that two IDs (in different paths) are the same. 
+            // * However it should not be a problem as it is really hard to happen, as described here:
+            // https://firebase.googleblog.com/2015/02/the-2120-ways-to-ensure-unique_68.html
+            if (user && user.length > 0 && user[0]) {
+                notification = user[0];
+            }
+            if (general && general.length > 0 && general[0]) {
+                notification = general[0];
+            }
+
+            return notification;
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    /**
+     * Returns only notifications of the current user (private)
+     * @param uid User ID
+     */
+    public static async getUserSpecificNotifications(uid: string) {
+        try {
+            const notifications = await this._getNotifications(`/users/${uid}/notifications`, "user", true, false);
+            return Promise.resolve(notifications);
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    /**
+     * Returns only public notifications
+     * @description Those notifications are the one that are shared between users, such as changelogs
+     */
+    public static async getGeneralNotifications() {
+        try {
+            const notifications = await this._getNotifications(`/notifications`, "general", false, false);
+            return Promise.resolve(notifications);
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    /**
+     * Returns a list of notifications from db given its path
+     * @param dbPath Search path
+     * @param source Source of the notification
+     * @param filterOutAlreadyReadMessages Returns only messages that where not already read
+     * @param singleResult Should this query return a single Notification or multiple?
+     */
+    private static async _getNotifications(dbPath: string, source: NotificationSource,
+        filterOutAlreadyReadMessages: boolean, singleResult: boolean): Promise<Notification[]> {
+
+        try {
+            let snap;
+
+            if (!filterOutAlreadyReadMessages) {
+                snap = await admin.database()
+                    .ref(`${dbPath}`)
+                    .once("value");
+            } else {
+                snap = await admin.database()
+                    .ref(`${dbPath}`)
+                    .orderByChild("alreadyRead")
+                    .equalTo(false)
+                    .once("value");
+            }
+
+            if (singleResult) {
+                return Promise.resolve([this._formatSingleNotificationsQueryResult(snap, source) as Notification]);
+            } else {
+                return Promise.resolve(this._formatMultipleNotificationsQueryResult(snap, source));
+            }
+        } catch (err) {
+            return Promise.reject(err);
+        }
+    }
+
+    private static _formatSingleNotificationsQueryResult(rawData: DataSnapshot, source: NotificationSource) {
+        const notification: Notification = rawData.val();
+        if (!notification) {
+            return null;
+        }
+
+        // Add calculable fields
+        notification.id = rawData.key as string;
+        notification.source = source;
+
+        return notification;
+    }
+
+    /**
+     * Transforms the notifications query result into an array
+     * @param rawData DataSnapshot returned from Firebase DB
+     */
+    private static _formatMultipleNotificationsQueryResult(rawData: DataSnapshot, source: NotificationSource): Notification[] {
+        const data = rawData.val();
+        if (!data) {
+            return [];
+        }
+
+        // Convert it to an array and format data
+        const dataArray: Notification[] = Object.keys(data).map((key) => {
+            return this._formatSingleNotificationsQueryResult(rawData.child(key), source) as Notification;
+        });
+
+        return dataArray;
     }
 
     /**

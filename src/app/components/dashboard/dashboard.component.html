@@ -1,0 +1,18 @@
+<div>
+    <mat-grid-list [cols]="calcGridCols()" [rowHeight]="calcGridRowHeight()">
+        <mat-grid-tile *ngFor="let tile of tiles" [colspan]="getCols(tile)" [rowspan]="getRows(tile)">
+            <mat-card class="dashboardTile">
+                <mat-card-header class="widget-header">
+                    <mat-icon mat-card-avatar class="widget-icon">{{tile.tileDetails.widgetIcon}}</mat-icon>
+                    <mat-card-title>{{tile.tileDetails.widgetName}}</mat-card-title>
+                    <mat-card-subtitle>{{tile.tileDetails.widgetCategory}}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>
+                        <app-dashboard-widget-container [widget]="tile"></app-dashboard-widget-container>
+                    </p>
+                </mat-card-content>
+            </mat-card>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>

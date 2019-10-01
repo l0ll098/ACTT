@@ -1,0 +1,36 @@
+#notifications-list {
+    overflow: auto;
+    /* 292px because mat-list occupies 300px but it has a 8px margin-top */
+    height: 292px;
+    max-height: 100%;
+}
+
+#centralImage {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    width: calc(100% - 8px);
+    margin: 0 auto;
+}
+
+@media screen and (min-width: 960px) {
+    #centralImage {
+        margin-top: -48px;
+    }
+}
+
+@media screen and (max-width: 959px) {
+    #centralImage {
+        margin-top: -24px;
+    }
+}
+
+#centralImage img {
+    opacity: 0.6;
+    width: 96px;
+    height: 96px; 
+}
+
+#centralImage div {
+    margin-top: 10px;
+}
